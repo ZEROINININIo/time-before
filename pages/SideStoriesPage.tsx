@@ -311,7 +311,7 @@ const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language }) => {
                             className={`w-full text-left p-4 text-xs font-mono border-b border-ash-dark transition-none group relative ${
                                 index === currentChapterIndex
                                     ? 'bg-ash-light text-ash-black'
-                                    : isLocked ? 'bg-ash-black/50 text-ash-gray/30 cursor-not-allowed' : 'text-ash-gray hover:bg-ash-dark hover:text-ash-white'
+                                    : isLocked ? 'bg-ash-black/50 text-ash-gray/60 cursor-not-allowed' : 'text-ash-gray hover:bg-ash-dark hover:text-ash-white'
                             }`}
                         >
                             <div className="flex justify-between items-start">

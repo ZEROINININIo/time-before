@@ -182,28 +182,28 @@ const HomePage: React.FC<HomePageProps> = ({ onStartReading, language, setLangua
                     <div>
                         <div className="flex justify-between text-[10px] mb-1">
                             <span>CPU_LOAD</span>
-                            <span>12%</span>
+                            <span>4%</span>
                         </div>
                         <div className="w-full bg-ash-dark h-1">
-                            <div className="w-[12%] h-full bg-ash-light"></div>
+                            <div className="w-[4%] h-full bg-ash-light"></div>
                         </div>
                     </div>
                     <div>
                         <div className="flex justify-between text-[10px] mb-1">
                             <span>MEM_ALLOC</span>
-                            <span>4,024 MB</span>
+                            <span>4024PB</span>
                         </div>
                         <div className="w-full bg-ash-dark h-1">
-                            <div className="w-[45%] h-full bg-ash-light"></div>
+                            <div className="w-[6%] h-full bg-ash-light"></div>
                         </div>
                     </div>
                     <div>
                         <div className="flex justify-between text-[10px] mb-1">
                             <span>SYNC_RATE</span>
-                            <span>99.9%</span>
+                            <span>10%</span>
                         </div>
                         <div className="w-full bg-ash-dark h-1">
-                            <div className="w-[99%] h-full bg-ash-light"></div>
+                            <div className="w-[10%] h-full bg-ash-light"></div>
                         </div>
                     </div>
                 </div>

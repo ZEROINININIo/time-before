@@ -12,6 +12,16 @@ export const lore: LoreEntry[] = [
     ]
   },
   {
+    id: "time-sector",
+    title: "时域特殊节区",
+    category: "World",
+    content: [
+      "**区域概述:** 类似现实世界的公交站点/市区。",
+      "**职能:** 三人的工作地点。",
+      "**设施:** 这里有 Nova labs 的全部主分设施。"
+    ]
+  },
+  {
     id: "nova-labs",
     title: "Nova Labs 组织结构",
     category: "Organization",
@@ -20,6 +30,17 @@ export const lore: LoreEntry[] = [
       "**核心层:** 隐藏在表层之后，负责“时域移转计划”。核心人员包括 X.泽洛、X.零点、X.芷漓、R.艾安等。",
       "**使命:** 负责与“主宇”进行现实连通，探索并获得主宇的完全控制权。为即将毁灭的世界和文明寻找下一个绿洲（生存后路）。",
       "**特殊地位:** 是唯一能执行此类任务的团队，不受外界任何组织的束缚。但也因权力过大，表层人员在谋划现世领导层的政变。"
+    ]
+  },
+  {
+    id: "nova-labs-logo",
+    title: "Nova Labs 组织标识",
+    category: "Organization",
+    content: [
+      "**通常版 (Standard Version):**",
+      "[[IMAGE::https://free.picui.cn/free/2025/12/08/6936e856897d6.png::NOVA_LABS_LOGO_STD]]",
+      "**整合版 (Integrated Version):**",
+      "[[IMAGE::https://free.picui.cn/free/2025/12/08/6936e856642e9.png::NOVA_LABS_LOGO_FULL]]"
     ]
   },
   {

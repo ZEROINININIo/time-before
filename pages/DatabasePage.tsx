@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { novelData } from '../data/novelData';
-import { Globe, Box, Cpu, Users, FolderOpen } from 'lucide-react';
+import { Globe, Box, Cpu, Users, FolderOpen, Image as ImageIcon } from 'lucide-react';
 import Reveal from '../components/Reveal';
 import { Language } from '../types';
 
@@ -105,6 +105,32 @@ const DatabasePage: React.FC<DatabasePageProps> = ({ language }) => {
               
               <div className="space-y-4 text-ash-gray font-mono text-xs md:text-sm leading-6 md:leading-7">
                 {entry.content.map((para, idx) => {
+                  const imageMatch = para.match(/\[\[IMAGE::(.*?)::(.*?)\]\]/);
+                  if (imageMatch) {
+                      const [_, src, caption] = imageMatch;
+                      return (
+                        <div key={idx} className="my-6">
+                            <div className="relative border-2 border-ash-gray p-2 bg-ash-dark/30 inline-block max-w-full">
+                                {/* Corners for image frame */}
+                                <div className="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-ash-gray"></div>
+                                <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-ash-gray"></div>
+                                
+                                <img 
+                                    src={src} 
+                                    alt={caption}
+                                    className="max-w-full h-auto max-h-64 object-contain mx-auto block grayscale-[20%] hover:grayscale-0 transition-all"
+                                />
+                                <div className="absolute bottom-0 right-0 translate-y-1/2 translate-x-2 bg-ash-dark border border-ash-gray px-2 py-0.5 z-10">
+                                     <div className="text-[10px] font-mono text-ash-light flex items-center gap-2 uppercase font-bold">
+                                        <ImageIcon size={10} />
+                                        {caption}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                      );
+                  }
+
                   const parts = para.split('**');
                   return (
                       <p key={idx}>
