@@ -200,8 +200,8 @@ const Navigation: React.FC<NavigationProps> = ({
           <div className="w-full bg-ash-dark h-2 border border-ash-gray mb-1">
               <div className="bg-ash-light h-full w-[98%] animate-pulse"></div>
           </div>
-          <p>> ENCRYPTION: STATIC</p>
-          <p>> PING: 0.04ms</p>
+          <p>&gt; ENCRYPTION: STATIC</p>
+          <p>&gt; PING: 0.04ms</p>
         </div>
       </nav>
 
