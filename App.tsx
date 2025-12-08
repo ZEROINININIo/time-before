@@ -4,9 +4,10 @@ import HomePage from './pages/HomePage';
 import CharactersPage from './pages/CharactersPage';
 import DatabasePage from './pages/DatabasePage';
 import ReaderPage from './pages/ReaderPage';
-import HistoryPage from './pages/HistoryPage';
+import SideStoriesPage from './pages/SideStoriesPage';
 import BootSequence from './components/BootSequence';
 import InitialSetup from './components/InitialSetup';
+import CustomCursor from './components/CustomCursor';
 import { Language } from './types';
 
 const STORAGE_KEY = 'nova_labs_config_v1';
@@ -63,11 +64,6 @@ const App: React.FC = () => {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
   }, [language, crtEnabled, isLightTheme, setupCompleted]);
 
-  const handleJumpToChapter = (index: number) => {
-    setCurrentChapterIndex(index);
-    setActiveTab('reader');
-  };
-
   const handleBootComplete = () => {
     if (setupCompleted) {
       setAppState('READY');
@@ -81,19 +77,21 @@ const App: React.FC = () => {
     setAppState('READY');
   };
 
-  // Render Boot Sequence
-  if (appState === 'BOOT') {
-    return (
-      <BootSequence 
-        onComplete={handleBootComplete} 
-        isNormalBoot={setupCompleted} // If setup is done, use normal/fast boot
-      />
-    );
-  }
+  return (
+    <>
+      {/* Global Cursor - Always rendered on top */}
+      <CustomCursor />
 
-  // Render Initial Setup (Only for new users or reset)
-  if (appState === 'SETUP') {
-    return (
+      {/* Render Boot Sequence */}
+      {appState === 'BOOT' && (
+        <BootSequence 
+          onComplete={handleBootComplete} 
+          isNormalBoot={setupCompleted} 
+        />
+      )}
+
+      {/* Render Initial Setup */}
+      {appState === 'SETUP' && (
         <InitialSetup 
             onComplete={handleSetupComplete}
             language={language}
@@ -103,55 +101,57 @@ const App: React.FC = () => {
             isDarkTheme={isLightTheme}
             setIsDarkTheme={setIsLightTheme}
         />
-    );
-  }
+      )}
 
-  // Render Main App
-  return (
-    <div className="flex flex-col md:flex-row h-screen supports-[height:100dvh]:h-[100dvh] bg-ash-black text-ash-light overflow-hidden font-mono selection:bg-ash-light selection:text-ash-black">
-      {/* Global Texture Overlays */}
-      <div className="noise-overlay"></div>
-      
-      {/* Background Grid */}
-      <div className="absolute inset-0 z-0 bg-grid-hard pointer-events-none opacity-50"></div>
+      {/* Render Main App */}
+      {appState === 'READY' && (
+        <div className="flex flex-col lg:flex-row h-screen supports-[height:100dvh]:h-[100dvh] bg-ash-black text-ash-light overflow-hidden font-mono selection:bg-ash-light selection:text-ash-black cursor-none">
+          
+          {/* Global Texture Overlays */}
+          <div className="noise-overlay"></div>
+          
+          {/* Background Grid */}
+          <div className="absolute inset-0 z-0 bg-grid-hard pointer-events-none opacity-50"></div>
 
-      {/* Main Layout */}
-      <Navigation 
-        activeTab={activeTab} 
-        setActiveTab={setActiveTab} 
-        language={language}
-        setLanguage={setLanguage}
-        crtEnabled={crtEnabled}
-        setCrtEnabled={setCrtEnabled}
-        isLightTheme={isLightTheme}
-        setIsLightTheme={setIsLightTheme}
-      />
-      
-      <main className="flex-1 h-full overflow-hidden relative z-10 border-l-2 border-ash-dark">
-        <div 
-          key={activeTab}
-          className="h-full overflow-y-auto pb-20 md:pb-0 bg-ash-black/90 animate-slide-in"
-        >
-          {activeTab === 'home' && (
-            <HomePage 
-              onStartReading={() => setActiveTab('reader')} 
-              language={language}
-              setLanguage={setLanguage}
-            />
-          )}
-          {activeTab === 'characters' && <CharactersPage />}
-          {activeTab === 'database' && <DatabasePage language={language} />}
-          {activeTab === 'reader' && (
-            <ReaderPage 
-              currentIndex={currentChapterIndex} 
-              onChapterChange={setCurrentChapterIndex} 
-              language={language}
-            />
-          )}
-          {activeTab === 'history' && <HistoryPage onNavigate={handleJumpToChapter} />}
+          {/* Main Layout */}
+          <Navigation 
+            activeTab={activeTab} 
+            setActiveTab={setActiveTab} 
+            language={language}
+            setLanguage={setLanguage}
+            crtEnabled={crtEnabled}
+            setCrtEnabled={setCrtEnabled}
+            isLightTheme={isLightTheme}
+            setIsLightTheme={setIsLightTheme}
+          />
+          
+          <main className="flex-1 h-full overflow-hidden relative z-10 border-l-2 border-ash-dark">
+            <div 
+              key={activeTab}
+              className="h-full overflow-y-auto pb-20 lg:pb-0 bg-ash-black/90 animate-slide-in"
+            >
+              {activeTab === 'home' && (
+                <HomePage 
+                  onStartReading={() => setActiveTab('reader')} 
+                  language={language}
+                  setLanguage={setLanguage}
+                />
+              )}
+              {activeTab === 'characters' && <CharactersPage />}
+              {activeTab === 'database' && <DatabasePage language={language} />}
+              {activeTab === 'reader' && (
+                <ReaderPage 
+                  currentIndex={currentChapterIndex} 
+                  onChapterChange={setCurrentChapterIndex} 
+                  language={language}
+                />
+              )}
+              {activeTab === 'sidestories' && <SideStoriesPage language={language} />}
+            </div>
+          </main>
         </div>
-      </main>
-    </div>
+      )}
+    </>
   );
 };
 

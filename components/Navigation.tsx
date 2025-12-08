@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Database, Book, Users, Home, Clock, Cpu, Settings, Globe } from 'lucide-react';
+import { Database, Book, Users, Home, GitBranch, Cpu, Settings, Globe } from 'lucide-react';
 import BackgroundMusic from './BackgroundMusic';
 import CRTToggle from './CRTToggle';
 import ThemeToggle from './ThemeToggle';
@@ -28,39 +28,39 @@ const Navigation: React.FC<NavigationProps> = ({
       characters: '人员档案',
       database: '数据资料',
       reader: '阅读终端',
-      history: '系统日志',
+      sidestories: '支线档案',
       config: '系统设置',
       mobileHome: '主页',
       mobileChars: '人员',
       mobileData: '数据',
       mobileRead: '阅读',
-      mobileLogs: '日志'
+      mobileSide: '支线'
     },
     'zh-TW': {
       home: '根控制台',
       characters: '人員檔案',
       database: '數據資料',
       reader: '閱讀終端',
-      history: '系統日誌',
+      sidestories: '支線檔案',
       config: '系統設置',
       mobileHome: '主頁',
       mobileChars: '人員',
       mobileData: '數據',
       mobileRead: '閱讀',
-      mobileLogs: '日誌'
+      mobileSide: '支線'
     },
     'en': {
       home: 'ROOT_MENU',
       characters: 'PERSONNEL',
       database: 'DATA_BANK',
       reader: 'READ_MODE',
-      history: 'SYS_LOGS',
+      sidestories: 'FRAGMENTS',
       config: 'SYS_CONFIG',
       mobileHome: 'ROOT',
       mobileChars: 'TEAM',
       mobileData: 'DATA',
       mobileRead: 'READ',
-      mobileLogs: 'LOGS'
+      mobileSide: 'SIDE'
     }
   };
 
@@ -70,8 +70,9 @@ const Navigation: React.FC<NavigationProps> = ({
     { id: 'home', label: t.home, mobileLabel: t.mobileHome, icon: Home },
     { id: 'characters', label: t.characters, mobileLabel: t.mobileChars, icon: Users },
     { id: 'database', label: t.database, mobileLabel: t.mobileData, icon: Database },
+    // These two are the "Story" items
     { id: 'reader', label: t.reader, mobileLabel: t.mobileRead, icon: Book },
-    { id: 'history', label: t.history, mobileLabel: t.mobileLogs, icon: Clock },
+    { id: 'sidestories', label: t.sidestories, mobileLabel: t.mobileSide, icon: GitBranch },
   ];
 
   const cycleLanguage = () => {
@@ -88,8 +89,8 @@ const Navigation: React.FC<NavigationProps> = ({
 
   return (
     <>
-      <nav className="fixed bottom-0 left-0 right-0 md:static md:w-72 md:h-full bg-ash-black border-t-2 md:border-t-0 md:border-r-2 border-ash-light/20 z-50 flex md:flex-col justify-between p-2 md:p-6 shadow-2xl transition-colors duration-300 md:overflow-y-auto no-scrollbar">
-        <div className="hidden md:block mb-8 border-b-2 border-ash-light/20 pb-6 shrink-0">
+      <nav className="fixed bottom-0 left-0 right-0 lg:static lg:w-72 lg:h-full bg-ash-black border-t-2 lg:border-t-0 lg:border-r-2 border-ash-light/20 z-50 flex lg:flex-col justify-between p-2 lg:p-6 shadow-2xl transition-colors duration-300 lg:overflow-y-auto no-scrollbar">
+        <div className="hidden lg:block mb-8 border-b-2 border-ash-light/20 pb-6 shrink-0">
           <div className="flex items-center gap-2 mb-2">
               <Cpu className="text-ash-light animate-pulse" />
               <div className="w-2 h-2 bg-ash-light"></div>
@@ -99,43 +100,70 @@ const Navigation: React.FC<NavigationProps> = ({
             NOVA<br/>LABS
           </h1>
           <div className="text-[10px] text-ash-gray font-mono bg-ash-dark p-1 inline-block border border-ash-gray">
-            ARCHIVE_SYS // V.3.1_LEGACY
+            ARCHIVE_SYS // V.3.2_SIDE
           </div>
         </div>
 
-        <div className="flex md:flex-col justify-between md:justify-start w-full gap-1 md:gap-3 md:mb-auto shrink-0">
-          {navItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => {
-                setActiveTab(item.id);
-                setShowMobileSettings(false);
-              }}
-              className={`flex-1 md:flex-none flex flex-col md:flex-row items-center justify-center md:justify-start py-2 md:px-4 md:py-4 border-2 transition-all duration-300 group relative overflow-hidden ${
-                activeTab === item.id
-                  ? 'bg-ash-light text-ash-black border-ash-light shadow-hard'
-                  : 'bg-ash-black text-ash-gray border-ash-gray/30 hover:border-ash-light hover:text-ash-light'
-              }`}
-            >
-              {/* Active Indicator Pattern */}
-              {activeTab === item.id && (
-                  <div className="absolute inset-0 bg-halftone opacity-20 pointer-events-none" />
-              )}
+        <div className="flex lg:flex-col justify-between lg:justify-start w-full gap-1 lg:gap-3 lg:mb-auto shrink-0">
+          {navItems.map((item, index) => {
+            const isStoryItem = item.id === 'reader' || item.id === 'sidestories';
+            // Add a separator before the story items on desktop
+            const addSeparator = index === 3; 
 
-              <item.icon size={18} className="mb-1 md:mb-0 md:mr-3 z-10" strokeWidth={2.5} />
-              
-              {/* Desktop Label */}
-              <span className="hidden md:inline text-sm font-bold tracking-widest z-10 whitespace-normal text-left">{item.label}</span>
-              
-              {/* Mobile Label */}
-              <span className="md:hidden text-[10px] font-bold tracking-widest z-10 whitespace-nowrap">{item.mobileLabel}</span>
-            </button>
-          ))}
+            return (
+              <React.Fragment key={item.id}>
+                {addSeparator && <div className="hidden lg:block h-px bg-ash-gray/30 w-full my-2"></div>}
+                
+                <button
+                  onClick={() => {
+                    setActiveTab(item.id);
+                    setShowMobileSettings(false);
+                  }}
+                  className={`flex-1 lg:flex-none flex flex-col lg:flex-row items-center justify-center lg:justify-start py-2 lg:px-4 lg:py-4 border-2 transition-all duration-300 group relative overflow-hidden ${
+                    activeTab === item.id
+                      ? 'bg-ash-light text-ash-black border-ash-light shadow-hard'
+                      : isStoryItem
+                        ? 'bg-ash-dark/40 text-ash-light border-ash-gray hover:bg-ash-light hover:text-ash-black hover:border-ash-light shadow-sm' // Emphasized inactive state
+                        : 'bg-ash-black text-ash-gray border-ash-gray/30 hover:border-ash-light hover:text-ash-light'
+                  }`}
+                >
+                  {/* Active Indicator Pattern */}
+                  {activeTab === item.id && (
+                      <div className="absolute inset-0 bg-halftone opacity-20 pointer-events-none" />
+                  )}
+                  
+                  {/* Story Item Decoration (When inactive) */}
+                  {isStoryItem && activeTab !== item.id && (
+                     <div className="absolute left-0 top-0 bottom-0 w-1 bg-ash-gray/50 group-hover:bg-ash-black transition-colors hidden lg:block"></div>
+                  )}
+
+                  <item.icon 
+                    size={18} 
+                    className={`mb-1 lg:mb-0 lg:mr-3 z-10 transition-transform ${isStoryItem && activeTab !== item.id ? 'group-hover:scale-110' : ''}`} 
+                    strokeWidth={isStoryItem ? 2.5 : 2.5} 
+                  />
+                  
+                  {/* Desktop Label */}
+                  <span className={`hidden lg:inline text-sm font-bold tracking-widest z-10 whitespace-normal text-left ${isStoryItem ? 'text-base uppercase' : ''}`}>
+                    {item.label}
+                  </span>
+                  
+                  {/* Mobile Label */}
+                  <span className="lg:hidden text-[10px] font-bold tracking-widest z-10 whitespace-nowrap">{item.mobileLabel}</span>
+                  
+                  {/* Story Item Badge */}
+                  {isStoryItem && (
+                    <div className="absolute top-1 right-1 lg:top-1/2 lg:-translate-y-1/2 lg:right-2 w-1.5 h-1.5 bg-current opacity-50 rounded-full lg:rounded-none lg:w-1 lg:h-3"></div>
+                  )}
+                </button>
+              </React.Fragment>
+            );
+          })}
           
           {/* Mobile Settings Toggle */}
           <button
             onClick={() => setShowMobileSettings(!showMobileSettings)}
-            className={`flex-1 md:hidden flex flex-col items-center justify-center py-2 border-2 transition-all duration-300 group relative overflow-hidden ${
+            className={`flex-1 lg:hidden flex flex-col items-center justify-center py-2 border-2 transition-all duration-300 group relative overflow-hidden ${
               showMobileSettings
                 ? 'bg-ash-light text-ash-black border-ash-light shadow-hard'
                 : 'bg-ash-black text-ash-gray border-ash-gray/30 hover:border-ash-light hover:text-ash-light'
@@ -150,7 +178,7 @@ const Navigation: React.FC<NavigationProps> = ({
         </div>
 
         {/* System Configuration Controls (Desktop Only) */}
-        <div className="hidden md:flex flex-col gap-2 mt-8 border-t-2 border-dashed border-ash-gray/30 pt-6 shrink-0">
+        <div className="hidden lg:flex flex-col gap-2 mt-8 border-t-2 border-dashed border-ash-gray/30 pt-6 shrink-0">
           <div className="text-[10px] text-ash-gray font-mono mb-1 uppercase px-1">[SYSTEM_CONFIG]</div>
           <button 
             onClick={cycleLanguage}
@@ -167,19 +195,19 @@ const Navigation: React.FC<NavigationProps> = ({
           <ThemeToggle value={isLightTheme} onChange={setIsLightTheme} />
         </div>
 
-        <div className="hidden md:block mt-6 pt-4 border-t-2 border-dashed border-ash-gray/30 text-ash-gray text-[10px] font-mono leading-tight shrink-0">
+        <div className="hidden lg:block mt-6 pt-4 border-t-2 border-dashed border-ash-gray/30 text-ash-gray text-[10px] font-mono leading-tight shrink-0">
           <p className="mb-2">[CONNECTION_STATUS]</p>
           <div className="w-full bg-ash-dark h-2 border border-ash-gray mb-1">
               <div className="bg-ash-light h-full w-[98%] animate-pulse"></div>
           </div>
-          <p>{'>'} ENCRYPTION: STATIC</p>
-          <p>{'>'} PING: 0.04ms</p>
+          <p>> ENCRYPTION: STATIC</p>
+          <p>> PING: 0.04ms</p>
         </div>
       </nav>
 
       {/* Mobile Settings Overlay */}
       {showMobileSettings && (
-        <div className="fixed inset-0 bg-black/60 z-40 md:hidden backdrop-blur-[2px]" onClick={() => setShowMobileSettings(false)}>
+        <div className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-[2px]" onClick={() => setShowMobileSettings(false)}>
             <div 
                 className="absolute bottom-[90px] left-4 right-4 bg-ash-black border-2 border-ash-light p-5 shadow-hard animate-slide-in z-50 max-h-[70vh] overflow-y-auto"
                 onClick={e => e.stopPropagation()}

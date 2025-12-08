@@ -127,8 +127,9 @@ const CharactersPage: React.FC = () => {
 
       <div className="flex-1 flex flex-col md:flex-row overflow-hidden relative">
          
-         {/* List Selection - Horizontal on mobile, Vertical on desktop */}
-         <aside className="w-full md:w-80 border-b-2 md:border-b-0 md:border-r-2 border-ash-dark bg-ash-black overflow-x-auto md:overflow-y-auto shrink-0 z-10 flex flex-row md:flex-col no-scrollbar">
+         {/* List Selection - Horizontal on mobile, Vertical on desktop (md+) */}
+         {/* On tablet (md), width is slightly reduced (w-64) to save space for details. On large desktop (lg), it grows to w-80 */}
+         <aside className="w-full md:w-64 lg:w-80 border-b-2 md:border-b-0 md:border-r-2 border-ash-dark bg-ash-black overflow-x-auto md:overflow-y-auto shrink-0 z-10 flex flex-row md:flex-col no-scrollbar">
              <div className="flex flex-row md:flex-col p-2 md:p-4 gap-2 md:gap-4 md:space-y-2 min-w-max md:min-w-0">
                  {novelData.characters.map(char => (
                      <button
@@ -165,8 +166,9 @@ const CharactersPage: React.FC = () => {
              <div className="max-w-4xl mx-auto space-y-8 md:space-y-12">
                  
                  {/* ID Card Header */}
-                 <div className="flex flex-col md:flex-row gap-6 md:gap-8 items-start border-b-2 border-dashed border-ash-gray pb-8 md:pb-12">
-                     <div className="w-full md:w-1/3 bg-ash-dark p-4 md:p-6 border-2 border-ash-gray shadow-hard relative">
+                 {/* Stacks vertically on mobile AND tablet (flex-col), only goes horizontal on large screens (lg:flex-row) */}
+                 <div className="flex flex-col lg:flex-row gap-6 md:gap-8 items-start border-b-2 border-dashed border-ash-gray pb-8 md:pb-12">
+                     <div className="w-full lg:w-1/3 bg-ash-dark p-4 md:p-6 border-2 border-ash-gray shadow-hard relative">
                          {/* Radar Chart Container */}
                          <div className="aspect-square bg-ash-black border border-ash-dark mb-4 flex items-center justify-center relative overflow-hidden">
                              <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-ash-gray to-transparent"></div>
@@ -211,7 +213,10 @@ const CharactersPage: React.FC = () => {
                          </div>
 
                          {selectedChar.quote && (
-                             <div className="border-l-4 border-ash-light pl-4 py-2 italic text-ash-light/80 font-serif text-base md:text-lg">
+                             <div 
+                                className="border-l-4 border-ash-light pl-4 py-2 italic text-ash-light/80 font-serif text-base md:text-lg animate-slide-in"
+                                style={{ animationDelay: '150ms', animationFillMode: 'both' }}
+                             >
                                  "{selectedChar.quote}"
                              </div>
                          )}
@@ -231,7 +236,8 @@ const CharactersPage: React.FC = () => {
                      <h3 className="text-lg md:text-xl font-bold uppercase border-b border-ash-gray pb-2 flex items-center gap-2">
                          <Activity size={20} /> Field Analysis
                      </h3>
-                     <div className="grid md:grid-cols-2 gap-4 md:gap-8 text-sm md:text-base leading-relaxed font-mono text-ash-gray/90">
+                     {/* 2-column layout only on XL screens to prevent squeezing on tablets */}
+                     <div className="grid xl:grid-cols-2 gap-4 md:gap-8 text-sm md:text-base leading-relaxed font-mono text-ash-gray/90">
                          {selectedChar.description.map((para, idx) => (
                              <div key={idx} className="p-3 md:p-4 border border-ash-dark bg-ash-dark/30 hover:bg-ash-dark/50 transition-colors">
                                  <span className="text-ash-light font-bold mr-2">[{String(idx + 1).padStart(2, '0')}]</span>

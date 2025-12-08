@@ -11,7 +11,7 @@ interface ReaderPageProps {
 }
 
 // Special collapsible component for Void logs
-const VoidLog = ({ lines }: { lines: string[] }) => {
+const VoidLog: React.FC<{ lines: string[] }> = ({ lines }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -25,7 +25,7 @@ const VoidLog = ({ lines }: { lines: string[] }) => {
              <AlertTriangle size={16} />
           </div>
           <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
-             <span className="animate-pulse tracking-widest text-fuchsia-400">{'>>>'} SYSTEM_INTERCEPT // 0000.2_VOID</span>
+             <span className="animate-pulse tracking-widest text-fuchsia-400">>>> SYSTEM_INTERCEPT // 0000.2_VOID</span>
              <span className="text-[10px] bg-fuchsia-900/50 px-1 border border-fuchsia-500/30 text-fuchsia-200/70">
                 ENCRYPTION: UNSTABLE
              </span>
@@ -76,24 +76,6 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
       setIsSidebarOpen(false);
     }
   }, []);
-
-  useEffect(() => {
-    try {
-      const historyKey = 'nova_history';
-      const history = JSON.parse(localStorage.getItem(historyKey) || '[]');
-      const newEntry = {
-        chapterId: currentChapter.id,
-        chapterIndex: currentIndex,
-        title: translation.title,
-        timestamp: Date.now()
-      };
-      const filteredHistory = history.filter((h: any) => h.chapterIndex !== currentIndex);
-      const updatedHistory = [newEntry, ...filteredHistory].slice(50);
-      localStorage.setItem(historyKey, JSON.stringify(updatedHistory));
-    } catch (e) {
-      console.error("Failed to save history", e);
-    }
-  }, [currentIndex, currentChapter, translation.title]);
 
   // Reset scroll on chapter change
   useEffect(() => {
@@ -245,24 +227,35 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
         <div className="overflow-y-auto h-[calc(100%-60px)] p-0">
           {novelData.chapters.map((chapter, index) => {
             const chapTitle = chapter.translations[language]?.title || chapter.translations['zh-CN'].title;
+            const isLocked = chapter.status === 'locked';
+
             return (
               <button
                 key={chapter.id}
                 onClick={() => {
-                  onChapterChange(index);
-                  if (window.innerWidth < 768) setIsSidebarOpen(false);
+                   if (!isLocked) {
+                      onChapterChange(index);
+                      if (window.innerWidth < 768) setIsSidebarOpen(false);
+                   }
                 }}
-                className={`w-full text-left p-4 text-xs font-mono border-b border-ash-dark transition-none group ${
+                disabled={isLocked}
+                className={`w-full text-left p-4 text-xs font-mono border-b border-ash-dark transition-none group relative ${
                   index === currentIndex
                     ? 'bg-ash-light text-ash-black'
-                    : 'text-ash-gray hover:bg-ash-dark hover:text-ash-white'
+                    : isLocked ? 'bg-ash-black/50 text-ash-gray/30 cursor-not-allowed' : 'text-ash-gray hover:bg-ash-dark hover:text-ash-white'
                 }`}
               >
-                <div className="font-bold truncate uppercase mb-1">
-                  {index === currentIndex && <span className="mr-2">{'>'}</span>}
-                  {chapTitle}
+                <div className="flex justify-between items-start">
+                    <div className="font-bold truncate uppercase mb-1 max-w-[85%]">
+                        {index === currentIndex && <span className="mr-2">></span>}
+                        {chapTitle}
+                    </div>
+                    {isLocked && <div className="text-[10px] border border-current px-1 opacity-50">LOCK</div>}
                 </div>
                 <div className="opacity-60">{chapter.date}</div>
+                {isLocked && (
+                    <div className="absolute inset-0 bg-[repeating-linear-gradient(45deg,transparent,transparent_5px,rgba(0,0,0,0.5)_5px,rgba(0,0,0,0.5)_10px)] pointer-events-none opacity-50"></div>
+                )}
               </button>
             )
           })}
@@ -285,54 +278,65 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
           key={currentIndex} 
           className="max-w-4xl mx-auto min-h-full bg-ash-black border-l-0 md:border-l-2 md:border-r-2 border-ash-dark/50 shadow-2xl relative animate-slide-in"
         >
-            
-          {/* Paper Header */}
-          <div className="px-8 py-12 md:px-16 md:py-16 border-b-4 border-double border-ash-gray bg-ash-black text-ash-light mt-12 md:mt-0">
-            <Reveal>
-              <div className="flex justify-between items-start mb-6 font-mono text-[10px] text-ash-gray uppercase tracking-widest">
-                  <span>NOVA_ARCHIVE // {currentChapter.id}</span>
-                  <span>PG_INDEX: {currentIndex + 1}</span>
+          {currentChapter.status === 'locked' ? (
+              <div className="h-[80vh] flex flex-col items-center justify-center text-ash-gray p-8 text-center">
+                  <div className="mb-6 p-6 border-4 border-dashed border-red-900/50 rounded-none bg-red-950/10">
+                      <Activity size={64} className="text-red-800 mb-4 mx-auto animate-pulse" />
+                      <h2 className="text-2xl font-black uppercase text-red-700 tracking-widest mb-2">Access Denied</h2>
+                      <p className="font-mono text-sm text-red-900/70">ENCRYPTED_FILE // AUTH_LEVEL_MISSING</p>
+                  </div>
               </div>
-              
-              <h1 className="text-3xl md:text-5xl font-black mb-6 uppercase tracking-tighter leading-tight">
-                  {translation.title}
-              </h1>
-              
-              <div className="flex items-center gap-2 text-xs font-mono text-ash-gray bg-ash-dark inline-block px-3 py-1 border border-ash-gray">
-                  <FileText size={12} />
-                  <span>{currentChapter.date}</span>
-              </div>
-            </Reveal>
-          </div>
+          ) : (
+            <>
+                {/* Paper Header */}
+                <div className="px-8 py-12 lg:px-16 md:mt-0 border-b-4 border-double border-ash-gray bg-ash-black text-ash-light mt-12">
+                    <Reveal>
+                    <div className="flex justify-between items-start mb-6 font-mono text-[10px] text-ash-gray uppercase tracking-widest">
+                        <span>NOVA_ARCHIVE // {currentChapter.id}</span>
+                        <span>PG_INDEX: {currentIndex + 1}</span>
+                    </div>
+                    
+                    <h1 className="text-3xl md:text-5xl font-black mb-6 uppercase tracking-tighter leading-tight">
+                        {translation.title}
+                    </h1>
+                    
+                    <div className="flex items-center gap-2 text-xs font-mono text-ash-gray bg-ash-dark inline-block px-3 py-1 border border-ash-gray">
+                        <FileText size={12} />
+                        <span>{currentChapter.date}</span>
+                    </div>
+                    </Reveal>
+                </div>
 
-          <article className="px-8 py-12 md:px-16 max-w-none text-ash-light font-serif leading-loose tracking-wide">
-            {renderContent(translation.content)}
-          </article>
+                <article className="px-8 py-12 lg:px-16 max-w-none text-ash-light font-serif leading-loose tracking-wide">
+                    {renderContent(translation.content)}
+                </article>
 
-          {/* Footer Nav */}
-          <div className="p-8 md:p-16 border-t-4 border-double border-ash-gray bg-ash-dark">
-             <div className="flex justify-between items-center gap-4">
-                 <button 
-                   onClick={handlePrev}
-                   disabled={currentIndex === 0}
-                   className="flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-ash-gray text-ash-gray hover:bg-ash-light hover:text-ash-black hover:border-ash-light disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-ash-gray transition-colors uppercase font-bold text-sm font-mono"
-                 >
-                   <ChevronLeft size={16} /> PREV_FILE
-                 </button>
+                {/* Footer Nav */}
+                <div className="p-8 md:p-16 border-t-4 border-double border-ash-gray bg-ash-dark">
+                    <div className="flex justify-between items-center gap-4">
+                        <button 
+                        onClick={handlePrev}
+                        disabled={currentIndex === 0}
+                        className="flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-ash-gray text-ash-gray hover:bg-ash-light hover:text-ash-black hover:border-ash-light disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-ash-gray transition-colors uppercase font-bold text-sm font-mono"
+                        >
+                        <ChevronLeft size={16} /> PREV_FILE
+                        </button>
 
-                 <div className="hidden md:block font-mono text-xs text-ash-gray">
-                   - END OF RECORD -
-                 </div>
+                        <div className="hidden md:block font-mono text-xs text-ash-gray">
+                        - END OF RECORD -
+                        </div>
 
-                 <button 
-                   onClick={handleNext}
-                   disabled={currentIndex === novelData.chapters.length - 1}
-                   className="flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-ash-gray text-ash-gray hover:bg-ash-light hover:text-ash-black hover:border-ash-light disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-ash-gray transition-colors uppercase font-bold text-sm font-mono"
-                 >
-                   NEXT_FILE <ChevronRight size={16} />
-                 </button>
-             </div>
-          </div>
+                        <button 
+                        onClick={handleNext}
+                        disabled={currentIndex === novelData.chapters.length - 1} // Logic checks total length, but navigation handles locks separately or allows browsing up to lock
+                        className="flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-ash-gray text-ash-gray hover:bg-ash-light hover:text-ash-black hover:border-ash-light disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-ash-gray transition-colors uppercase font-bold text-sm font-mono"
+                        >
+                        NEXT_FILE <ChevronRight size={16} />
+                        </button>
+                    </div>
+                </div>
+            </>
+          )}
         </div>
       </main>
     </div>

@@ -1,3 +1,4 @@
+
 export type Language = 'zh-CN' | 'zh-TW' | 'en';
 
 export interface CharacterStats {
@@ -36,12 +37,20 @@ export interface ChapterTranslation {
 export interface Chapter {
   id: string;
   date: string;
-  status?: 'published' | 'locked';
+  status?: 'published' | 'locked' | 'corrupted';
   translations: {
     'zh-CN': ChapterTranslation;
     'zh-TW': ChapterTranslation;
     'en': ChapterTranslation;
   };
+}
+
+export interface SideStoryVolume {
+  id: string;
+  title: string; 
+  titleEn: string;
+  status: 'unlocked' | 'locked' | 'corrupted';
+  chapters: Chapter[];
 }
 
 export interface NovelData {

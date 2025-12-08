@@ -100,6 +100,13 @@
         transition: background-color 0.3s ease, color 0.3s ease;
       }
 
+      /* Hide native cursor on desktop to use JS CustomCursor */
+      @media (pointer: fine) {
+        *, button, a, input, select, textarea {
+          cursor: none !important;
+        }
+      }
+
       /* Global Reset for Retro Feel */
       * {
         border-radius: 0 !important; /* STRICT NO ROUNDED CORNERS */
