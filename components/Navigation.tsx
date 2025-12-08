@@ -3,6 +3,7 @@ import { Database, Book, Users, Home, GitBranch, Cpu, Settings, Globe } from 'lu
 import BackgroundMusic from './BackgroundMusic';
 import CRTToggle from './CRTToggle';
 import ThemeToggle from './ThemeToggle';
+import FullscreenToggle from './FullscreenToggle';
 import { Language } from '../types';
 
 interface NavigationProps {
@@ -192,6 +193,7 @@ const Navigation: React.FC<NavigationProps> = ({
           </button>
           <BackgroundMusic />
           <CRTToggle value={crtEnabled} onChange={setCrtEnabled} language={language} />
+          <FullscreenToggle language={language} />
           <ThemeToggle value={isLightTheme} onChange={setIsLightTheme} />
         </div>
 
@@ -233,6 +235,7 @@ const Navigation: React.FC<NavigationProps> = ({
                     </button>
                     <BackgroundMusic />
                     <CRTToggle value={crtEnabled} onChange={setCrtEnabled} language={language} />
+                    <FullscreenToggle language={language} />
                     <ThemeToggle value={isLightTheme} onChange={setIsLightTheme} />
                 </div>
                 

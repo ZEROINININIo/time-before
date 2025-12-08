@@ -1,16 +1,16 @@
 @echo off
 setlocal
 
-REM Change to repo root
+rem Jump to project root (script location)
 cd /d "%~dp0"
 
-REM Install dependencies if node_modules is missing
+rem Install dependencies if node_modules missing
 if not exist "node_modules" (
   echo Installing dependencies...
   npm install
 )
 
-echo Starting Vite dev server...
+echo Starting dev server...
 npm run dev
 
 endlocal

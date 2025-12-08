@@ -4,6 +4,7 @@ import { Language } from '../types';
 import ThemeToggle from './ThemeToggle';
 import CRTToggle from './CRTToggle';
 import BackgroundMusic from './BackgroundMusic';
+import FullscreenToggle from './FullscreenToggle';
 
 interface InitialSetupProps {
   onComplete: () => void;
@@ -140,6 +141,7 @@ const InitialSetup: React.FC<InitialSetupProps> = ({
                                     </label>
                                     <div className="space-y-3">
                                         <CRTToggle value={crtEnabled} onChange={setCrtEnabled} isSetupMode language={language} />
+                                        <FullscreenToggle isSetupMode language={language} />
                                         <ThemeToggle value={isDarkTheme} onChange={setIsDarkTheme} isSetupMode />
                                     </div>
                                 </div>
