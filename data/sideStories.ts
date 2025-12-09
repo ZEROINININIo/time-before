@@ -1,6 +1,6 @@
 
 import { SideStoryVolume, Chapter } from '../types';
-import { chapterA003 } from './chapter_files/A003';
+import { chapterS001 } from './side_story_files/S001';
 
 // Helper to create garbled chapters
 const createGarbledChapter = (id: string, dateLabel: string): Chapter => ({
@@ -18,11 +18,11 @@ export const sideStoryVolumes: SideStoryVolume[] = [
   {
     id: "VOL_DAILY",
     title: "时域日常", 
-    titleEn: "Time Domain Daily",
+    titleEn: "Time Line Daily",
     status: 'unlocked',
     chapters: [
-        // Chapter 1: The Coffee Machine (Moved from A003)
-        chapterA003,
+        // Chapter 1: The Coffee Machine (Previously A003)
+        chapterS001,
         // Garbled Chapters
         createGarbledChapter("ERR_002", "档案记录: X-002"),
         createGarbledChapter("ERR_003", "档案记录: X-003"),

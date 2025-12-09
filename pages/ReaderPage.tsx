@@ -24,8 +24,8 @@ const VoidLog: React.FC<{ lines: string[] }> = ({ lines }) => {
           <div className={`transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`}>
              <AlertTriangle size={16} />
           </div>
-            <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
-             <span className="animate-pulse tracking-widest text-fuchsia-400">&gt;&gt;&gt; SYSTEM_INTERCEPT // 0000.2_VOID</span>
+          <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
+             <span className="animate-pulse tracking-widest text-fuchsia-400">{">>> SYSTEM_INTERCEPT // 0000.2_VOID"}</span>
              <span className="text-[10px] bg-fuchsia-900/50 px-1 border border-fuchsia-500/30 text-fuchsia-200/70">
                 ENCRYPTION: UNSTABLE
              </span>
@@ -247,7 +247,7 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
               >
                 <div className="flex justify-between items-start">
                     <div className="font-bold truncate uppercase mb-1 max-w-[85%]">
-                        {index === currentIndex && <span className="mr-2">&gt;</span>}
+                        {index === currentIndex && <span className="mr-2">{">"}</span>}
                         {chapTitle}
                     </div>
                     {isLocked && <div className="text-[10px] border border-current px-1 opacity-50">LOCK</div>}

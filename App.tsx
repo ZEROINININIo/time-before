@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Navigation from './components/Navigation';
 import HomePage from './pages/HomePage';
@@ -137,7 +138,7 @@ const App: React.FC = () => {
                   setLanguage={setLanguage}
                 />
               )}
-              {activeTab === 'characters' && <CharactersPage />}
+              {activeTab === 'characters' && <CharactersPage language={language} />}
               {activeTab === 'database' && <DatabasePage language={language} />}
               {activeTab === 'reader' && (
                 <ReaderPage 

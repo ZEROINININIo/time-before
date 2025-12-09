@@ -9,23 +9,39 @@ export interface CharacterStats {
   resonance: number;   // 共鸣/量子适应性
 }
 
-export interface Character {
-  id: string;
+export interface CharacterTranslation {
   name: string;
-  alias?: string;
   role: string;
   description: string[];
   tags: string[];
-  stats: CharacterStats;
   quote?: string;
+}
+
+export interface Character {
+  id: string;
+  alias?: string;
+  stats: CharacterStats;
   themeColor?: string;
+  translations: {
+    'zh-CN': CharacterTranslation;
+    'zh-TW': CharacterTranslation;
+    'en': CharacterTranslation;
+  };
+}
+
+export interface LoreTranslation {
+  title: string;
+  content: string[];
 }
 
 export interface LoreEntry {
   id: string;
-  title: string;
   category: 'World' | 'Organization' | 'Technology' | 'Society';
-  content: string[]; // Array of paragraphs
+  translations: {
+    'zh-CN': LoreTranslation;
+    'zh-TW': LoreTranslation;
+    'en': LoreTranslation;
+  };
 }
 
 export interface ChapterTranslation {

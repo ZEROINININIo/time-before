@@ -213,11 +213,11 @@ const HomePage: React.FC<HomePageProps> = ({ onStartReading, language, setLangua
             <div className="bg-ash-black border border-ash-gray p-2 font-mono text-[10px] h-32 overflow-hidden opacity-70">
                 <div className="mb-2 border-b border-ash-gray/30 pb-1 text-ash-gray uppercase">{t.recent_logs}</div>
                 <ul className="space-y-1 text-ash-gray/80">
-                    <li>&gt; [SYS] User_Login detected...</li>
-                    <li>&gt; [NET] Handshake successful (0.04ms)</li>
-                    <li>&gt; [DB] Loaded 3 Volumes, 1 Side_Story</li>
-                    <li>&gt; [SEC] Environment scan... Clear</li>
-                    <li>&gt; [SYS] Ready for input.</li>
+                    <li>{">"} [SYS] User_Login detected...</li>
+                    <li>{">"} [NET] Handshake successful (0.04ms)</li>
+                    <li>{">"} [DB] Loaded 3 Volumes, 1 Side_Story</li>
+                    <li>{">"} [SEC] Environment scan... Clear</li>
+                    <li>{">"} [SYS] Ready for input.</li>
                 </ul>
             </div>
         </div>

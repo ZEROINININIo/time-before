@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { novelData } from '../data/novelData';
 import { Globe, Box, Cpu, Users, FolderOpen, Image as ImageIcon } from 'lucide-react';
@@ -87,65 +88,69 @@ const DatabasePage: React.FC<DatabasePageProps> = ({ language }) => {
 
       {/* Content Grid */}
       <div className="grid grid-cols-1 gap-4 md:gap-8 pb-8">
-        {filteredLore.map((entry, index) => (
-          <Reveal key={entry.id} delay={index * 100}>
-            <div className="bg-ash-black border-2 border-ash-gray p-4 md:p-8 hover:border-ash-light transition-colors relative group">
-              {/* Corner Markers */}
-              <div className="absolute top-0 left-0 w-3 md:w-4 h-3 md:h-4 border-t-2 border-l-2 border-ash-gray group-hover:border-ash-light"></div>
-              <div className="absolute top-0 right-0 w-3 md:w-4 h-3 md:h-4 border-t-2 border-r-2 border-ash-gray group-hover:border-ash-light"></div>
-              <div className="absolute bottom-0 left-0 w-3 md:w-4 h-3 md:h-4 border-b-2 border-l-2 border-ash-gray group-hover:border-ash-light"></div>
-              <div className="absolute bottom-0 right-0 w-3 md:w-4 h-3 md:h-4 border-b-2 border-r-2 border-ash-gray group-hover:border-ash-light"></div>
+        {filteredLore.map((entry, index) => {
+          const tLore = entry.translations[language] || entry.translations['zh-CN'];
+          
+          return (
+            <Reveal key={entry.id} delay={index * 100}>
+              <div className="bg-ash-black border-2 border-ash-gray p-4 md:p-8 hover:border-ash-light transition-colors relative group">
+                {/* Corner Markers */}
+                <div className="absolute top-0 left-0 w-3 md:w-4 h-3 md:h-4 border-t-2 border-l-2 border-ash-gray group-hover:border-ash-light"></div>
+                <div className="absolute top-0 right-0 w-3 md:w-4 h-3 md:h-4 border-t-2 border-r-2 border-ash-gray group-hover:border-ash-light"></div>
+                <div className="absolute bottom-0 left-0 w-3 md:w-4 h-3 md:h-4 border-b-2 border-l-2 border-ash-gray group-hover:border-ash-light"></div>
+                <div className="absolute bottom-0 right-0 w-3 md:w-4 h-3 md:h-4 border-b-2 border-r-2 border-ash-gray group-hover:border-ash-light"></div>
 
-              <div className="flex flex-col md:flex-row md:items-start justify-between mb-4 md:mb-6 border-b border-dashed border-ash-gray pb-4 gap-2 md:gap-0">
-                <h3 className="text-lg md:text-xl font-bold text-ash-light font-mono uppercase leading-tight">{entry.title}</h3>
-                <span className="self-start text-[10px] font-mono text-ash-black bg-ash-gray px-2 py-1 font-bold">
-                  {t.type}: {entry.category.toUpperCase()}
-                </span>
-              </div>
-              
-              <div className="space-y-4 text-ash-gray font-mono text-xs md:text-sm leading-6 md:leading-7">
-                {entry.content.map((para, idx) => {
-                  const imageMatch = para.match(/\[\[IMAGE::(.*?)::(.*?)\]\]/);
-                  if (imageMatch) {
-                      const [_, src, caption] = imageMatch;
-                      return (
-                        <div key={idx} className="my-6">
-                            <div className="relative border-2 border-ash-gray p-2 bg-ash-dark/30 inline-block max-w-full">
-                                {/* Corners for image frame */}
-                                <div className="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-ash-gray"></div>
-                                <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-ash-gray"></div>
-                                
-                                <img 
-                                    src={src} 
-                                    alt={caption}
-                                    className="max-w-full h-auto max-h-64 object-contain mx-auto block grayscale-[20%] hover:grayscale-0 transition-all"
-                                />
-                                <div className="absolute bottom-0 right-0 translate-y-1/2 translate-x-2 bg-ash-dark border border-ash-gray px-2 py-0.5 z-10">
-                                     <div className="text-[10px] font-mono text-ash-light flex items-center gap-2 uppercase font-bold">
-                                        <ImageIcon size={10} />
-                                        {caption}
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                      );
-                  }
+                <div className="flex flex-col md:flex-row md:items-start justify-between mb-4 md:mb-6 border-b border-dashed border-ash-gray pb-4 gap-2 md:gap-0">
+                  <h3 className="text-lg md:text-xl font-bold text-ash-light font-mono uppercase leading-tight">{tLore.title}</h3>
+                  <span className="self-start text-[10px] font-mono text-ash-black bg-ash-gray px-2 py-1 font-bold">
+                    {t.type}: {entry.category.toUpperCase()}
+                  </span>
+                </div>
+                
+                <div className="space-y-4 text-ash-gray font-mono text-xs md:text-sm leading-6 md:leading-7">
+                  {tLore.content.map((para, idx) => {
+                    const imageMatch = para.match(/\[\[IMAGE::(.*?)::(.*?)\]\]/);
+                    if (imageMatch) {
+                        const [_, src, caption] = imageMatch;
+                        return (
+                          <div key={idx} className="my-6">
+                              <div className="relative border-2 border-ash-gray p-2 bg-ash-dark/30 inline-block max-w-full">
+                                  {/* Corners for image frame */}
+                                  <div className="absolute -top-1 -left-1 w-2 h-2 border-t border-l border-ash-gray"></div>
+                                  <div className="absolute -bottom-1 -right-1 w-2 h-2 border-b border-r border-ash-gray"></div>
+                                  
+                                  <img 
+                                      src={src} 
+                                      alt={caption}
+                                      className="max-w-full h-auto max-h-64 object-contain mx-auto block grayscale-[20%] hover:grayscale-0 transition-all"
+                                  />
+                                  <div className="absolute bottom-0 right-0 translate-y-1/2 translate-x-2 bg-ash-dark border border-ash-gray px-2 py-0.5 z-10">
+                                      <div className="text-[10px] font-mono text-ash-light flex items-center gap-2 uppercase font-bold">
+                                          <ImageIcon size={10} />
+                                          {caption}
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                        );
+                    }
 
-                  const parts = para.split('**');
-                  return (
-                      <p key={idx}>
-                          {parts.map((part, i) => 
-                              i % 2 === 1 
-                              ? <strong key={i} className="text-ash-light bg-ash-dark px-1 border border-ash-gray/50">{part}</strong> 
-                              : part
-                          )}
-                      </p>
-                  )
-                })}
+                    const parts = para.split('**');
+                    return (
+                        <p key={idx}>
+                            {parts.map((part, i) => 
+                                i % 2 === 1 
+                                ? <strong key={i} className="text-ash-light bg-ash-dark px-1 border border-ash-gray/50">{part}</strong> 
+                                : part
+                            )}
+                        </p>
+                    )
+                  })}
+                </div>
               </div>
-            </div>
-          </Reveal>
-        ))}
+            </Reveal>
+          );
+        })}
       </div>
     </div>
   );
