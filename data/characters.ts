@@ -1,11 +1,10 @@
-
 import { Character } from '../types';
 
 export const characters: Character[] = [
   {
     id: "point",
     alias: "Z.Point",
-    themeColor: "text-zinc-400",
+    themeColor: "text-orange-500",
     stats: {
       strength: 5,
       intelligence: 8,
@@ -197,9 +196,9 @@ export const characters: Character[] = [
           "A higher-dimensional existence from the 'Void', sharing a special relationship with the trio.",
           "Possesses infinite life and a special memory system. Extremely powerful, easily accomplishing things impossible in reality.",
           "Appears laid-back but is very reliable at critical moments.",
-          "Dotes on Point and will help, but warns Point not to summon it often (as it damages Point)."
+          "He is protective of Point, helping her but also warning her not to summon him too often (as it damages her)."
         ]
       }
     }
-  },
+  }
 ];

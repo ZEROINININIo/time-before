@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import Navigation from './components/Navigation';
 import HomePage from './pages/HomePage';
@@ -11,7 +10,7 @@ import InitialSetup from './components/InitialSetup';
 import CustomCursor from './components/CustomCursor';
 import { Language } from './types';
 
-const STORAGE_KEY = 'nova_labs_config_v1';
+const STORAGE_KEY = 'nova_labs_config_v2';
 
 interface AppConfig {
   language: Language;
@@ -88,6 +87,7 @@ const App: React.FC = () => {
         <BootSequence 
           onComplete={handleBootComplete} 
           isNormalBoot={setupCompleted} 
+          language={language}
         />
       )}
 
@@ -99,8 +99,8 @@ const App: React.FC = () => {
             setLanguage={setLanguage}
             crtEnabled={crtEnabled}
             setCrtEnabled={setCrtEnabled}
-            isDarkTheme={isLightTheme}
-            setIsDarkTheme={setIsLightTheme}
+            isLightTheme={isLightTheme}
+            setIsLightTheme={setIsLightTheme}
         />
       )}
 

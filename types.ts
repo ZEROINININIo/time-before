@@ -77,3 +77,19 @@ export interface NovelData {
   lore: LoreEntry[];
   chapters: Chapter[];
 }
+
+export interface SideCharacterData {
+  id: string;
+  group: string; // Grouping for tree view
+  isLocked?: boolean; // Lock status
+  translations: {
+    [key in Language]: {
+      name: string;
+      enName: string;
+      role: string;
+      tags: string[];
+      description: string[];
+      quote?: string;
+    }
+  }
+}

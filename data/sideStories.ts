@@ -1,6 +1,7 @@
 
 import { SideStoryVolume, Chapter } from '../types';
 import { chapterS001 } from './side_story_files/S001';
+import { chapterSMemories001 } from './side_story_files/S_Memories_001';
 
 // Helper to create garbled chapters
 const createGarbledChapter = (id: string, dateLabel: string): Chapter => ({
@@ -33,8 +34,10 @@ export const sideStoryVolumes: SideStoryVolume[] = [
     id: "VOL_MEMORIES",
     title: "破碎雨滴",
     titleEn: "Fragmented Rain",
-    status: 'locked',
-    chapters: []
+    status: 'unlocked',
+    chapters: [
+      chapterSMemories001
+    ]
   },
   {
     id: "VOL_UNKNOWN",

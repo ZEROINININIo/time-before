@@ -1,3 +1,4 @@
+
 import { Chapter } from '../../types';
 
 export const chapterA001: Chapter = {
@@ -8,7 +9,7 @@ export const chapterA001: Chapter = {
     'zh-CN': {
       title: "加班是个坏文明",
       summary: "难得的休假时间，零点想找人玩，却误入了芷漓的“陷阱”。",
-      content: `本故事时间&世界线为前传现世篇，请勿代入正篇设定
+      content: `[[BLUE::本故事时间&世界线为前传现世篇，请勿代入正篇设定]]
 
 （轻盈的脚步声）（敲门）
 
@@ -79,7 +80,7 @@ export const chapterA001: Chapter = {
     'zh-TW': {
       title: "加班是壞文明",
       summary: "難得的休假時間，零點想找人玩，卻誤入了芷漓的「陷阱」。",
-      content: `本故事時間&世界線為前傳現世篇，請勿代入正篇設定
+      content: `[[BLUE::本故事時間&世界線為前傳現世篇，請勿代入正篇設定]]
 
 （輕盈的腳步聲）（敲門）
 
@@ -100,7 +101,7 @@ export const chapterA001: Chapter = {
 芷漓：（輕嘆）「我幾分鐘後正準備出門呢，不過，我打賭妳不會喜歡跟我這次同
 行的……」
 
-零點：「先讓我進去嘛，好像我是小偷一樣！（進入），那我在客廳等妳囉」
+零點：「先讓我進去嘛，好像我是小偷一樣！（進入），那我先在前廳等妳囉」
 
 正如芷漓的性格，在這個二十一世紀風格的小屋裡，一切設施都清幽有序。
 
@@ -110,7 +111,7 @@ export const chapterA001: Chapter = {
 零點：「我又不是新客人！嘿嘿，其實，其實我上次偷偷拿多了幾塊巧克力（笑）」
 
 芷漓帶著看餓死鬼一樣的眼神盯了一眼零點，隨後向房間走去，幾分鐘後，芷漓
-背著側背包，鼓鼓的包引起了零點的好奇，不過還沒等好奇心得到滿足，芷漓就
+背著單肩包，鼓鼓的包引起了零點的好奇，不過還沒等好奇心得到滿足，芷漓就
 招呼零點出門了
 
 零點：「（疑惑）我們要去哪裡？中心節區嗎？」
@@ -123,7 +124,7 @@ export const chapterA001: Chapter = {
 
 隨著兩人的「旅程」到了必經的總中轉站，零點發現他們要搭乘的穿梭軌根本不是
 去中心節區的，而是…他們的工作地點——時域特別節區，零點回過神，芷漓這
-個滿腦子都是研究的人，怎麼可能會主動去放鬆？！想跑，可是已經晚了，芷漓
+個滿腦子都是研習的人，怎麼可能會主動去放鬆？！想跑，可是已經晚了，芷漓
 死死拉著零點的手臂，把她的身體往穿梭車裡拉，零點怎麼也沒想到，芷漓也會
 有小心思啊~~
 
@@ -132,7 +133,7 @@ export const chapterA001: Chapter = {
 
 芷漓：「（板著臉）不行，妳..說好的，不能後悔！陪我！（使出全力一拽）」
 
-可能是芷漓使力過大，也可能是零點腳底打滑，她失去了重心並朝芷漓倒去，
+可能是芷漓使力過大，也可能是零點腳底打滑，她失去了著力點並朝芷漓倒去，
 芷漓沒反應過來，還在繼續拽著零點，導致零點被她拉向自己，再一瞬，只剩在
 地上躺著的兩人了，更慘的是，芷漓整個人都被零點壓在身下。
 
@@ -140,67 +141,82 @@ export const chapterA001: Chapter = {
 
 零點：「（疼痛）妳賭對了嗚嗚嗚，能不能放我走啊~我想跟澤洛一起睡覺！！」
 
-芷漓：「門都沒有！（抱住零點）」
+芷漓：「沒門！（抱住零點）」
 
 最後零點還是乖乖的給芷漓當了一天助理……
 
-晚上澤洛回到研究所後，看著零點那副生無可戀的模樣，還以為零點玩了一天，
+晚上澤洛回到研究所後，看著零點那個生不如死的模樣，還以為零點玩了一天，
 累得不行了。`
     },
     'en': {
       title: "Overtime is Bad Civilization",
-      summary: "A rare vacation time. Point wanted to find someone to hang out with, but stumbled into Zeri's 'trap'.",
-      content: `Note: This story's timeline & worldline is the Prequel Current World Arc, please do not confuse with main story settings.
+      summary: "In a rare moment of time off, Point wanted to find someone to hang out with, but stumbled into Zeri's 'trap'.",
+      content: `[[BLUE::This story takes place in the Prequel Current World Timeline. Please do not conflate with the Main Story setting.]]
 
 (Light footsteps) (Knocking)
 
-A rare moment of vacation; the tense world seemed to halt its operations for them for a split second. After Z.Point sent a message to Z.Zelo wanting to hang out and relax, the only response she got was dead silence (she was sleeping too soundly). With a light sigh, she turned to visit another friend—Z.Zeri.
+It was a rare holiday. The tense world seemed to have stopped running for them for a moment. Point (Z.Point)
+sent a message to Zelo (Z.Zelo) asking to hang out and relax, but the only response was
+dead silence (she was sleeping too soundly). Sighing, she turned to visit another friend—Zeri (Z.Zeri).
 
-Point: "That guy Zelo, I bet she's sleeping like a corpse in bed... I wonder what Zeri is doing right now, maybe I can kidnap her to come play~~"
+Point: "That guy Zelo is probably sleeping like a corpse in bed... I wonder what Zeri is doing now.
+I'll take this chance to kidnap her to play~~"
 
 "Zeri! Are you home?"
 
-Zeri: (Opens the door a crack) "Point... Weren't you looking for Zelo-chan? Is something wrong with her?..."
+Zeri: (Opens the door a crack) "Point... didn't you go find Zelo-chan? Did something happen to her?..."
 
-Point: "Zelo hasn't woken up yet, and I have nothing to do, so I came to find you! Do you have any plans today? I'm going to follow you the~whole~day~"
+Point: "Zelo hasn't woken up yet, and I have nothing to do, so I came to find you! Do you have any plans today? I
+am going to follow you all~ day~ long~"
 
-Zeri: (Sighs lightly) "I was just about to go out in a few minutes, but... I bet you won't like coming with me this time..."
+Zeri: (Sighs softly) "I was just about to go out in a few minutes, but I bet you won't like joining me this time..."
 
-Point: "Let me in first! You make it seem like I'm a thief! (Enters) I'll wait for you in the front hall then."
+Point: "Let me in first! You make it sound like I'm a thief! (Enters) I'll wait for you in the front hall then."
 
 True to Zeri's character, everything in this 21st-century style cottage was quiet and orderly.
 
-Zeri: "Well... sit for a bit. There's chocolate you like on the table at your 3 o'clock direction. There's bottled water under the shelf at 2 o'clock, you can take one later..."
+Zeri: "Well... you sit for a while. There's chocolate you like on the table at your 3 o'clock direction. You can
+have some. There's bottled water under the shelf at 2 o'clock, you can take one with you later..."
 
 Point: "I'm not a new guest! Hehe, actually, actually I secretly took a few extra chocolates last time (laughs)"
 
-Zeri stared at Point with a look reserved for starving ghosts, then walked towards her room. A few minutes later, Zeri came out carrying a shoulder bag. The bulging bag aroused Point's curiosity, but before her curiosity could be satisfied, Zeri beckoned Point to leave.
+Zeri stared at Point with a look reserved for starving ghosts, then walked towards her room. A few minutes later, Zeri
+came out carrying a shoulder bag. The bulging bag aroused Point's curiosity, but before her curiosity could be satisfied, Zeri
+beckoned Point to go out.
 
 Point: "(Confused) Where are we going? The Central Sector?"
 
 Zeri: "(Smiles) The place you are most familiar with."
 
-Point was confused at first, but since she said she wanted to relax, surely Zeri wouldn't go to...
+Point was confused at first, but since she said she wanted to relax, Zeri wouldn't go to...
 
 Point: (Wait! Something's wrong!)
 
-As their "journey" reached the inevitable Main Transit Station, Point realized the shuttle rail they were boarding wasn't going to the Central Sector at all, but... their workplace—the Time Domain Special Sector. Point snapped back to reality. Zeri, whose brain is full of research, how could she actively go to relax?! She wanted to run, but it was too late. Zeri held Point's arm tightly, pulling her body into the shuttle car. Point never expected Zeri to have schemes too~~
+As their 'journey' reached the inevitable main transfer station, Point discovered that the shuttle rail they were about to board was not
+going to the Central Sector, but... their workplace—the Time Domain Special Sector. Point came to her senses. Zeri,
+whose head is full of studies, how could she actively go to relax?! She wanted to run, but it was too late. Zeri
+held onto Point's arm tightly, pulling her body into the shuttle. Point never expected that Zeri would also
+have such schemes~~
 
-Point: "(Panicked) Wait! Zeri! I don't want to work overtime wuwuwuwu, please let me go, you're so scary right now!... (Struggles to lean her body out)"
+Point: "(Panic) Wait! Zeri! I don't want to work overtime boohoohoo, please let me go, you are so scary right now!
+... (Tries hard to lean her body out to break free)"
 
-Zeri: "(Stern face) No, you... promised. No regrets! Keep me company! (Pulls with full force)"
+Zeri: "(Straight-faced) No. You... promised. No regrets! Keep me company! (Pulls with all her might)"
 
-Maybe Zeri used too much force, or maybe Point slipped. She lost her footing and fell towards Zeri. Zeri didn't react in time and continued pulling Point, causing Point to be pulled towards her. In an instant, the two were lying on the ground. Worse yet, Zeri was completely pinned under Point.
+Maybe Zeri used too much force, or maybe Point slipped. She lost her footing and fell towards Zeri.
+Zeri didn't react in time and continued pulling Point, causing Point to be pulled towards her. In an instant, only the two
+lying on the ground remained. Even worse, Zeri was completely crushed under Point.
 
-Zeri: "(On the verge of tears) Point... Get off me quickly... You need to lose weight..."
+Zeri: "(About to cry) Point... get off me quickly... you need to lose weight..."
 
-Point: "(In pain) You win wuwuwu, can you let me go~ I want to sleep with Zelo!!"
+Point: "(In pain) You won the bet boohoo, can you let me go~ I want to sleep with Zelo!!"
 
 Zeri: "No way! (Hugs Point)"
 
 In the end, Point obediently served as Zeri's assistant for the day...
 
-When Zelo returned to the research institute that night and saw Point looking like she would rather be dead, she thought Point had played all day and was just exhausted.`
+When Zelo returned to the institute at night and saw Point looking like she would rather be dead, she thought Point had played all day and
+was exhausted.`
     }
   }
 };

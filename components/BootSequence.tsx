@@ -1,22 +1,30 @@
+
 import React, { useEffect, useState } from 'react';
 import { AlertTriangle, Terminal, Cpu, CheckCircle } from 'lucide-react';
+import { Language } from '../types';
 
 interface BootSequenceProps {
   onComplete: () => void;
   isNormalBoot?: boolean; // If true, skip the crash/recovery drama
+  language: Language;
 }
 
-const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = false }) => {
+const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = false, language }) => {
   const [lines, setLines] = useState<string[]>([]);
   const [phase, setPhase] = useState<'BIOS' | 'ERROR' | 'RECOVERY' | 'NORMAL'>('BIOS');
 
   useEffect(() => {
+    const tip = language === 'zh-CN' ? ">> 提示：开启暗黑模式阅读体验更佳"
+            : language === 'zh-TW' ? ">> 提示：開啟暗黑模式閱讀體驗更佳"
+            : ">> TIP: DARK MODE RECOMMENDED FOR BEST EXPERIENCE";
+
     // Normal Boot Sequence (Fast, clean)
     if (isNormalBoot) {
         const bootLines = [
             "NOVA_BIOS v.3.1.4 (STABLE)",
             "VERIFYING_INTEGRITY... OK",
             "LOADING_USER_PROFILE... FOUND",
+            tip,
             "CONNECTING_TO_ARCHIVE... ESTABLISHED",
             "DECRYPTING_DATA_STREAMS...",
             "WELCOME_BACK_OPERATOR."
@@ -82,6 +90,7 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = 
             "INITIATING_SAFE_MODE...",
             "BYPASSING_DAMAGED_SECTORS...",
             "LOADING_BACKUP_CONFIG...",
+            tip,
             "RESTORING_USER_INTERFACE...",
             "PLEASE_CONFIGURE_SYSTEM_PARAMETERS."
         ];
@@ -98,7 +107,7 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = 
 
     }, delay + 2500);
 
-  }, [onComplete, isNormalBoot]);
+  }, [onComplete, isNormalBoot, language]);
 
   if (phase === 'ERROR') {
     return (
@@ -128,13 +137,27 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = 
         <span>NOVA_LABS_TERMINAL_ACCESS // {isNormalBoot ? 'NORMAL_BOOT' : phase}</span>
       </div>
       
-      <div className="space-y-1">
-        {lines.map((line, index) => (
-          <div key={index} className="animate-fade-in">
-            <span className="opacity-50 mr-2">[{new Date().toLocaleTimeString()}]</span>
-            {line}
-          </div>
-        ))}
+      <div className="space-y-1 w-full max-w-4xl mx-auto">
+        {lines.map((line, index) => {
+            const isTip = line.includes("开启暗黑模式") || line.includes("開啟暗黑模式") || line.includes("DARK MODE RECOMMENDED");
+            
+            if (isTip) {
+                return (
+                    <div key={index} className="animate-fade-in my-6 w-full text-center">
+                         <div className="inline-block px-4 py-2 border-y-2 border-dashed border-amber-500 bg-amber-900/20 text-amber-400 text-sm md:text-lg font-bold tracking-widest animate-pulse shadow-[0_0_15px_rgba(245,158,11,0.3)]">
+                             {line.replace(/^>>\s*/, '')}
+                         </div>
+                    </div>
+                );
+            }
+
+            return (
+                <div key={index} className="animate-fade-in break-words">
+                    <span className="opacity-50 mr-2">[{new Date().toLocaleTimeString()}]</span>
+                    {line}
+                </div>
+            );
+        })}
         <div className="h-4 w-3 bg-current animate-pulse inline-block mt-2"></div>
       </div>
 

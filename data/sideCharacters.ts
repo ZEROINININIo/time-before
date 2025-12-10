@@ -1,0 +1,96 @@
+
+import { SideCharacterData } from '../types';
+
+export const sideCharacters: SideCharacterData[] = [
+  {
+    id: "dusk-rain",
+    group: "ARCHIVE_01 // ACTIVE",
+    translations: {
+      'zh-CN': {
+        name: "暮雨",
+        enName: "Dusk .Rain",
+        role: "协作者",
+        tags: ["畏光", "多虑", "吉他手", "狂热"],
+        quote: "这只是必要的牺牲……大概吧？",
+        description: [
+          "**背景设定:** 父母曾是科研者，但从未告诉暮雨。在其父母双亡前，暮雨是一个极其普通的孩子。",
+          "**生理特征:** 在接受“零空”的预示后落下心理性创伤，从而畏光，需定时滴消眼药水，并佩戴科技遮光眼罩（外观看起来是普通黑色眼罩，从里面是可以看清外界的）。",
+          "**性格侧写:**",
+          "• 目的性很强，甚至狂热 (针对于特定事件)。",
+          "• 对人温和，善于交际。读得懂气氛，关照他人感受。",
+          "• Overthinking，多虑，以至内耗。",
+          "• 爱弹琴。以音乐的形式舒缓压力。",
+          "• 有自己的想法。",
+          "• 喜欢逗弄零点。"
+        ]
+      },
+      'zh-TW': {
+        name: "暮雨",
+        enName: "Dusk .Rain",
+        role: "協作者",
+        tags: ["畏光", "多慮", "吉他手", "狂熱"],
+        quote: "這只是必要的犧牲……大概吧？",
+        description: [
+          "**背景設定:** 父母曾是科研者，但從未告訴暮雨。在其父母雙亡前，暮雨是一個極其普通的孩子。",
+          "**生理特徵:** 在接受「零空」的預示後落下心理性創傷，從而畏光，需定時滴消眼藥水，並佩戴科技遮光眼罩（外觀看起來是普通黑色眼罩，從裡面是可以看清外界的）。",
+          "**性格側寫:**",
+          "• 目的性很強，甚至狂熱 (針對於特定事件)。",
+          "• 對人溫和，善於交際。讀得懂氣氛，關照他人感受。",
+          "• Overthinking，多慮，以至內耗。",
+          "• 愛彈琴。以音樂的形式舒緩壓力。",
+          "• 有自己的想法。",
+          "• 喜歡逗弄零點。"
+        ]
+      },
+      'en': {
+        name: "Dusk Rain",
+        enName: "Dusk .Rain",
+        role: "Collaborator",
+        tags: ["Photophobia", "Overthinker", "Guitarist", "Fanatic"],
+        quote: "This is just a necessary sacrifice... probably?",
+        description: [
+          "**Background:** His parents were researchers but never told him. Before they passed away, Dusk was an extremely ordinary child.",
+          "**Physical Condition:** Suffered psychological trauma after receiving a premonition from 'Void', resulting in photophobia. He needs to apply eye drops regularly and wears tech blackout goggles (opaque black from the outside, but clear from the inside).",
+          "**Personality:**",
+          "• Highly purposeful, even fanatical (regarding specific events).",
+          "• Gentle with others, good at socializing. Reads the atmosphere and cares about others' feelings.",
+          "• Overthinking, leads to internal exhaustion.",
+          "• Loves playing the guitar to relieve stress.",
+          "• Has his own ideas.",
+          "• Likes to tease Point."
+        ]
+      }
+    }
+  },
+  // --- PLACEHOLDERS FOR TREE STRUCTURE DEMO ---
+  {
+    id: "unknown-entity",
+    group: "ARCHIVE_02 // CLASSIFIED",
+    isLocked: true,
+    translations: {
+      'zh-CN': { name: "？？？", enName: "UNKNOWN_ENTITY", role: "未知", tags: [], description: ["权限不足，无法访问该档案。"], quote: "..." },
+      'zh-TW': { name: "？？？", enName: "UNKNOWN_ENTITY", role: "未知", tags: [], description: ["權限不足，無法訪問該檔案。"], quote: "..." },
+      'en': { name: "???", enName: "UNKNOWN_ENTITY", role: "UNKNOWN", tags: [], description: ["Access denied. Insufficient clearance."], quote: "..." }
+    }
+  },
+  {
+    id: "empty-slot-01",
+    group: "ARCHIVE_03 // RESERVED",
+    isLocked: true,
+    translations: {
+      'zh-CN': { name: "空闲槽位_01", enName: "EMPTY_SLOT_01", role: "待定", tags: [], description: ["该记录槽位为空，等待数据录入..."], quote: "" },
+      'zh-TW': { name: "空閒槽位_01", enName: "EMPTY_SLOT_01", role: "待定", tags: [], description: ["該記錄槽位為空，等待數據錄入..."], quote: "" },
+      'en': { name: "EMPTY_SLOT_01", enName: "EMPTY_SLOT_01", role: "TBD", tags: [], description: ["Slot empty. Awaiting data entry..."], quote: "" }
+    }
+  },
+    {
+    id: "empty-slot-02",
+    group: "ARCHIVE_03 // RESERVED",
+    isLocked: true,
+    translations: {
+      'zh-CN': { name: "空闲槽位_02", enName: "EMPTY_SLOT_02", role: "待定", tags: [], description: ["该记录槽位为空，等待数据录入..."], quote: "" },
+      'zh-TW': { name: "空閒槽位_02", enName: "EMPTY_SLOT_02", role: "待定", tags: [], description: ["該記錄槽位為空，等待數據錄入..."], quote: "" },
+      'en': { name: "EMPTY_SLOT_02", enName: "EMPTY_SLOT_02", role: "TBD", tags: [], description: ["Slot empty. Awaiting data entry..."], quote: "" }
+    }
+  }
+];

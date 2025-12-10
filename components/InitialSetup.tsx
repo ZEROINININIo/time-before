@@ -12,12 +12,12 @@ interface InitialSetupProps {
   setLanguage: (lang: Language) => void;
   crtEnabled: boolean;
   setCrtEnabled: (enabled: boolean) => void;
-  isDarkTheme: boolean;
-  setIsDarkTheme: (isDark: boolean) => void;
+  isLightTheme: boolean;
+  setIsLightTheme: (isLight: boolean) => void;
 }
 
 const InitialSetup: React.FC<InitialSetupProps> = ({ 
-    onComplete, language, setLanguage, crtEnabled, setCrtEnabled, isDarkTheme, setIsDarkTheme 
+    onComplete, language, setLanguage, crtEnabled, setCrtEnabled, isLightTheme, setIsLightTheme 
 }) => {
   
   const [step, setStep] = useState(0); // 0: Lang, 1: Config, 2: Ready
@@ -142,7 +142,7 @@ const InitialSetup: React.FC<InitialSetupProps> = ({
                                     <div className="space-y-3">
                                         <CRTToggle value={crtEnabled} onChange={setCrtEnabled} isSetupMode language={language} />
                                         <FullscreenToggle isSetupMode language={language} />
-                                        <ThemeToggle value={isDarkTheme} onChange={setIsDarkTheme} isSetupMode />
+                                        <ThemeToggle value={isLightTheme} onChange={setIsLightTheme} isSetupMode />
                                     </div>
                                 </div>
                                 <div>

@@ -101,7 +101,7 @@ const Navigation: React.FC<NavigationProps> = ({
             NOVA<br/>LABS
           </h1>
           <div className="text-[10px] text-ash-gray font-mono bg-ash-dark p-1 inline-block border border-ash-gray">
-            ARCHIVE_SYS // V.3.2_SIDE
+            ARCHIVE_SYS // TL.1.4-C
           </div>
         </div>
 

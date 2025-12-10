@@ -8,10 +8,9 @@ export const chapterA002: Chapter = {
     'zh-CN': {
       title: "愿赌服输！",
       summary: "自上次零点被芷漓进行“诱骗加班”后，零点心里的那口憋屈气一直未能放下。于是，她找到了一个机会，提出了一场关于寻找「远时」的赌约……",
-      content: `引用：现世世界观
+      content: `[[BLUE::引用：现世世界观]]
 
-自上次零点 被芷漓 进行“诱骗加班”后，零点心里的那口憋屈气一直未能放下。于
-是，她找到了一个机会…
+[[BLUE::自上次零点 被芷漓 进行“诱骗加班”后，零点心里的那口憋屈气一直未能放下。于是，她找到了一个机会…]]
 
 [[DIVIDER]]
 
@@ -198,15 +197,14 @@ export const chapterA002: Chapter = {
 
 零点：“我要珍藏一辈子！今天你必须穿一天，然后当我的女仆！”
 
-芷漓：“（想杀了她，不行，愿赌服输....）”`
+[[DANGER::芷漓：“（想杀了她，不行，愿赌服输....）”]]`
     },
     'zh-TW': {
       title: "願賭服輸！",
       summary: "自上次零點被芷漓進行「誘騙加班」後，零點心裡的那股悶氣一直未能放下。於是，她找到了一個機會，提出了一場關於尋找「遠時」的賭約……",
-      content: `引用：現世世界觀
+      content: `[[BLUE::引用：現世世界觀]]
 
-自上次零點 被芷漓 進行「誘騙加班」後，零點心裡的那股悶氣一直未能放下。於
-是，她找到了一個機會…
+[[BLUE::自上次零點 被芷漓 進行「誘騙加班」後，零點心裡的那股悶氣一直未能放下。於是，她找到了一個機會…]]
 
 [[DIVIDER]]
 
@@ -393,14 +391,14 @@ export const chapterA002: Chapter = {
 
 零點：「我要珍藏一輩子！今天妳必須穿一天，然後當我的女僕！」
 
-芷漓：「（想殺了她，不行，願賭服輸....）」`
+[[DANGER::芷漓：「（想殺了她，不行，願賭服輸....）」]]`
     },
     'en': {
       title: "Bet Accepted!",
       summary: "Since Point was 'tricked into overtime' by Zeri last time, she hasn't been able to let go of her frustration. So, she found an opportunity...",
-      content: `Reference: Current World Setting
+      content: `[[BLUE::Reference: Current World Setting]]
 
-Since Point was 'tricked into overtime' by Zeri last time, she hasn't been able to let go of her frustration. So, she found an opportunity...
+[[BLUE::Since Point was 'tricked into overtime' by Zeri last time, she hasn't been able to let go of her frustration. So, she found an opportunity...]]
 
 [[DIVIDER]]
 
@@ -450,7 +448,7 @@ Point: "Wow! Zeri, you didn't add sugar again yeeeee (painful expression)"
 
 Point: "I'm going to treasure this forever! You have to wear this all day today and be my maid!"
 
-Zeri: "(Wants to kill her, but no, she lost the bet...)"`
+[[DANGER::Zeri: "(Wants to kill her, but no, she lost the bet...)"]]`
     }
   }
 };
