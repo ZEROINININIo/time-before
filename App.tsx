@@ -145,9 +145,15 @@ const App: React.FC = () => {
                   currentIndex={currentChapterIndex} 
                   onChapterChange={setCurrentChapterIndex} 
                   language={language}
+                  isLightTheme={isLightTheme}
                 />
               )}
-              {activeTab === 'sidestories' && <SideStoriesPage language={language} />}
+              {activeTab === 'sidestories' && (
+                <SideStoriesPage 
+                  language={language} 
+                  isLightTheme={isLightTheme}
+                />
+              )}
             </div>
           </main>
         </div>

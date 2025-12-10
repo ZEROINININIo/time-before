@@ -8,6 +8,7 @@ import Reveal from '../components/Reveal';
 
 interface SideStoriesPageProps {
   language: Language;
+  isLightTheme: boolean;
 }
 
 // --- Internal Reader Logic (Shared with ReaderPage) ---
@@ -24,7 +25,7 @@ const VoidLog: React.FC<{ lines: string[] }> = ({ lines }) => {
              <AlertTriangle size={16} />
           </div>
           <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
-             <span className="animate-pulse tracking-widest text-fuchsia-400">{'>>>'} SYSTEM_INTERCEPT // VOID_SIDE</span>
+             <span className="animate-pulse tracking-widest text-fuchsia-400">{">>>"} SYSTEM_INTERCEPT // VOID_SIDE</span>
              <span className="text-[10px] bg-fuchsia-900/50 px-1 border border-fuchsia-500/30 text-fuchsia-200/70">
                 SOURCE: UNKNOWN
              </span>
@@ -44,7 +45,7 @@ const VoidLog: React.FC<{ lines: string[] }> = ({ lines }) => {
   );
 };
 
-const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language }) => {
+const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language, isLightTheme }) => {
   const [activeVolume, setActiveVolume] = useState<SideStoryVolume | null>(null);
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -106,15 +107,30 @@ const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language }) => {
             let className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-ash-light transition-colors";
             
             if (joinedText.startsWith('零点') || joinedText.startsWith('Point') || joinedText.startsWith('零點')) {
-                className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-orange-500";
+                // Point: Special white in dark mode, Dark Grey in light mode
+                className = isLightTheme
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-zinc-600 font-bold"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_2px_rgba(255,255,255,0.4)]";
             } else if (joinedText.startsWith('芷漓') || joinedText.startsWith('Zeri')) {
-                className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-400";
+                // Zeri: Pink with glow in Dark Mode
+                className = isLightTheme
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-600"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-400 drop-shadow-[0_0_2px_rgba(244,114,182,0.4)]";
             } else if (joinedText.startsWith('泽洛') || joinedText.startsWith('Zelo') || joinedText.startsWith('澤洛')) {
-                className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400";
+                // Zelo: Blue with glow in Dark Mode
+                className = isLightTheme
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-600"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400 drop-shadow-[0_0_2px_rgba(96,165,250,0.4)]";
             } else if (joinedText.startsWith('???') || joinedText.startsWith('Void') || joinedText.includes('void') || joinedText.includes('Void')) {
-                 className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]";
+                 // Void
+                 className = isLightTheme
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-zinc-900 font-bold"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]";
             } else if (joinedText.startsWith('终端') || joinedText.startsWith('TERMINAL') || joinedText.startsWith('終端')) {
-                 className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-emerald-500 font-bold";
+                 // Terminal
+                 className = isLightTheme
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-emerald-700 font-bold"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-emerald-500 font-bold";
             }
 
             nodes.push(
@@ -172,17 +188,23 @@ const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language }) => {
             flushTextBuffer(); // These elements break the paragraph
             
             if (blueMatch) {
+                 const blueClass = isLightTheme 
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-600 font-bold"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400 font-bold";
                 nodes.push(
                     <Reveal key={`blue-${i}`}>
-                        <p className="mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400 font-bold">
+                        <p className={blueClass}>
                             {blueMatch[1]}
                         </p>
                     </Reveal>
                 );
             } else if (dangerMatch) {
+                const dangerClass = isLightTheme
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-red-600 font-black animate-crash origin-left"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-red-500 font-black animate-crash origin-left";
                 nodes.push(
                     <Reveal key={`danger-${i}`}>
-                        <p className="mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-red-500 font-black animate-crash origin-left">
+                        <p className={dangerClass}>
                             {dangerMatch[1]}
                         </p>
                     </Reveal>
@@ -358,7 +380,7 @@ const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language }) => {
                                     // Simple bold parsing for markdown-like syntax
                                     const parts = para.split('**');
                                     return (
-                                        <div key={i} className={para.startsWith('•') || para.startsWith('>') ? "pl-4" : ""}>
+                                        <div key={i} className={para.startsWith('•') || para.startsWith('> ') ? "pl-4" : ""}>
                                             {parts.map((part, idx) => 
                                                 idx % 2 === 1 
                                                 ? <span key={idx} className="text-ash-light font-bold bg-ash-dark/50 px-1">{part}</span> 
@@ -514,7 +536,7 @@ const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language }) => {
                             <div className="relative z-10">
                                 <div className="flex justify-between items-start">
                                     <span className="font-bold truncate uppercase max-w-[85%]">
-                                        {index === currentChapterIndex && '> '}{chapTitle}
+                                        {index === currentChapterIndex && <span>{' > '}</span>}{chapTitle}
                                     </span>
                                     {isLocked && <ShieldAlert size={12} className="opacity-70" />}
                                 </div>

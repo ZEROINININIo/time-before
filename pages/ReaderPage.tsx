@@ -9,6 +9,7 @@ interface ReaderPageProps {
   currentIndex: number;
   onChapterChange: (index: number) => void;
   language: Language;
+  isLightTheme: boolean;
 }
 
 // Special collapsible component for Void logs
@@ -64,7 +65,7 @@ const VoidLog: React.FC<{ lines: string[] }> = ({ lines }) => {
   );
 };
 
-const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, language }) => {
+const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, language, isLightTheme }) => {
   // viewMode state: 'directory' shows the grid of chapters, 'reader' shows the text content
   const [viewMode, setViewMode] = useState<'directory' | 'reader'>('directory');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -140,17 +141,29 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
             const joinedText = smartJoin(textBuffer);
             
             // Auto-color logic based on speaker
+            // Default styling
             let className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-ash-light transition-colors";
             
             if (joinedText.startsWith('零点') || joinedText.startsWith('Point') || joinedText.startsWith('零點')) {
-                className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-zinc-400";
+                // Point: Special white with glow in Dark Mode, Dark Grey in Light Mode
+                className = isLightTheme
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-zinc-600 font-bold"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_2px_rgba(255,255,255,0.4)]";
             } else if (joinedText.startsWith('芷漓') || joinedText.startsWith('Zeri')) {
-                className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-400";
+                // Zeri: Pink with glow in Dark Mode
+                className = isLightTheme
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-600"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-400 drop-shadow-[0_0_2px_rgba(244,114,182,0.4)]";
             } else if (joinedText.startsWith('泽洛') || joinedText.startsWith('Zelo') || joinedText.startsWith('澤洛')) {
-                className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400";
+                // Zelo: Blue with glow in Dark Mode
+                className = isLightTheme
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-600"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400 drop-shadow-[0_0_2px_rgba(96,165,250,0.4)]";
             } else if (joinedText.startsWith('???') || joinedText.startsWith('Void') || joinedText.includes('void') || joinedText.includes('Void')) {
-                 // Void usually has special blocks, but for dialogue lines
-                 className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]";
+                 // Void
+                 className = isLightTheme
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-zinc-900 font-bold"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]";
             }
 
             nodes.push(
@@ -208,17 +221,23 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
             flushTextBuffer(); // These elements break the paragraph
             
             if (blueMatch) {
+                const blueClass = isLightTheme 
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-600 font-bold"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400 font-bold";
                 nodes.push(
                     <Reveal key={`blue-${i}`}>
-                        <p className="mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400 font-bold">
+                        <p className={blueClass}>
                             {blueMatch[1]}
                         </p>
                     </Reveal>
                 );
             } else if (dangerMatch) {
+                const dangerClass = isLightTheme
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-red-600 font-black animate-crash origin-left"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-red-500 font-black animate-crash origin-left";
                 nodes.push(
                     <Reveal key={`danger-${i}`}>
-                        <p className="mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-red-500 font-black animate-crash origin-left">
+                        <p className={dangerClass}>
                             {dangerMatch[1]}
                         </p>
                     </Reveal>
@@ -419,7 +438,7 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
                 <div className="relative z-10">
                     <div className="flex justify-between items-start">
                         <div className="font-bold truncate uppercase mb-1 max-w-[85%]">
-                            {index === currentIndex && <span className="mr-2">{'>'}</span>}
+                            {index === currentIndex && <span className="mr-2">{' > '}</span>}
                             {chapTitle}
                         </div>
                         {isLocked && <div className="text-[10px] border border-current px-1 opacity-70">LOCK</div>}

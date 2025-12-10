@@ -1,10 +1,11 @@
+
 import { Character } from '../types';
 
 export const characters: Character[] = [
   {
     id: "point",
     alias: "Z.Point",
-    themeColor: "text-orange-500",
+    themeColor: "text-zinc-400",
     stats: {
       strength: 5,
       intelligence: 8,
