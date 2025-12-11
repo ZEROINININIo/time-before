@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { SideStoryVolume, Language } from '../../types';
 import { Folder, Lock, AlertTriangle, HardDrive, VenetianMask } from 'lucide-react';
@@ -25,7 +26,7 @@ const SideStoryVolumeList: React.FC<SideStoryVolumeListProps> = ({ volumes, onSe
             {/* Floating Char Modal Button */}
             <button 
                 onClick={onOpenCharModal}
-                className="fixed bottom-4 right-4 md:absolute md:top-4 md:right-4 z-40 bg-ash-black border border-ash-gray p-3 text-ash-gray hover:bg-ash-light hover:text-ash-black hover:border-ash-light transition-all shadow-hard group"
+                className="fixed bottom-24 right-4 md:absolute md:top-4 md:right-4 z-50 bg-ash-black border border-ash-gray p-3 text-ash-gray hover:bg-ash-light hover:text-ash-black hover:border-ash-light transition-all shadow-hard group"
                 title="Personnel Archive"
             >
                 <VenetianMask size={20} />
