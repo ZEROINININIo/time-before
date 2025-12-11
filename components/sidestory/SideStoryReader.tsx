@@ -17,7 +17,7 @@ const VoidLog: React.FC<{ lines: string[] }> = ({ lines }) => {
              <AlertTriangle size={16} />
           </div>
           <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
-             <span className="animate-pulse tracking-widest text-fuchsia-400">{'>>> SYSTEM_INTERCEPT // VOID_SIDE'}</span>
+             <span className="animate-pulse tracking-widest text-fuchsia-400">&gt;&gt;&gt; SYSTEM_INTERCEPT // VOID_SIDE</span>
              <span className="text-[10px] bg-fuchsia-900/50 px-1 border border-fuchsia-500/30 text-fuchsia-200/70">
                 SOURCE: UNKNOWN
              </span>
@@ -283,7 +283,7 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
                             <div className="relative z-10">
                                 <div className="flex justify-between items-start">
                                     <span className="font-bold truncate uppercase max-w-[85%]">
-                                        {index === currentChapterIndex && <span>{' > '}</span>}{chapTitle}
+                                        {index === currentChapterIndex && <span className="mr-2">&gt;</span>}{chapTitle}
                                     </span>
                                     {isLocked && <ShieldAlert size={12} className="opacity-70" />}
                                 </div>

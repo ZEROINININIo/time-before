@@ -14,7 +14,8 @@ export const sideCharacters: SideCharacterData[] = [
         quote: "这只是必要的牺牲……大概吧？",
         description: [
           "**背景设定:** 父母曾是科研者，但从未告诉暮雨。在其父母双亡前，暮雨是一个极其普通的孩子。",
-          "**生理特征:** 在接受“零空”的预示后落下心理性创伤，从而畏光，需定时滴消眼药水，并佩戴科技遮光眼罩（外观看起来是普通黑色眼罩，从里面是可以看清外界的）。",
+          "**生理特征:** 在接受“零空”的预示后落下心理性创伤，从而畏光，需定时滴消眼药水，并佩戴高科技遮光眼罩（单向透明，从内部能清晰看见外界，但从外部看只是一块普通的黑色布料）。",
+          "**外貌习惯:** 无论去哪里，背上永远背着一个黑色的吉他包，吉他本体从不离身。对他来说，这不仅是乐器，更是某种安全感的来源。",
           "**性格侧写:**",
           "• 目的性很强，甚至狂热 (针对于特定事件)。",
           "• 对人温和，善于交际。读得懂气氛，关照他人感受。",
@@ -32,7 +33,8 @@ export const sideCharacters: SideCharacterData[] = [
         quote: "這只是必要的犧牲……大概吧？",
         description: [
           "**背景設定:** 父母曾是科研者，但從未告訴暮雨。在其父母雙亡前，暮雨是一個極其普通的孩子。",
-          "**生理特徵:** 在接受「零空」的預示後落下心理性創傷，從而畏光，需定時滴消眼藥水，並佩戴科技遮光眼罩（外觀看起來是普通黑色眼罩，從裡面是可以看清外界的）。",
+          "**生理特徵:** 在接受「零空」的預示後落下心理性創傷，從而畏光，需定時滴消眼藥水，並佩戴高科技遮光眼罩（單向透明，從內部能清晰看見外界，但從外部看只是一塊普通的黑色布料）。",
+          "**外貌習慣:** 無論去哪裡，背上永遠背著一個黑色的吉他包，吉他本體從不離身。對他來說，這不僅是樂器，更是某種安全感的來源。",
           "**性格側寫:**",
           "• 目的性很強，甚至狂熱 (針對於特定事件)。",
           "• 對人溫和，善於交際。讀得懂氣氛，關照他人感受。",
@@ -50,7 +52,8 @@ export const sideCharacters: SideCharacterData[] = [
         quote: "This is just a necessary sacrifice... probably?",
         description: [
           "**Background:** His parents were researchers but never told him. Before they passed away, Dusk was an extremely ordinary child.",
-          "**Physical Condition:** Suffered psychological trauma after receiving a premonition from 'Void', resulting in photophobia. He needs to apply eye drops regularly and wears tech blackout goggles (opaque black from the outside, but clear from the inside).",
+          "**Physical Condition:** Suffered psychological trauma after receiving a premonition from 'Void', resulting in photophobia. He needs to apply eye drops regularly and wears a high-tech blackout eye mask (one-way transparent, allowing a clear view from the inside, but appearing as a piece of ordinary black cloth from the outside).",
+          "**Habit:** Regardless of where he goes, he always carries a black guitar bag on his back; his guitar never leaves his side. For him, it is not just an instrument, but a source of security.",
           "**Personality:**",
           "• Highly purposeful, even fanatical (regarding specific events).",
           "• Gentle with others, good at socializing. Reads the atmosphere and cares about others' feelings.",

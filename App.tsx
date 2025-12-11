@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import Navigation from './components/Navigation';
 import HomePage from './pages/HomePage';
@@ -18,13 +19,17 @@ interface AppConfig {
   crtEnabled: boolean;
   isLightTheme: boolean;
   setupCompleted: boolean;
+  bgmPlaying: boolean;
+  bgmVolume: number;
 }
 
 const defaultConfig: AppConfig = {
   language: 'zh-CN',
   crtEnabled: true,
   isLightTheme: false,
-  setupCompleted: false
+  setupCompleted: false,
+  bgmPlaying: false,
+  bgmVolume: 0.06
 };
 
 const App: React.FC = () => {
@@ -56,6 +61,10 @@ const App: React.FC = () => {
   const [crtEnabled, setCrtEnabled] = useState(initialConfig.crtEnabled);
   const [isLightTheme, setIsLightTheme] = useState(initialConfig.isLightTheme);
   const [setupCompleted, setSetupCompleted] = useState(initialConfig.setupCompleted);
+  
+  // BGM State (Lifted)
+  const [bgmPlaying, setBgmPlaying] = useState(initialConfig.bgmPlaying);
+  const [bgmVolume, setBgmVolume] = useState(initialConfig.bgmVolume);
 
   // 2. Persist settings whenever they change
   useEffect(() => {
@@ -63,10 +72,12 @@ const App: React.FC = () => {
       language,
       crtEnabled,
       isLightTheme,
-      setupCompleted
+      setupCompleted,
+      bgmPlaying,
+      bgmVolume
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
-  }, [language, crtEnabled, isLightTheme, setupCompleted]);
+  }, [language, crtEnabled, isLightTheme, setupCompleted, bgmPlaying, bgmVolume]);
 
   const handleBootComplete = () => {
     if (setupCompleted) {
@@ -129,6 +140,10 @@ const App: React.FC = () => {
             setCrtEnabled={setCrtEnabled}
             isLightTheme={isLightTheme}
             setIsLightTheme={setIsLightTheme}
+            bgmPlaying={bgmPlaying}
+            setBgmPlaying={setBgmPlaying}
+            bgmVolume={bgmVolume}
+            setBgmVolume={setBgmVolume}
         />
       )}
 
@@ -160,6 +175,10 @@ const App: React.FC = () => {
             setCrtEnabled={setCrtEnabled}
             isLightTheme={isLightTheme}
             setIsLightTheme={setIsLightTheme}
+            bgmPlaying={bgmPlaying}
+            setBgmPlaying={setBgmPlaying}
+            bgmVolume={bgmVolume}
+            setBgmVolume={setBgmVolume}
           />
           
           <main className="flex-1 h-full overflow-hidden relative z-10 border-l-2 border-ash-dark">

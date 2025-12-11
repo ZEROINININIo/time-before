@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Database, Book, Users, Home, GitBranch, Cpu, Settings, Globe } from 'lucide-react';
+import { Database, Book, Users, Home, GitBranch, Settings, Globe } from 'lucide-react';
 import BackgroundMusic from './BackgroundMusic';
 import CRTToggle from './CRTToggle';
 import ThemeToggle from './ThemeToggle';
@@ -15,11 +16,16 @@ interface NavigationProps {
   setCrtEnabled: (val: boolean) => void;
   isLightTheme: boolean;
   setIsLightTheme: (val: boolean) => void;
+  bgmPlaying: boolean;
+  setBgmPlaying: (val: boolean) => void;
+  bgmVolume: number;
+  setBgmVolume: (val: number) => void;
 }
 
 const Navigation: React.FC<NavigationProps> = ({ 
     activeTab, setActiveTab, language, setLanguage,
-    crtEnabled, setCrtEnabled, isLightTheme, setIsLightTheme
+    crtEnabled, setCrtEnabled, isLightTheme, setIsLightTheme,
+    bgmPlaying, setBgmPlaying, bgmVolume, setBgmVolume
 }) => {
   const [showMobileSettings, setShowMobileSettings] = useState(false);
 
@@ -92,16 +98,27 @@ const Navigation: React.FC<NavigationProps> = ({
     <>
       <nav className="fixed bottom-0 left-0 right-0 lg:static lg:w-72 lg:h-full bg-ash-black border-t-2 lg:border-t-0 lg:border-r-2 border-ash-light/20 z-50 flex lg:flex-col justify-between p-2 lg:p-6 shadow-2xl transition-colors duration-300 lg:overflow-y-auto no-scrollbar">
         <div className="hidden lg:block mb-8 border-b-2 border-ash-light/20 pb-6 shrink-0">
-          <div className="flex items-center gap-2 mb-2">
-              <Cpu className="text-ash-light animate-pulse" />
-              <div className="w-2 h-2 bg-ash-light"></div>
-              <div className="w-2 h-2 bg-ash-gray"></div>
+          <div className="flex items-center gap-4 mb-4">
+               {/* Logo Image */}
+               <div className="relative w-12 h-12 bg-ash-black border border-ash-gray/50 p-1 shadow-hard group">
+                   <img 
+                      src="https://free.picui.cn/free/2025/12/08/6936e856897d6.png" 
+                      alt="Nova Labs"
+                      className="w-full h-full object-contain filter grayscale opacity-80 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500"
+                   />
+                   <div className="absolute -top-1 -right-1 w-2 h-2 bg-ash-light"></div>
+                   <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-ash-light"></div>
+              </div>
+              <div className="flex flex-col gap-1">
+                  <div className="w-2 h-2 bg-ash-light animate-pulse"></div>
+                  <div className="w-2 h-2 bg-ash-gray"></div>
+              </div>
           </div>
           <h1 className="text-4xl font-black text-ash-light tracking-tighter uppercase mb-1" style={{ textShadow: '2px 2px 0 #333' }}>
             NOVA<br/>LABS
           </h1>
           <div className="text-[10px] text-ash-gray font-mono bg-ash-dark p-1 inline-block border border-ash-gray">
-            ARCHIVE_SYS // TL.1.6-I
+            ARCHIVE_SYS // TL.1.6-U
           </div>
         </div>
 
@@ -191,18 +208,22 @@ const Navigation: React.FC<NavigationProps> = ({
             </div>
             <span className="text-[10px] font-mono font-bold">{getLangLabel()}</span>
           </button>
-          <BackgroundMusic />
+          <BackgroundMusic 
+             isPlaying={bgmPlaying} 
+             onToggle={() => setBgmPlaying(!bgmPlaying)}
+             volume={bgmVolume}
+             onVolumeChange={setBgmVolume}
+          />
           <CRTToggle value={crtEnabled} onChange={setCrtEnabled} language={language} />
           <FullscreenToggle language={language} />
           <ThemeToggle value={isLightTheme} onChange={setIsLightTheme} />
         </div>
 
         <div className="hidden lg:block mt-6 pt-4 border-t-2 border-dashed border-ash-gray/30 text-ash-gray text-[10px] font-mono leading-tight shrink-0">
-          <p className="mb-2">[CONNECTION_STATUS]</p>
+          <p>&gt; ENCRYPTION: STATIC</p>
           <div className="w-full bg-ash-dark h-2 border border-ash-gray mb-1">
               <div className="bg-ash-light h-full w-[98%] animate-pulse"></div>
           </div>
-          <p>&gt; ENCRYPTION: STATIC</p>
           <p>&gt; PING: 0.04ms</p>
         </div>
       </nav>
@@ -233,7 +254,12 @@ const Navigation: React.FC<NavigationProps> = ({
                       </div>
                       <span className="text-[10px] font-mono font-bold">{getLangLabel()}</span>
                     </button>
-                    <BackgroundMusic />
+                    <BackgroundMusic 
+                        isPlaying={bgmPlaying} 
+                        onToggle={() => setBgmPlaying(!bgmPlaying)}
+                        volume={bgmVolume}
+                        onVolumeChange={setBgmVolume}
+                    />
                     <CRTToggle value={crtEnabled} onChange={setCrtEnabled} language={language} />
                     <FullscreenToggle language={language} />
                     <ThemeToggle value={isLightTheme} onChange={setIsLightTheme} />

@@ -1,6 +1,7 @@
+
 import React from 'react';
 import { SideStoryVolume, Language } from '../../types';
-import { ArrowLeft, Cpu, Lock, FileText, ChevronRight } from 'lucide-react';
+import { ArrowLeft, Cpu, Lock, FileText, ChevronRight, AlertTriangle, Star } from 'lucide-react';
 import Reveal from '../Reveal';
 
 interface SideStoryChapterListProps {
@@ -37,10 +38,17 @@ const SideStoryChapterList: React.FC<SideStoryChapterListProps> = ({ volume, onB
                     {volume.chapters.map((chapter, index) => {
                         const isLocked = chapter.status === 'locked';
                         const t = chapter.translations[language] || chapter.translations['zh-CN'];
+                        const isLegacy = chapter.id === 'special-legacy-dusk'; // Check for special legacy chapter
                         
                         // Dynamic Styles based on theme and state
                         let itemClass = "";
-                        if (isLocked) {
+                        
+                        if (isLegacy) {
+                             // Special Style for Legacy Chapter
+                             itemClass = isLightTheme
+                                ? 'bg-red-50 border-red-500 text-red-900 shadow-[0_0_10px_rgba(220,38,38,0.3)]'
+                                : 'bg-red-950/20 border-red-700/50 text-red-500 shadow-[0_0_15px_rgba(185,28,28,0.2)]';
+                        } else if (isLocked) {
                             itemClass = isLightTheme 
                                 ? 'bg-zinc-100 border-zinc-300 text-zinc-400 opacity-60 cursor-not-allowed'
                                 : 'bg-ash-dark/20 border-ash-dark/50 text-ash-gray opacity-60 cursor-not-allowed';
@@ -58,35 +66,42 @@ const SideStoryChapterList: React.FC<SideStoryChapterListProps> = ({ volume, onB
                                             onSelectChapter(index);
                                         }
                                     }}
-                                    disabled={isLocked}
+                                    disabled={isLocked} // It is strictly locked as requested
                                     className={`
                                         w-full flex items-center gap-4 p-4 border transition-all duration-200 group relative overflow-hidden
                                         ${itemClass}
+                                        ${isLegacy ? 'hover:scale-[1.01] hover:bg-red-900/10 cursor-not-allowed' : ''}
                                     `}
                                 >
-                                    <div className="shrink-0 w-8 text-center font-mono text-xs opacity-50">
-                                        {String(index + 1).padStart(2, '0')}
+                                    {/* Number Index */}
+                                    <div className={`shrink-0 w-8 text-center font-mono text-xs ${isLegacy ? 'text-red-500 font-bold' : 'opacity-50'}`}>
+                                        {isLegacy ? '!!' : String(index + 1).padStart(2, '0')}
                                     </div>
                                     
+                                    {/* Icon Box */}
                                     <div className={`
                                         shrink-0 p-2 border transition-colors
-                                        ${isLocked 
-                                            ? 'bg-transparent border-current opacity-50' 
-                                            : isLightTheme 
-                                                ? 'bg-zinc-100 border-zinc-200 group-hover:bg-zinc-800 group-hover:text-white group-hover:border-zinc-800'
-                                                : 'bg-ash-dark/50 border-ash-gray/30 group-hover:border-ash-light group-hover:bg-ash-light group-hover:text-ash-black'
+                                        ${isLegacy
+                                            ? 'bg-red-950 border-red-500 text-red-500 animate-pulse'
+                                            : isLocked 
+                                                ? 'bg-transparent border-current opacity-50' 
+                                                : isLightTheme 
+                                                    ? 'bg-zinc-100 border-zinc-200 group-hover:bg-zinc-800 group-hover:text-white group-hover:border-zinc-800'
+                                                    : 'bg-ash-dark/50 border-ash-gray/30 group-hover:border-ash-light group-hover:bg-ash-light group-hover:text-ash-black'
                                         }
                                     `}>
-                                        {isLocked ? <Lock size={16} /> : <FileText size={16} />}
+                                        {isLegacy ? <Star size={16} fill="currentColor" /> : isLocked ? <Lock size={16} /> : <FileText size={16} />}
                                     </div>
                                     
-                                    <div className="flex-1 text-left">
-                                        <div className="font-bold font-mono text-sm md:text-base uppercase truncate">
+                                    {/* Text Content */}
+                                    <div className="flex-1 text-left relative">
+                                        <div className={`font-bold font-mono text-sm md:text-base uppercase truncate ${isLegacy ? 'glitch-text-heavy tracking-widest' : ''}`} data-text={t.title}>
                                             {t.title}
                                         </div>
-                                        <div className="text-[10px] font-mono opacity-50 flex items-center gap-2">
+                                        <div className={`text-[10px] font-mono flex items-center gap-2 ${isLegacy ? 'text-red-500/70' : 'opacity-50'}`}>
                                             <span>{chapter.date}</span>
-                                            {!isLocked && <span className="hidden md:inline">| {t.content.length * 2} BYTES</span>}
+                                            {isLegacy && <span className="font-bold border border-red-500/50 px-1 bg-red-950/30">LEGACY // RESTRICTED</span>}
+                                            {!isLocked && !isLegacy && <span className="hidden md:inline">| {t.content.length * 2} BYTES</span>}
                                         </div>
                                     </div>
 
@@ -97,8 +112,19 @@ const SideStoryChapterList: React.FC<SideStoryChapterListProps> = ({ volume, onB
                                         </div>
                                     )}
 
+                                    {isLegacy && (
+                                         <div className="opacity-70">
+                                             <AlertTriangle size={16} className="text-red-500" />
+                                         </div>
+                                    )}
+
                                     {/* Scanline on Hover (Only dark mode or subtle) */}
-                                    {!isLocked && !isLightTheme && <div className="absolute inset-0 bg-white/5 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none skew-x-12"></div>}
+                                    {!isLocked && !isLightTheme && !isLegacy && <div className="absolute inset-0 bg-white/5 translate-x-[-100%] group-hover:translate-x-[100%] transition-transform duration-700 ease-in-out pointer-events-none skew-x-12"></div>}
+                                    
+                                    {/* Legacy Special Effects */}
+                                    {isLegacy && (
+                                        <div className="absolute inset-0 pointer-events-none bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(220,38,38,0.05)_10px,rgba(220,38,38,0.05)_20px)]"></div>
+                                    )}
                                 </button>
                             </Reveal>
                         );

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Globe, Monitor, Volume2, ArrowRight, ShieldAlert, Check, ChevronLeft, Loader2 } from 'lucide-react';
 import { Language } from '../types';
@@ -14,10 +15,15 @@ interface InitialSetupProps {
   setCrtEnabled: (enabled: boolean) => void;
   isLightTheme: boolean;
   setIsLightTheme: (isLight: boolean) => void;
+  bgmPlaying: boolean;
+  setBgmPlaying: (val: boolean) => void;
+  bgmVolume: number;
+  setBgmVolume: (val: number) => void;
 }
 
 const InitialSetup: React.FC<InitialSetupProps> = ({ 
-    onComplete, language, setLanguage, crtEnabled, setCrtEnabled, isLightTheme, setIsLightTheme 
+    onComplete, language, setLanguage, crtEnabled, setCrtEnabled, isLightTheme, setIsLightTheme,
+    bgmPlaying, setBgmPlaying, bgmVolume, setBgmVolume
 }) => {
   
   const [step, setStep] = useState(0); // 0: Lang, 1: Config, 2: Ready
@@ -149,7 +155,13 @@ const InitialSetup: React.FC<InitialSetupProps> = ({
                                     <label className="block text-xs font-bold text-amber-600 mb-2 uppercase flex items-center gap-2">
                                         <Volume2 size={14} /> {t.audio}
                                     </label>
-                                    <BackgroundMusic isSetupMode />
+                                    <BackgroundMusic 
+                                        isSetupMode 
+                                        isPlaying={bgmPlaying}
+                                        onToggle={() => setBgmPlaying(!bgmPlaying)}
+                                        volume={bgmVolume}
+                                        onVolumeChange={setBgmVolume}
+                                    />
                                     <p className="text-[10px] text-amber-800 mt-2 leading-tight">
                                         * {language === 'en' ? 'Audio hardware detected. Enable for immersion.' : '检测到音频硬件。建议开启以获得沉浸体验。'}
                                     </p>

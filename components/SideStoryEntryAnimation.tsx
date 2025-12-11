@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState } from 'react';
-import { Binary, Waves, Database, FileDigit } from 'lucide-react';
+import { Binary, Database, Brain } from 'lucide-react';
 import { Language } from '../types';
 
 interface SideStoryEntryAnimationProps {
@@ -97,10 +98,10 @@ const SideStoryEntryAnimation: React.FC<SideStoryEntryAnimationProps> = ({ onCom
               )}
 
               {/* Central Icon */}
-              <div className={`transition-all duration-700 ${stage === 2 ? 'scale-125 text-white blur-[1px]' : 'scale-100 text-blue-400'}`}>
+              <div className={`transition-all duration-700 ${stage === 2 ? 'scale-125 text-white' : 'scale-100 text-blue-400'}`}>
                  {stage === 0 && <Database size={48} className="animate-pulse" />}
                  {stage === 1 && <Binary size={48} className="animate-bounce" />}
-                 {stage >= 2 && <Waves size={64} strokeWidth={1} />}
+                 {stage >= 2 && <Brain size={64} />}
               </div>
           </div>
 
