@@ -442,5 +442,6 @@ export default function CharactersPage({ language }: CharactersPageProps) {
 
          </main>
       </div>
+    </div>
     );
 }
