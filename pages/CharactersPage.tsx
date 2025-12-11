@@ -1,12 +1,140 @@
 
 import React, { useState } from 'react';
 import { novelData } from '../data/novelData';
-import { User, Activity, Shield, Sparkles, Hash, Zap, Cpu, Brain, Heart, Wind } from 'lucide-react';
+import { sideCharacters } from '../data/sideCharacters';
+import { User, Activity, Shield, Sparkles, Hash, Zap, Cpu, Brain, Heart, Wind, Share2 } from 'lucide-react';
 import { CharacterStats, Language } from '../types';
 
 interface CharactersPageProps {
     language: Language;
 }
+
+// --- Data & Helpers for Relationship Graph ---
+
+const relationships: Record<string, string[]> = {
+  'point': ['zeri', 'zelo', 'void', 'dusk-rain'],
+  'zeri': ['point', 'zelo'],
+  'zelo': ['point', 'zeri'],
+  'void': ['point'],
+};
+
+const getCharInfo = (id: string, language: Language) => {
+  // 1. Check Main Characters
+  const main = novelData.characters.find(c => c.id === id);
+  if (main) {
+    const t = main.translations[language] || main.translations['zh-CN'];
+    return {
+      id: main.id,
+      name: t.name,
+      role: t.role,
+      color: main.themeColor || 'text-ash-light',
+      isMain: true
+    };
+  }
+  
+  // 2. Check Side Characters
+  const side = sideCharacters.find(c => c.id === id);
+  if (side) {
+    const t = side.translations[language] || side.translations['zh-CN'];
+    return {
+      id: side.id,
+      name: t.name,
+      role: t.role,
+      color: 'text-ash-gray',
+      isMain: false
+    };
+  }
+
+  return null;
+};
+
+// --- Components ---
+
+const RelationshipGraph = ({ centerId, language, onSelect, isLightTheme }: { centerId: string, language: Language, onSelect: (id: string) => void, isLightTheme: boolean }) => {
+    const relatedIds = relationships[centerId] || [];
+    if (relatedIds.length === 0) return null;
+
+    const centerInfo = getCharInfo(centerId, language);
+    if (!centerInfo) return null;
+
+    // Increased sizes for better visibility - V2
+    const radius = 130; // Further increased distance
+    const size = 400;  // Larger canvas size
+    const center = size / 2;
+
+    return (
+        <div className="flex flex-col items-center w-full overflow-hidden">
+            <h3 className="text-xs font-bold uppercase mb-4 flex items-center gap-2 text-ash-gray w-full border-b border-ash-gray/20 pb-2">
+                <Share2 size={14} /> {language === 'en' ? 'Network' : '关系网络'}
+            </h3>
+            
+            {/* Increased max-width constraint to allow bigger graph */}
+            <div className="relative w-full max-w-[400px]" style={{ aspectRatio: '1/1' }}>
+                 <svg viewBox={`0 0 ${size} ${size}`} className="w-full h-full overflow-visible">
+                     {/* Lines */}
+                     {relatedIds.map((id, i) => {
+                         const angle = (i * 2 * Math.PI) / relatedIds.length - Math.PI / 2;
+                         const x = center + radius * Math.cos(angle);
+                         const y = center + radius * Math.sin(angle);
+                         return (
+                             <g key={`line-${id}`}>
+                                <line 
+                                    x1={center} y1={center}
+                                    x2={x} y2={y}
+                                    stroke="currentColor"
+                                    strokeOpacity="0.3" 
+                                    strokeWidth="2"
+                                    className="text-ash-gray"
+                                />
+                                <circle cx={center + (x-center)*0.5} cy={center + (y-center)*0.5} r="3" className="text-ash-gray fill-current opacity-50" />
+                             </g>
+                         );
+                     })}
+
+                     {/* Center Node */}
+                     <g className="filter drop-shadow-lg">
+                        <circle cx={center} cy={center} r="40" className={`${centerInfo.color} fill-current opacity-20`} />
+                        <circle cx={center} cy={center} r="35" className="fill-ash-black stroke-[3px] stroke-current text-ash-gray" />
+                        <text x={center} y={center} dy="0.35em" textAnchor="middle" className={`text-[18px] font-mono font-black uppercase ${centerInfo.color} fill-current pointer-events-none select-none`}>
+                            {centerInfo.name.substring(0, 2)}
+                        </text>
+                     </g>
+
+                     {/* Satellite Nodes */}
+                     {relatedIds.map((id, i) => {
+                         const angle = (i * 2 * Math.PI) / relatedIds.length - Math.PI / 2;
+                         const x = center + radius * Math.cos(angle);
+                         const y = center + radius * Math.sin(angle);
+                         const info = getCharInfo(id, language);
+                         
+                         if (!info) return null;
+
+                         return (
+                             <g 
+                                key={id} 
+                                onClick={(e) => {
+                                    e.stopPropagation();
+                                    if(info.isMain) onSelect(id);
+                                }}
+                                className={`transition-all duration-300 ${info.isMain ? 'cursor-pointer hover:scale-110' : 'cursor-default opacity-90'}`}
+                             >
+                                 <circle cx={x} cy={y} r="28" className={`${info.color} fill-current opacity-10`} />
+                                 <circle cx={x} cy={y} r="24" className={`fill-ash-black stroke-2 stroke-current ${info.color}`} />
+                                 
+                                 <text x={x} y={y} dy="-0.3em" textAnchor="middle" className={`text-[12px] font-mono font-bold uppercase ${info.color} fill-current select-none`}>
+                                    {info.name}
+                                 </text>
+                                 <text x={x} y={y} dy="1.2em" textAnchor="middle" className="text-[9px] font-mono uppercase fill-ash-gray select-none">
+                                    {info.role}
+                                 </text>
+                             </g>
+                         );
+                     })}
+                 </svg>
+            </div>
+        </div>
+    );
+};
 
 // Simple Radar Chart Component
 const RadarChart = ({ stats, colorClass }: { stats: CharacterStats; colorClass: string }) => {
@@ -26,7 +154,6 @@ const RadarChart = ({ stats, colorClass }: { stats: CharacterStats; colorClass: 
 
   const statValues = [stats.strength, stats.intelligence, stats.mental, stats.resonance, stats.agility];
   const points = statValues.map((val, i) => getPoint(val, i, 5)).join(' ');
-  const fullPoints = Array(5).fill(maxStat).map((val, i) => getPoint(val, i, 5)).join(' ');
 
   // Helper labels
   const labels = [
@@ -88,7 +215,7 @@ const RadarChart = ({ stats, colorClass }: { stats: CharacterStats; colorClass: 
   );
 };
 
-const CharactersPage: React.FC<CharactersPageProps> = ({ language }) => {
+export default function CharactersPage({ language }: CharactersPageProps) {
   const [selectedId, setSelectedId] = useState<string>(novelData.characters[0].id);
 
   const selectedChar = novelData.characters.find(c => c.id === selectedId) || novelData.characters[0];
@@ -187,7 +314,7 @@ const CharactersPage: React.FC<CharactersPageProps> = ({ language }) => {
                              </div>
                          </div>
                          
-                         <div className="space-y-2">
+                         <div className="space-y-2 mb-6">
                             {statsList.map((stat) => (
                                 <div key={stat.label} className="flex items-center justify-between text-[10px] font-mono">
                                     <span className="flex items-center gap-1 text-ash-gray">
@@ -203,6 +330,16 @@ const CharactersPage: React.FC<CharactersPageProps> = ({ language }) => {
                                     </div>
                                 </div>
                             ))}
+                         </div>
+
+                         {/* Relationship Graph Section */}
+                         <div className="pt-4 border-t border-ash-gray/20">
+                             <RelationshipGraph 
+                                centerId={selectedChar.id} 
+                                language={language} 
+                                onSelect={setSelectedId}
+                                isLightTheme={false} 
+                             />
                          </div>
                      </div>
 
@@ -257,8 +394,6 @@ const CharactersPage: React.FC<CharactersPageProps> = ({ language }) => {
              </div>
          </main>
       </div>
-    </div>
-  );
-};
-
-export default CharactersPage;
+   </div>
+    );
+}

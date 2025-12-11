@@ -8,6 +8,7 @@ import SideStoriesPage from './pages/SideStoriesPage';
 import BootSequence from './components/BootSequence';
 import InitialSetup from './components/InitialSetup';
 import CustomCursor from './components/CustomCursor';
+import StoryEntryAnimation from './components/StoryEntryAnimation';
 import { Language } from './types';
 
 const STORAGE_KEY = 'nova_labs_config_v2';
@@ -46,6 +47,9 @@ const App: React.FC = () => {
   // Navigation State
   const [activeTab, setActiveTab] = useState('home');
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
+  
+  // Transition State
+  const [isEnteringStory, setIsEnteringStory] = useState(false);
 
   // Global Preference State (Initialized from storage)
   const [language, setLanguage] = useState<Language>(initialConfig.language);
@@ -77,6 +81,30 @@ const App: React.FC = () => {
     setAppState('READY');
   };
 
+  // Logic to intercept navigation for animation triggers
+  const handleNavigationChange = (tab: string) => {
+      setActiveTab(tab);
+  };
+
+  // Triggered from HomePage button
+  const startStorySequence = () => {
+    setIsEnteringStory(true);
+  };
+
+  // Called when MAIN story animation finishes
+  const handleStoryEntryComplete = () => {
+    setActiveTab('reader');
+    setIsEnteringStory(false);
+  };
+
+  const handleHomeNavigate = (tab: string) => {
+    if (tab === 'reader') {
+        startStorySequence();
+    } else {
+        setActiveTab(tab);
+    }
+  };
+
   return (
     <>
       {/* Global Cursor - Always rendered on top */}
@@ -104,6 +132,14 @@ const App: React.FC = () => {
         />
       )}
 
+      {/* Main Story Transition Animation */}
+      {isEnteringStory && (
+        <StoryEntryAnimation 
+            onComplete={handleStoryEntryComplete}
+            language={language}
+        />
+      )}
+
       {/* Render Main App */}
       {appState === 'READY' && (
         <div className="flex flex-col lg:flex-row h-screen supports-[height:100dvh]:h-[100dvh] bg-ash-black text-ash-light overflow-hidden font-mono selection:bg-ash-light selection:text-ash-black cursor-none">
@@ -117,7 +153,7 @@ const App: React.FC = () => {
           {/* Main Layout */}
           <Navigation 
             activeTab={activeTab} 
-            setActiveTab={setActiveTab} 
+            setActiveTab={handleNavigationChange} 
             language={language}
             setLanguage={setLanguage}
             crtEnabled={crtEnabled}
@@ -133,7 +169,7 @@ const App: React.FC = () => {
             >
               {activeTab === 'home' && (
                 <HomePage 
-                  onStartReading={() => setActiveTab('reader')} 
+                  onNavigate={handleHomeNavigate}
                   language={language}
                   setLanguage={setLanguage}
                 />

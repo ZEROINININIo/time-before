@@ -1,9 +1,9 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { novelData } from '../data/novelData';
 import { BookOpen, List, ChevronLeft, ChevronRight, Image as ImageIcon, FileText, Activity, AlertTriangle, Terminal, Grid, Folder, Lock, ArrowLeft, MousePointer2 } from 'lucide-react';
 import { ChapterTranslation, Language } from '../types';
 import Reveal from '../components/Reveal';
+import StoryEntryAnimation from '../components/StoryEntryAnimation';
 
 interface ReaderPageProps {
   currentIndex: number;
@@ -27,7 +27,7 @@ const VoidLog: React.FC<{ lines: string[] }> = ({ lines }) => {
              <AlertTriangle size={16} />
           </div>
           <div className="flex flex-col md:flex-row md:items-center gap-1 md:gap-3">
-             <span className="animate-pulse tracking-widest text-fuchsia-400">{'>>>'} SYSTEM_INTERCEPT // 0000.2_VOID</span>
+             <span className="animate-pulse tracking-widest text-fuchsia-400">{'>>> SYSTEM_INTERCEPT // 0000.2_VOID'}</span>
              <span className="text-[10px] bg-fuchsia-900/50 px-1 border border-fuchsia-500/30 text-fuchsia-200/70">
                 ENCRYPTION: UNSTABLE
              </span>
@@ -70,6 +70,10 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
   const [viewMode, setViewMode] = useState<'directory' | 'reader'>('directory');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const mainRef = useRef<HTMLElement>(null);
+  
+  // Local transition state
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [pendingChapterIndex, setPendingChapterIndex] = useState(0);
 
   const currentChapter = novelData.chapters[currentIndex];
   // Safe access to translation, fallback to CN if missing (though data ensures it's there)
@@ -89,7 +93,13 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
   }, [currentIndex, viewMode]);
 
   const handleChapterSelect = (index: number) => {
-      onChapterChange(index);
+      setPendingChapterIndex(index);
+      setIsTransitioning(true);
+  };
+  
+  const handleTransitionComplete = () => {
+      setIsTransitioning(false);
+      onChapterChange(pendingChapterIndex);
       setViewMode('reader');
   };
 
@@ -308,6 +318,15 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
   if (viewMode === 'directory') {
     return (
         <div className="h-full bg-halftone overflow-y-auto p-4 md:p-12 relative flex flex-col items-center">
+             {/* Local Transition Animation */}
+             {isTransitioning && (
+                 <StoryEntryAnimation 
+                    onComplete={handleTransitionComplete}
+                    language={language}
+                    mode="fast"
+                 />
+             )}
+
              {/* Background Decorative Line */}
              <div className="absolute top-0 bottom-0 left-1/2 w-px bg-ash-dark -translate-x-1/2 z-0 border-l border-dashed border-ash-gray/30"></div>
 

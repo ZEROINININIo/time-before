@@ -29,6 +29,11 @@
               'fade-in': 'fadeIn 0.5s ease-out forwards',
               'slide-in': 'slideIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
               'crash': 'crash 0.3s cubic-bezier(0.36, 0.07, 0.19, 0.97) both infinite',
+              'spin-slow': 'spin 12s linear infinite',
+              'spin-reverse-slow': 'spinReverse 15s linear infinite',
+              'zoom-in-fast': 'zoomIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
+              'tunnel': 'tunnel 2s linear infinite',
+              'data-rain': 'dataRain 2s linear infinite',
             },
             keyframes: {
               glitch: {
@@ -53,6 +58,29 @@
                 '20%, 80%': { transform: 'translate3d(2px, 0, 0)' },
                 '30%, 50%, 70%': { transform: 'translate3d(-4px, 0, 0)' },
                 '40%, 60%': { transform: 'translate3d(4px, 0, 0)' }
+              },
+              spin: {
+                '0%': { transform: 'rotate(0deg)' },
+                '100%': { transform: 'rotate(360deg)' }
+              },
+              spinReverse: {
+                '0%': { transform: 'rotate(360deg)' },
+                '100%': { transform: 'rotate(0deg)' }
+              },
+              zoomIn: {
+                '0%': { transform: 'scale(0)', opacity: '0' },
+                '100%': { transform: 'scale(1)', opacity: '1' }
+              },
+              tunnel: {
+                '0%': { transform: 'scale(1)', opacity: '0.1' },
+                '50%': { opacity: '0.5' },
+                '100%': { transform: 'scale(4)', opacity: '0' }
+              },
+              dataRain: {
+                '0%': { transform: 'translateY(-100%)', opacity: '0' },
+                '20%': { opacity: '1' },
+                '80%': { opacity: '1' },
+                '100%': { transform: 'translateY(100vh)', opacity: '0' }
               }
             }
           }
@@ -233,7 +261,7 @@
       /* --- Extreme Glitch for Boot Sequence --- */
       .glitch-text-heavy {
         position: relative;
-        color: white;
+        color: var(--foreground); /* was white */
       }
       .glitch-text-heavy::before,
       .glitch-text-heavy::after {
@@ -243,7 +271,7 @@
         left: 0;
         width: 100%;
         height: 100%;
-        background: #000;
+        background: var(--background); /* was #000 */
       }
       .glitch-text-heavy::before {
         left: 2px;
@@ -287,7 +315,7 @@
   }
 }
 </script>
-  <script type="module" crossorigin src="/assets/index-DiBrQJvJ.js"></script>
+  <script type="module" crossorigin src="/assets/index-DJpWyy_7.js"></script>
 </head>
   <body class="crt-enabled">
     <div id="root"></div>

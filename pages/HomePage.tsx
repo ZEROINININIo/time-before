@@ -1,16 +1,16 @@
 import React, { useState, useEffect, useMemo } from 'react';
-import { Terminal, Activity, Wifi, Shield, ChevronRight, Cpu, HardDrive, Clock, RefreshCw } from 'lucide-react';
+import { Terminal, RefreshCw, BookOpen, GitBranch, ArrowRight, Lock, Database, Wifi } from 'lucide-react';
 import { Language } from '../types';
 import Reveal from '../components/Reveal';
 import { introQuotes } from '../data/introQuotes';
 
 interface HomePageProps {
-  onStartReading: () => void;
+  onNavigate: (tab: string) => void;
   language: Language;
   setLanguage: (lang: Language) => void;
 }
 
-const HomePage: React.FC<HomePageProps> = ({ onStartReading, language, setLanguage }) => {
+const HomePage: React.FC<HomePageProps> = ({ onNavigate, language, setLanguage }) => {
   const [typedText, setTypedText] = useState('');
   const [showCursor, setShowCursor] = useState(true);
 
@@ -18,10 +18,8 @@ const HomePage: React.FC<HomePageProps> = ({ onStartReading, language, setLangua
   const [quoteIndex, setQuoteIndex] = useState(() => Math.floor(Math.random() * introQuotes.length));
 
   const handleReroute = () => {
-    // Pick a new random index, ensuring it tries to be different if possible (optional, but nice UX)
     setQuoteIndex(prev => {
         let next = Math.floor(Math.random() * introQuotes.length);
-        // Simple retry once if it's the same to encourage variety
         if (next === prev && introQuotes.length > 1) {
              next = Math.floor(Math.random() * introQuotes.length);
         }
@@ -29,7 +27,7 @@ const HomePage: React.FC<HomePageProps> = ({ onStartReading, language, setLangua
     });
   };
 
-  // Construct the intro content based on language and the selected random quote
+  // Construct the intro content
   const introContent = useMemo(() => {
     const quote = introQuotes[quoteIndex];
     const text = quote.text[language];
@@ -43,10 +41,10 @@ const HomePage: React.FC<HomePageProps> = ({ onStartReading, language, setLangua
     }
   }, [language, quoteIndex]);
 
-  // Typing effect for the intro
+  // Typing effect
   useEffect(() => {
     let index = 0;
-    const speed = 40; // Slightly slower for dialogue
+    const speed = 30; 
     setTypedText('');
     
     const interval = setInterval(() => {
@@ -69,235 +67,184 @@ const HomePage: React.FC<HomePageProps> = ({ onStartReading, language, setLangua
 
   const t = {
     'zh-CN': {
-      sys_status: '系统状态',
-      net_status: '网络连接',
-      mem_usage: '内存占用',
-      integrity: '完整性',
-      online: '在线',
-      stable: '稳定',
-      verified: '已验证',
-      welcome: '欢迎回来，操作员',
-      cmd_prompt: '执行主要协议 [阅读模式]',
-      recent_logs: '近期系统日志'
+      main_archive: '主线档案',
+      main_desc: '进入核心故事线，访问已解密的记忆节点。',
+      side_archive: '支线扇区',
+      side_desc: '访问碎片化数据，探索未知的时间分支。',
+      enter: '执行协议',
+      access: '访问扇区',
+      status: '状态：正常'
     },
     'zh-TW': {
-      sys_status: '系統狀態',
-      net_status: '網絡連接',
-      mem_usage: '內存占用',
-      integrity: '完整性',
-      online: '在線',
-      stable: '穩定',
-      verified: '已驗證',
-      welcome: '歡迎回來，操作員',
-      cmd_prompt: '執行主要協議 [閱讀模式]',
-      recent_logs: '近期系統日誌'
+      main_archive: '主線檔案',
+      main_desc: '進入核心故事線，訪問已解密的記憶節點。',
+      side_archive: '支線扇區',
+      side_desc: '訪問碎片化數據，探索未知的時間分支。',
+      enter: '執行協議',
+      access: '訪問扇區',
+      status: '狀態：正常'
     },
     'en': {
-      sys_status: 'SYS_STATUS',
-      net_status: 'NET_UPLINK',
-      mem_usage: 'MEM_USAGE',
-      integrity: 'INTEGRITY',
-      online: 'ONLINE',
-      stable: 'STABLE',
-      verified: 'VERIFIED',
-      welcome: 'WELCOME BACK, OPERATOR',
-      cmd_prompt: 'EXECUTE PRIMARY PROTOCOL [READ_MODE]',
-      recent_logs: 'RECENT SYSTEM LOGS'
+      main_archive: 'MAIN_ARCHIVE',
+      main_desc: 'Access core storyline. View decrypted memory nodes.',
+      side_archive: 'MEMORY_SECTOR',
+      side_desc: 'Access fragmented data. Explore unknown time branches.',
+      enter: 'EXECUTE',
+      access: 'ACCESS',
+      status: 'STATUS: OK'
     }
   }[language];
 
   return (
-    <div className="flex flex-col h-full p-4 md:p-8 overflow-y-auto bg-halftone text-ash-light font-mono relative">
+    <div className="flex flex-col min-h-full bg-halftone text-ash-light font-mono relative">
       
-      {/* --- Top Status Bar --- */}
-      <div className="flex flex-wrap items-end justify-between border-b-2 border-ash-gray pb-4 mb-8 shrink-0 animate-fade-in gap-4">
-        <div>
-           <div className="flex items-center gap-2 text-xl md:text-2xl font-black uppercase tracking-tighter text-ash-light mb-1">
-              <Terminal size={24} />
-              <span>ROOT_CONSOLE // V.3.2.1</span>
-           </div>
-           <div className="text-[10px] text-ash-gray flex items-center gap-4">
-              <span>ID: VOID-XPSDVN</span>
-              <span>LOC: SECTOR_0</span>
-              <span className="flex items-center gap-1"><Clock size={10} /> {new Date().toLocaleTimeString()}</span>
-           </div>
-        </div>
-        
-        {/* Language Switcher Mini-Terminal */}
-        <div className="flex gap-1 text-[10px] font-bold">
-           {(['zh-CN', 'zh-TW', 'en'] as Language[]).map(lang => (
-              <button
-                key={lang}
-                onClick={() => setLanguage(lang)}
-                className={`px-2 py-1 border transition-colors ${
-                    language === lang 
-                    ? 'bg-ash-light text-ash-black border-ash-light' 
-                    : 'bg-ash-black text-ash-gray border-ash-gray hover:text-ash-light'
-                }`}
-              >
-                {lang === 'en' ? 'EN' : lang === 'zh-CN' ? 'CN' : 'TW'}
-              </button>
-           ))}
-        </div>
-      </div>
-
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-3 gap-8">
-        
-        {/* --- Left Column: System Metrics --- */}
-        <div className="space-y-6 lg:col-span-1 animate-slide-in" style={{ animationDelay: '100ms' }}>
-            
-            {/* Status Block */}
-            <div className="bg-ash-dark/30 border border-ash-gray p-4 relative">
-                <div className="absolute top-0 right-0 p-1">
-                    <div className="flex gap-1">
-                        <div className="w-2 h-2 bg-ash-gray rounded-full"></div>
-                        <div className="w-2 h-2 bg-ash-gray rounded-full"></div>
-                    </div>
-                </div>
-                <h3 className="text-xs font-bold text-ash-gray mb-4 flex items-center gap-2 uppercase">
-                    <Activity size={14} /> {t.sys_status}
-                </h3>
-                <div className="space-y-3 text-xs">
-                    <div className="flex justify-between items-center">
-                        <span className="text-ash-gray">CORE_KERNEL</span>
-                        <span className="text-ash-light font-bold bg-ash-dark px-1 border border-ash-gray/50 text-[10px]">{t.online}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-ash-gray">ARCHIVE_DB</span>
-                        <span className="text-ash-light font-bold bg-ash-dark px-1 border border-ash-gray/50 text-[10px]">{t.online}</span>
-                    </div>
-                    <div className="flex justify-between items-center">
-                        <span className="text-ash-gray">REALITY_ANCHOR</span>
-                        <span className="text-ash-light font-bold bg-ash-dark px-1 border border-ash-gray/50 text-[10px]">{t.stable}</span>
-                    </div>
-                </div>
-            </div>
-
-            {/* Hardware Block */}
-            <div className="bg-ash-dark/30 border border-ash-gray p-4">
-                 <h3 className="text-xs font-bold text-ash-gray mb-4 flex items-center gap-2 uppercase">
-                    <Cpu size={14} /> HARDWARE_MONITOR
-                </h3>
-                <div className="space-y-4">
-                    <div>
-                        <div className="flex justify-between text-[10px] mb-1">
-                            <span>CPU_LOAD</span>
-                            <span>4%</span>
-                        </div>
-                        <div className="w-full bg-ash-dark h-1">
-                            <div className="w-[4%] h-full bg-ash-light"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div className="flex justify-between text-[10px] mb-1">
-                            <span>MEM_ALLOC</span>
-                            <span>4024PB</span>
-                        </div>
-                        <div className="w-full bg-ash-dark h-1">
-                            <div className="w-[6%] h-full bg-ash-light"></div>
-                        </div>
-                    </div>
-                    <div>
-                        <div className="flex justify-between text-[10px] mb-1">
-                            <span>SYNC_RATE</span>
-                            <span>10%</span>
-                        </div>
-                        <div className="w-full bg-ash-dark h-1">
-                            <div className="w-[10%] h-full bg-ash-light"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            {/* Logs Preview */}
-            <div className="bg-ash-black border border-ash-gray p-2 font-mono text-[10px] h-32 overflow-hidden opacity-70">
-                <div className="mb-2 border-b border-ash-gray/30 pb-1 text-ash-gray uppercase">{t.recent_logs}</div>
-                <ul className="space-y-1 text-ash-gray/80">
-                    <li>{'>'} [SYS] User_Login detected...</li>
-                    <li>{'>'} [NET] Handshake successful (0.04ms)</li>
-                    <li>{'>'} [DB] Loaded 3 Volumes, 1 Side_Story</li>
-                    <li>{'>'} [SEC] Environment scan... Clear</li>
-                    <li>{'>'} [SYS] Ready for input.</li>
-                </ul>
-            </div>
-        </div>
-
-        {/* --- Center/Right: Main Terminal Output --- */}
-        <div className="lg:col-span-2 flex flex-col animate-slide-in" style={{ animationDelay: '200ms' }}>
-            
-            {/* Main Viewport */}
-            <div className="flex-1 bg-ash-black border-2 border-ash-light p-6 md:p-12 relative shadow-hard min-h-[400px] flex flex-col">
-                {/* Decorative UI */}
-                <div className="absolute top-2 left-2 flex gap-1">
-                    <div className="w-1 h-1 bg-ash-light"></div>
-                    <div className="w-1 h-1 bg-ash-light"></div>
-                </div>
-                
-                {/* Refresh Signal Button */}
+      {/* Scrollable Content Container with Padding */}
+      <div className="flex-1 flex flex-col p-4 md:p-8 pb-32 lg:pb-12">
+          
+          {/* Top Section: Console only */}
+          <div className="w-full max-w-7xl mx-auto mb-6 shrink-0">
+            <Reveal className="w-full bg-ash-black border-2 border-ash-gray p-4 md:p-6 shadow-hard relative min-h-[160px] md:min-h-[180px] flex flex-col">
                 <div className="absolute top-2 right-2 flex gap-2">
                     <button 
                         onClick={handleReroute}
                         className="flex items-center gap-1 text-[10px] font-bold bg-ash-gray/20 text-ash-gray border border-ash-gray/50 px-2 hover:bg-ash-light hover:text-ash-black hover:border-ash-light transition-all group"
                     >
                         <RefreshCw size={10} className="group-hover:animate-spin" />
-                        REROUTE_SIGNAL
+                        REROUTE
                     </button>
-                    <div className="text-[10px] font-bold bg-ash-light text-ash-black px-1 border border-ash-light">
-                        TTY_1
-                    </div>
                 </div>
-
-                {/* ASCII Art */}
-                <pre className="text-[6px] md:text-[10px] leading-[6px] md:leading-[10px] font-black text-ash-gray/30 select-none mb-8">
-{`
- _   _  _____  _   _   ___       _       ___  ______  _____ 
-| \\ | ||  _  || | | | / _ \\     | |     / _ \\ | ___ \\/  ___|
-|  \\| || | | || | | |/ /_\\ \\    | |    / /_\\ \\| |_/ /\\ \`--. 
-| . \` || | | || | | ||  _  |    | |    |  _  || ___ \\ \`--. \\
-| |\\  |\\ \\_/ /\\ \\_/ /| | | |    | |____| | | || |_/ /\\__/ /
-\\_| \\_/ \\___/  \\___/ \\_| |_/    \\_____/\\_| |_/\\____/\\____/ 
-                                                          
- >> SECURE ARCHIVE TERMINAL `}
-                </pre>
-
-                {/* Welcome Message */}
-                <div className="mb-6">
-                    <h1 className="text-xl md:text-3xl font-bold uppercase text-ash-light mb-2">
-                        {t.welcome}
-                    </h1>
-                    <div className="h-px w-full bg-gradient-to-r from-ash-light via-ash-gray to-transparent opacity-50"></div>
-                </div>
-
-                {/* Typing Content */}
-                <div className="flex-1 font-mono text-sm md:text-base leading-relaxed whitespace-pre-wrap text-ash-gray">
+                
+                <h2 className="text-xs font-bold text-ash-gray mb-4 flex items-center gap-2 uppercase border-b border-dashed border-ash-gray/30 pb-2">
+                    <Terminal size={14} /> ROOT_CONSOLE // V.3.2.1
+                </h2>
+                
+                <div className="flex-1 font-mono text-xs md:text-sm leading-relaxed whitespace-pre-wrap text-ash-gray">
                     {typedText}
                     {showCursor && <span className="inline-block w-2 h-4 bg-ash-light ml-1 align-middle"></span>}
                 </div>
+            </Reveal>
+          </div>
 
-                {/* Interactive Command Line (The Button) */}
-                <div className="mt-8 pt-6 border-t border-dashed border-ash-gray/30">
+          {/* Middle Section: Dual Entry Modules */}
+          <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-6 md:gap-8">
+                
+                {/* Module 1: Main Story (Red/Ash Theme) */}
+                <Reveal delay={200} className="flex-1">
                     <button 
-                        onClick={onStartReading}
-                        className="w-full text-left group relative bg-ash-dark/50 hover:bg-ash-light hover:text-ash-black border border-ash-gray hover:border-ash-light p-4 transition-all duration-200"
+                        onClick={() => onNavigate('reader')}
+                        className="w-full h-full min-h-[240px] bg-ash-black border-2 border-ash-gray hover:border-ash-light hover:shadow-hard transition-all duration-300 group relative flex flex-col overflow-hidden text-left"
                     >
-                        <div className="flex items-center gap-3 font-bold text-sm md:text-lg">
-                            <ChevronRight size={20} className="group-hover:translate-x-1 transition-transform" />
-                            <span className="animate-pulse group-hover:animate-none">{t.cmd_prompt}</span>
+                        {/* Header */}
+                        <div className="w-full p-4 border-b-2 border-ash-gray bg-ash-dark/30 flex justify-between items-center group-hover:bg-ash-light group-hover:text-ash-black transition-colors">
+                            <div className="flex items-center gap-2 font-bold font-mono">
+                                <BookOpen size={18} />
+                                <span>ARCHIVE_CORE</span>
+                            </div>
+                            <div className="flex gap-1">
+                                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
+                                <div className="w-2 h-2 bg-ash-gray/50 rounded-full"></div>
+                            </div>
                         </div>
-                        {/* Hover effect decorative elements */}
-                        <div className="absolute right-4 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span className="text-[10px] font-mono border border-current px-2 py-1">ENTER</span>
-                        </div>
-                    </button>
-                    <div className="mt-2 flex justify-between text-[10px] text-ash-gray/50 font-mono">
-                        <span>WAITING FOR INPUT...</span>
-                        <span>SESSION_ID: #992-AZ</span>
-                    </div>
-                </div>
-            </div>
-        </div>
 
+                        {/* Body */}
+                        <div className="p-6 md:p-10 flex-1 flex flex-col justify-center relative z-10">
+                            <h3 className="text-3xl md:text-5xl font-black uppercase text-ash-light mb-4 group-hover:scale-105 transition-transform origin-left">
+                                {t.main_archive}
+                            </h3>
+                            <p className="text-ash-gray text-xs md:text-sm max-w-sm mb-8 font-mono leading-relaxed">
+                                {t.main_desc}
+                            </p>
+                            
+                            <div className="mt-auto flex items-center gap-2 text-ash-light font-bold text-sm uppercase group-hover:translate-x-2 transition-transform">
+                                {t.enter} <ArrowRight size={16} />
+                            </div>
+                        </div>
+
+                        {/* Background Decor */}
+                        <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none group-hover:opacity-20 transition-opacity">
+                            <Lock size={180} strokeWidth={0.5} />
+                        </div>
+                        <div className="absolute inset-0 bg-halftone opacity-10 pointer-events-none"></div>
+                    </button>
+                </Reveal>
+
+                {/* Module 2: Side Story (Blue/Cyan Theme) */}
+                <Reveal delay={300} className="flex-1">
+                    <button 
+                        onClick={() => onNavigate('sidestories')}
+                        className="w-full h-full min-h-[240px] bg-slate-950 border-2 border-slate-700 hover:border-cyan-400 hover:shadow-[4px_4px_0_theme(colors.cyan.400)] transition-all duration-300 group relative flex flex-col overflow-hidden text-left"
+                    >
+                        {/* Header */}
+                        <div className="w-full p-4 border-b-2 border-slate-700 bg-slate-900/50 flex justify-between items-center group-hover:bg-cyan-400 group-hover:text-black transition-colors">
+                            <div className="flex items-center gap-2 font-bold font-mono text-cyan-500 group-hover:text-black">
+                                <GitBranch size={18} />
+                                <span>MEMORY_FRAGS</span>
+                            </div>
+                            <div className="flex gap-1">
+                                <div className="w-2 h-2 bg-cyan-400 rounded-full animate-pulse"></div>
+                                <div className="w-2 h-2 bg-slate-700 rounded-full"></div>
+                            </div>
+                        </div>
+
+                        {/* Body */}
+                        <div className="p-6 md:p-10 flex-1 flex flex-col justify-center relative z-10">
+                            <h3 className="text-3xl md:text-5xl font-black uppercase text-cyan-100 mb-4 group-hover:text-cyan-300 group-hover:scale-105 transition-transform origin-left drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]">
+                                {t.side_archive}
+                            </h3>
+                            <p className="text-slate-400 text-xs md:text-sm max-w-sm mb-8 font-mono leading-relaxed group-hover:text-cyan-200/80">
+                                {t.side_desc}
+                            </p>
+                            
+                            <div className="mt-auto flex items-center gap-2 text-cyan-400 font-bold text-sm uppercase group-hover:text-cyan-300 group-hover:translate-x-2 transition-transform">
+                                {t.access} <ArrowRight size={16} />
+                            </div>
+                        </div>
+
+                        {/* Background Decor */}
+                        <div className="absolute right-[-20px] bottom-[-20px] opacity-10 pointer-events-none group-hover:opacity-20 transition-opacity text-cyan-500">
+                            <Database size={200} strokeWidth={0.5} />
+                        </div>
+                        {/* Digital Rain Effect Overlay */}
+                        <div className="absolute inset-0 bg-[linear-gradient(0deg,transparent_20%,rgba(6,182,212,0.05)_50%,transparent_80%)] bg-[length:100%_4px] animate-scanline pointer-events-none opacity-30"></div>
+                    </button>
+                </Reveal>
+          </div>
       </div>
+
+      {/* Bottom Status Footer - Adjusted for Mobile to sit above nav bar */}
+      <div className="absolute bottom-20 lg:bottom-0 left-0 right-0 bg-ash-black border-t-2 border-ash-gray p-2 text-[10px] text-ash-gray font-mono flex justify-between items-center select-none z-20">
+          <div className="flex items-center gap-2 md:gap-4 px-2 overflow-hidden shrink-0">
+               <div className="flex items-center gap-1 shrink-0">
+                   <Wifi size={10} /> 
+                   <span className="hidden md:inline">CONNECTION:</span> 
+                   <span className="text-ash-light">SECURE</span>
+               </div>
+               <div className="h-3 w-px bg-ash-gray/30 shrink-0"></div>
+               <div className="truncate">ID: VOID-XPSDVN</div>
+               <div className="h-3 w-px bg-ash-gray/30 hidden md:block shrink-0"></div>
+               <div className="hidden md:block shrink-0">LOC: SECTOR_0</div>
+          </div>
+
+          <div className="flex items-center gap-2 px-2 shrink-0">
+                <span className="uppercase text-ash-gray/50 hidden md:inline">Input_Lang:</span>
+                <div className="flex gap-1 font-bold">
+                    {(['zh-CN', 'zh-TW', 'en'] as Language[]).map(lang => (
+                        <button
+                            key={lang}
+                            onClick={() => setLanguage(lang)}
+                            className={`px-1.5 py-0.5 border transition-colors ${
+                                language === lang 
+                                ? 'bg-ash-light text-ash-black border-ash-light' 
+                                : 'bg-transparent text-ash-gray border-ash-gray/50 hover:text-ash-light'
+                            }`}
+                        >
+                            {lang === 'en' ? 'EN' : lang === 'zh-CN' ? 'CN' : 'TW'}
+                        </button>
+                    ))}
+                </div>
+          </div>
+      </div>
+
     </div>
   );
 };
