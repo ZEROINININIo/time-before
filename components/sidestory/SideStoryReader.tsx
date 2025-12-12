@@ -1,6 +1,7 @@
+
 import React, { useState, useRef, useEffect } from 'react';
 import { SideStoryVolume, Language, ChapterTranslation } from '../../types';
-import { ArrowLeft, List, ShieldAlert, FileText, ChevronLeft, ChevronRight, Activity, Image as ImageIcon, AlertTriangle, Loader2 } from 'lucide-react';
+import { ArrowLeft, List, ShieldAlert, FileText, ChevronLeft, ChevronRight, Activity, Image as ImageIcon, AlertTriangle, Loader2, Eye } from 'lucide-react';
 import Reveal from '../Reveal';
 
 // --- Internal Reader Logic (Shared with ReaderPage) ---
@@ -167,11 +168,12 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
         // 2. Special Elements
         const blueMatch = trimmed.match(/^\[\[BLUE::(.*?)\]\]$/);
         const dangerMatch = trimmed.match(/^\[\[DANGER::(.*?)\]\]$/);
+        const voidVisionMatch = trimmed.match(/^\[\[VOID_VISION::(.*?)\]\]$/);
         const isDivider = trimmed === '[[DIVIDER]]';
         const isImage = /\[\[IMAGE::(.*?)::(.*?)\]\]/.test(trimmed);
         const isEmpty = !trimmed;
 
-        if (blueMatch || dangerMatch || isDivider || isImage || isEmpty) {
+        if (blueMatch || dangerMatch || voidVisionMatch || isDivider || isImage || isEmpty) {
             flushTextBuffer(); 
             
             if (blueMatch) {
@@ -194,6 +196,35 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
                         <p className={dangerClass}>
                             {dangerMatch[1]}
                         </p>
+                    </Reveal>
+                );
+            } else if (voidVisionMatch) {
+                // New Void Vision Effect with Identifier
+                nodes.push(
+                    <Reveal key={`void-vis-${i}`} className="my-12 w-full max-w-3xl mx-auto">
+                        <div className="relative border-2 border-dashed border-fuchsia-500/50 bg-black/60 p-8 backdrop-blur-md overflow-hidden group select-none shadow-[0_0_20px_rgba(192,38,211,0.1)]">
+                             {/* Background Glitch Elements */}
+                             <div className="absolute inset-0 bg-fuchsia-900/10 opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                             
+                             {/* Label */}
+                             <div className="text-xs font-mono text-fuchsia-400 mb-6 tracking-[0.2em] flex items-center justify-center gap-2 animate-pulse font-bold">
+                                 <Eye size={14} /> RETINAL_PROJECTION // UNAUTHORIZED
+                             </div>
+                             
+                             {/* Content - White Highlight */}
+                             <div className="text-white font-bold text-xl md:text-2xl text-center drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] leading-relaxed tracking-wide font-sans relative z-10">
+                                 "{voidVisionMatch[1]}"
+                             </div>
+
+                             {/* VOID IDENTIFIER TAG */}
+                             <div className="absolute bottom-2 right-4 flex items-center gap-1.5 opacity-70 border-t border-fuchsia-500/30 pt-1">
+                                <span className="w-1.5 h-1.5 bg-fuchsia-500 rounded-full animate-pulse shadow-[0_0_4px_#d946ef]"></span>
+                                <span className="text-[9px] font-mono text-fuchsia-400 tracking-[0.2em] font-bold">SENDER: VOID</span>
+                             </div>
+
+                             {/* Decorative Scanline */}
+                             <div className="absolute top-0 left-0 w-full h-px bg-fuchsia-500/30 shadow-[0_0_10px_rgba(217,70,239,0.5)] animate-scanline pointer-events-none"></div>
+                        </div>
                     </Reveal>
                 );
             } else if (isDivider) {

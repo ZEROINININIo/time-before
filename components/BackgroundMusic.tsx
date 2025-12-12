@@ -10,8 +10,11 @@ interface BackgroundMusicProps {
     onVolumeChange: (val: number) => void;
 }
 
-// Updated song: 神隠しの真相 by しゃろう
-const SONG_URL = "https://music.163.com/song/media/outer/url?id=1831400969.mp3";
+// Local file reference - ensure 'bgm/bgm.mp3' exists in your public folder
+const LOCAL_URL = "/bgm/bgm.mp3";
+// Fallback Online Reference
+const FALLBACK_URL = "https://music.163.com/song/media/outer/url?id=1831400969.mp3";
+
 const SONG_INFO = {
     title: "神隠しの真相",
     composer: "しゃろう"
@@ -19,12 +22,12 @@ const SONG_INFO = {
 
 const FADE_DURATION = 5; // Seconds for fade in/out
 
-// Global singleton to persist audio across component unmounts (e.g. Setup -> Main transition)
+// Global singleton to persist audio across component unmounts
 let globalAudio: HTMLAudioElement | null = null;
 
 const getGlobalAudio = () => {
     if (!globalAudio) {
-        globalAudio = new Audio(SONG_URL);
+        globalAudio = new Audio(LOCAL_URL);
         globalAudio.loop = true;
         globalAudio.volume = 0; // Init at 0
     }
@@ -84,7 +87,19 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     };
 
     const handleError = (e: Event) => {
-        console.warn("BackgroundMusic: Audio resource failed to load.", e);
+        // If local file fails, try fallback
+        const src = audio.currentSrc || audio.src;
+        // Check if we are trying to load the local file
+        if (src.indexOf(LOCAL_URL) !== -1 || src.endsWith('bgm.mp3')) {
+            console.warn("BackgroundMusic: Local file not found or invalid. Switching to online fallback.");
+            audio.src = FALLBACK_URL;
+            audio.load();
+            if (isPlaying) {
+                audio.play().catch(err => console.error("Fallback play failed:", err));
+            }
+        } else {
+             console.error("BackgroundMusic: Audio resource failed to load.", e);
+        }
     };
 
     audio.addEventListener('timeupdate', handleTimeUpdate);
@@ -95,7 +110,10 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             const playPromise = audio.play();
             if (playPromise !== undefined) {
                 playPromise.catch(error => {
-                    console.error("Audio playback failed:", error);
+                    // Suppress AbortError which happens if user toggles quickly
+                    if (error.name !== 'AbortError') {
+                        console.log("Audio play request interrupted:", error);
+                    }
                 });
             }
         }

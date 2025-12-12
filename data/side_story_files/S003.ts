@@ -53,7 +53,7 @@ export const chapterS003: Chapter = {
 
 暮雨：“给！这个送你了。”
 
-零点：“哎？这不是你最宝贝的东西吗？你说过这是……”
+零点：“诶？这东西对你来说挺宝贵的吧...怎么就突然给我了？”
 
 暮雨：“正因为珍贵，所以才要交给你保管啊！零点，你是‘变数’。如果说这个世界还有什么希望的话，那一定在你身上。”
 
@@ -79,7 +79,7 @@ export const chapterS003: Chapter = {
 
 是一首很老的曲子，旋律简单。在学校的礼堂里，我曾经弹过无数次。
 
-零点静静地听着，金色的怀表在她手中折射着夕阳的光芒。
+零点静静地听着，怀表的茶色琉璃盖在她手中折射出落日的斜阳。
 
 音乐声在风中飘荡，仿佛在诉说着那些无法言说的告别。
 
@@ -132,7 +132,7 @@ export const chapterS003: Chapter = {
 
 暮雨：「給！這個送妳了。」
 
-零點：「哎？這不是妳最寶貝的東西嗎？妳說過這是妳父母……」
+零點：「欸？這東西對妳來說挺寶貴的吧...怎麼就突然給我了？」
 
 暮雨：「正因為珍貴，所以才要交給妳保管啊！零點，妳是『變數』。如果說這個世界還有什麼希望的話，那一定在妳身上。」
 
@@ -158,7 +158,7 @@ export const chapterS003: Chapter = {
 
 是一首很老的曲子，旋律簡單而哀傷。在學校的天台上，我曾經彈過無數次。
 
-零點靜靜地聽著，金色的懷表在她手中折射著夕陽的光芒。
+零點靜靜地聽著，懷表的茶色琉璃蓋在她手中折射出落日的斜陽。
 
 音樂聲在風中飄盪，彷彿在訴說著那些無法言說的告別。
 
@@ -211,7 +211,7 @@ I paused and didn't continue. I took out a gold pocket watch from my chest. It w
 
 Dusk: "Here! This is for you."
 
-Point: "Eh? Isn't this your most treasured possession? You said this was your parents'..."
+Point: "Eh? This is pretty precious to you, right... why give it to me all of a sudden?"
 
 Dusk: "Exactly because it's precious, I need you to keep it safe! Point, you are the 'Variable'. If there is any hope for this world, it must be in you."
 
@@ -237,7 +237,7 @@ I strummed the strings.
 
 It was a very old tune, simple and sad. I had played it countless times on the school rooftop.
 
-Point listened quietly, the gold pocket watch in her hand refracting the light of the setting sun.
+Point listened quietly, the tea-colored glass cover of the pocket watch in her hand refracting the setting sun.
 
 The music floated in the wind, seemingly telling of those unspeakable farewells.
 

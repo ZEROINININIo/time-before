@@ -23,7 +23,11 @@ export const chapterS002: Chapter = {
 
 零点熟练地在视网膜扫描仪前晃了一下，红光转绿。她今天穿着一身干练的科研工装，与平日的休闲打扮截然不同。
 
-暮雨因为初来乍到，感到了些许不自在。他清瘦的身影在冷色调的灯光下显得有些单薄，随后掏出了怀表，静静的盯着看了几秒，放回原处。
+暮雨因为初来乍到，感到了些许不自在。他清瘦的身影在冷色调的灯光下显得有些单薄，随后掏出了怀表，静静的盯着看了几秒。
+
+[[VOID_VISION::关于你父母的事情，我实在感到抱歉，我无能为力]]
+
+忽然间，暮雨一个踉跄，不可置信般死死紧握怀表，过了足足半分钟，才放回原处。
 
 路过的几个辅助员大多行色匆匆，手里抱着厚重的数据板。
 
@@ -100,7 +104,11 @@ export const chapterS002: Chapter = {
 
 零點熟練地在視網膜掃描儀前晃了一下，紅光轉綠。她今天穿著一身干練的科研工裝，與平日的休閒打扮截然不同。
 
-暮雨因為初來乍到，感到了些許不自在。他清瘦的身影在冷色調的燈光下顯得有些單薄，隨後掏出了懷表，靜靜的盯著看了幾秒，放回原處。
+暮雨因為初來乍到，感到了些許不自在。他清瘦的身影在冷色調的燈光下顯得有些單薄，隨後掏出了懷表，靜靜的盯著看了幾秒。
+
+[[VOID_VISION::關於你父母的事情，我實在感到抱歉，我無能為力]]
+
+忽然間，暮雨一個踉蹌，不可置信般死死緊握懷表，過了足足半分鐘，才放回原處。
 
 路過的幾個輔助員大多行色匆匆，手裡抱著厚重的數據板。
 
@@ -177,7 +185,11 @@ Point: "Welcome to the 'Anomalous Materials Laboratory'—just kidding, this is 
 
 Point skillfully scanned her eyes at the retinal scanner, and the red light turned green. She was wearing a sharp research utility suit today, starkly different from her usual casual attire.
 
-Dusk felt a bit uneasy being a newcomer. His lean figure looked somewhat thin under the cold-toned lights. He took out his pocket watch, stared at it quietly for a few seconds, then put it back.
+Dusk felt a bit uneasy being a newcomer. His lean figure looked somewhat thin under the cold-toned lights. He took out his pocket watch, stared at it quietly for a few seconds.
+
+[[VOID_VISION::Regarding your parents, I am truly sorry, I was powerless.]]
+
+Suddenly, Dusk stumbled, clutching the pocket watch tightly in disbelief, and after a full half-minute, put it back.
 
 A few auxiliary staff passed by hurriedly, holding heavy data pads.
 
