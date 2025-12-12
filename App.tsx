@@ -12,7 +12,10 @@ import CustomCursor from './components/CustomCursor';
 import StoryEntryAnimation from './components/StoryEntryAnimation';
 import { Language } from './types';
 
-const STORAGE_KEY = 'nova_labs_config_v2';
+// The requested track: Sharou - The Truth of Spirit Hiding
+const SPECIFIC_TRACK_URL = "https://music.163.com/song/media/outer/url?id=1831400969.mp3";
+
+const STORAGE_KEY = 'nova_labs_config_v4';
 
 interface AppConfig {
   language: Language;
@@ -29,7 +32,7 @@ const defaultConfig: AppConfig = {
   isLightTheme: false,
   setupCompleted: false,
   bgmPlaying: false,
-  bgmVolume: 0.06
+  bgmVolume: 0.15 // Requested 15% default volume
 };
 
 const App: React.FC = () => {
@@ -52,6 +55,10 @@ const App: React.FC = () => {
   // Navigation State
   const [activeTab, setActiveTab] = useState('home');
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
+  
+  // BGM Context State
+  // We track which side story volume is active to determine if music should play
+  const [activeSideStoryVolumeId, setActiveSideStoryVolumeId] = useState<string | null>(null);
   
   // Transition State
   const [isEnteringStory, setIsEnteringStory] = useState(false);
@@ -95,6 +102,10 @@ const App: React.FC = () => {
   // Logic to intercept navigation for animation triggers
   const handleNavigationChange = (tab: string) => {
       setActiveTab(tab);
+      // Reset side story context when leaving tab
+      if (tab !== 'sidestories') {
+          setActiveSideStoryVolumeId(null);
+      }
   };
 
   // Triggered from HomePage button
@@ -115,6 +126,27 @@ const App: React.FC = () => {
         setActiveTab(tab);
     }
   };
+
+  // --- Dynamic Audio Logic ---
+  // The specific track only plays in Side Story Volume: "那场仍未结束的零碎之雨" (ID: VOL_MEMORIES)
+  const shouldPlaySpecificTrack = activeTab === 'sidestories' && activeSideStoryVolumeId === 'VOL_MEMORIES';
+  
+  // Auto-play effect when entering the specific volume
+  useEffect(() => {
+    if (shouldPlaySpecificTrack) {
+        setBgmPlaying(true);
+    } else {
+        // Optional: Auto-stop when leaving? 
+        // For now, we let it stay 'playing' state, but the BackgroundMusic component 
+        // will handle silence if src is null, or we can force false here.
+        // Let's force false to stop noise when leaving the special zone.
+        setBgmPlaying(false);
+    }
+  }, [shouldPlaySpecificTrack]);
+
+  const currentAudioSrc = shouldPlaySpecificTrack ? SPECIFIC_TRACK_URL : null;
+  const currentTrackTitle = shouldPlaySpecificTrack ? "神隠しの真相" : "NO_SIGNAL";
+  const currentTrackComposer = shouldPlaySpecificTrack ? "しゃろう" : "";
 
   return (
     <>
@@ -179,6 +211,10 @@ const App: React.FC = () => {
             setBgmPlaying={setBgmPlaying}
             bgmVolume={bgmVolume}
             setBgmVolume={setBgmVolume}
+            // Audio Props
+            audioSrc={currentAudioSrc}
+            trackTitle={currentTrackTitle}
+            trackComposer={currentTrackComposer}
           />
           
           <main className="flex-1 h-full overflow-hidden relative z-10 border-l-2 border-ash-dark">
@@ -207,6 +243,7 @@ const App: React.FC = () => {
                 <SideStoriesPage 
                   language={language} 
                   isLightTheme={isLightTheme}
+                  onVolumeChange={setActiveSideStoryVolumeId}
                 />
               )}
             </div>

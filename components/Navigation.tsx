@@ -20,12 +20,17 @@ interface NavigationProps {
   setBgmPlaying: (val: boolean) => void;
   bgmVolume: number;
   setBgmVolume: (val: number) => void;
+  // Audio Props
+  audioSrc: string | null;
+  trackTitle: string;
+  trackComposer: string;
 }
 
 const Navigation: React.FC<NavigationProps> = ({ 
     activeTab, setActiveTab, language, setLanguage,
     crtEnabled, setCrtEnabled, isLightTheme, setIsLightTheme,
-    bgmPlaying, setBgmPlaying, bgmVolume, setBgmVolume
+    bgmPlaying, setBgmPlaying, bgmVolume, setBgmVolume,
+    audioSrc, trackTitle, trackComposer
 }) => {
   const [showMobileSettings, setShowMobileSettings] = useState(false);
 
@@ -118,7 +123,7 @@ const Navigation: React.FC<NavigationProps> = ({
             NOVA<br/>LABS
           </h1>
           <div className="text-[10px] text-ash-gray font-mono bg-ash-dark p-1 inline-block border border-ash-gray">
-            ARCHIVE_SYS // TL.1.7-G
+            ARCHIVE_SYS // TL.1.7-C
           </div>
         </div>
 
@@ -213,6 +218,9 @@ const Navigation: React.FC<NavigationProps> = ({
              onToggle={() => setBgmPlaying(!bgmPlaying)}
              volume={bgmVolume}
              onVolumeChange={setBgmVolume}
+             audioSrc={audioSrc}
+             trackTitle={trackTitle}
+             trackComposer={trackComposer}
           />
           <CRTToggle value={crtEnabled} onChange={setCrtEnabled} language={language} />
           <FullscreenToggle language={language} />
@@ -259,6 +267,9 @@ const Navigation: React.FC<NavigationProps> = ({
                         onToggle={() => setBgmPlaying(!bgmPlaying)}
                         volume={bgmVolume}
                         onVolumeChange={setBgmVolume}
+                        audioSrc={audioSrc}
+                        trackTitle={trackTitle}
+                        trackComposer={trackComposer}
                     />
                     <CRTToggle value={crtEnabled} onChange={setCrtEnabled} language={language} />
                     <FullscreenToggle language={language} />

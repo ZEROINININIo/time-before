@@ -8,26 +8,20 @@ interface BackgroundMusicProps {
     onToggle: () => void;
     volume: number;
     onVolumeChange: (val: number) => void;
+    audioSrc?: string | null;
+    trackTitle?: string;
+    trackComposer?: string;
 }
 
-// Local file reference - ensure 'bgm/bgm.mp3' exists in your public folder
-const LOCAL_URL = "/bgm/bgm.mp3";
-// Fallback Online Reference
-const FALLBACK_URL = "https://music.163.com/song/media/outer/url?id=1831400969.mp3";
+const FADE_IN_DURATION = 2000; // ms
+const FADE_OUT_DURATION = 1500; // ms
 
-const SONG_INFO = {
-    title: "神隠しの真相",
-    composer: "しゃろう"
-};
-
-const FADE_DURATION = 5; // Seconds for fade in/out
-
-// Global singleton to persist audio across component unmounts
+// Global singleton to persist audio across component unmounts (e.g. Setup -> Main transition)
 let globalAudio: HTMLAudioElement | null = null;
 
 const getGlobalAudio = () => {
     if (!globalAudio) {
-        globalAudio = new Audio(LOCAL_URL);
+        globalAudio = new Audio(); // Source set dynamically
         globalAudio.loop = true;
         globalAudio.volume = 0; // Init at 0
     }
@@ -39,109 +33,111 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     isPlaying,
     onToggle,
     volume,
-    onVolumeChange
+    onVolumeChange,
+    audioSrc = null,
+    trackTitle = "UNKNOWN",
+    trackComposer = "UNKNOWN"
 }) => {
-  // Use a ref to access current target volume inside the event listener without re-binding
-  const volumeRef = useRef(volume);
+  const fadeIntervalRef = useRef<number | null>(null);
 
-  useEffect(() => {
-    volumeRef.current = volume;
-  }, [volume]);
+  // Helper to perform smooth volume transition
+  const performFade = (audio: HTMLAudioElement, targetVol: number, duration: number, onComplete?: () => void) => {
+      // Clear any existing fade
+      if (fadeIntervalRef.current) window.clearInterval(fadeIntervalRef.current);
 
-  // Apply volume with fade logic
-  const applyVolume = (audio: HTMLAudioElement) => {
-      const targetVolume = volumeRef.current;
+      const startVol = audio.volume;
+      const diff = targetVol - startVol;
       
-      if (!audio.duration) {
-          audio.volume = targetVolume;
+      // If no change needed
+      if (Math.abs(diff) < 0.01) {
+          audio.volume = targetVol;
+          if (onComplete) onComplete();
           return;
       }
-      
-      const currentTime = audio.currentTime;
-      const duration = audio.duration;
-      const timeLeft = duration - currentTime;
-      
-      let modifier = 1;
-      
-      // Fade In at start
-      if (currentTime < FADE_DURATION) {
-          modifier = currentTime / FADE_DURATION;
-      } 
-      // Fade Out at end
-      else if (timeLeft < FADE_DURATION) {
-          modifier = timeLeft / FADE_DURATION;
-      }
-      
-      // Ensure modifier is between 0 and 1
-      modifier = Math.max(0, Math.min(1, modifier));
-      
-      audio.volume = targetVolume * modifier;
+
+      const startTime = Date.now();
+
+      fadeIntervalRef.current = window.setInterval(() => {
+          const elapsed = Date.now() - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          
+          // Linear interpolation
+          audio.volume = startVol + (diff * progress);
+
+          if (progress >= 1) {
+              if (fadeIntervalRef.current) window.clearInterval(fadeIntervalRef.current);
+              audio.volume = targetVol; // Ensure exact target is hit
+              if (onComplete) onComplete();
+          }
+      }, 50); // Update every 50ms
   };
 
-  // Sync Audio State & Attach Listeners
+  // Manage Playback State & Source
   useEffect(() => {
     const audio = getGlobalAudio();
 
-    const handleTimeUpdate = () => {
-        applyVolume(audio);
-    };
+    // 1. Handle Audio Source Update
+    if (audioSrc && audio.src !== audioSrc) {
+        audio.src = audioSrc;
+        // If we switch tracks while playing, we keep playing, 
+        // but performFade will handle volume smoothing below.
+    }
 
-    const handleError = (e: Event) => {
-        // If local file fails, try fallback
-        const src = audio.currentSrc || audio.src;
-        // Check if we are trying to load the local file
-        if (src.indexOf(LOCAL_URL) !== -1 || src.endsWith('bgm.mp3')) {
-            console.warn("BackgroundMusic: Local file not found or invalid. Switching to online fallback.");
-            audio.src = FALLBACK_URL;
-            audio.load();
-            if (isPlaying) {
-                audio.play().catch(err => console.error("Fallback play failed:", err));
-            }
-        } else {
-             console.error("BackgroundMusic: Audio resource failed to load.", e);
-        }
-    };
-
-    audio.addEventListener('timeupdate', handleTimeUpdate);
-    audio.addEventListener('error', handleError);
-
-    if (isPlaying) {
+    // 2. Handle Play/Stop Logic with Fades
+    if (isPlaying && audioSrc) {
+        // --- DESIRED STATE: PLAYING ---
         if (audio.paused) {
+            // Start from silence
+            audio.volume = 0; 
             const playPromise = audio.play();
             if (playPromise !== undefined) {
-                playPromise.catch(error => {
-                    // Suppress AbortError which happens if user toggles quickly
-                    if (error.name !== 'AbortError') {
-                        console.log("Audio play request interrupted:", error);
-                    }
-                });
+                playPromise
+                    .then(() => {
+                        // Fade In
+                        performFade(audio, volume, FADE_IN_DURATION);
+                    })
+                    .catch(e => console.error("Playback failed", e));
             }
+        } else {
+            // Already playing, ensure we fade to the correct target volume 
+            // (e.g., if we cancelled a fade-out midway)
+            performFade(audio, volume, FADE_IN_DURATION);
         }
     } else {
+        // --- DESIRED STATE: STOPPED ---
         if (!audio.paused) {
-            audio.pause();
+            // Fade Out -> Pause
+            performFade(audio, 0, FADE_OUT_DURATION, () => {
+                audio.pause();
+            });
         }
     }
 
-    // Initial volume apply in case paused/seeked
-    applyVolume(audio);
-
+    // Cleanup on unmount (only clears interval, audio keeps playing if global)
     return () => {
-        audio.removeEventListener('timeupdate', handleTimeUpdate);
-        audio.removeEventListener('error', handleError);
+        if (fadeIntervalRef.current) window.clearInterval(fadeIntervalRef.current);
     };
-  }, [isPlaying]);
+  }, [isPlaying, audioSrc]); // Note: 'volume' is NOT in dependency array to avoid re-triggering fade on slider drag
 
-  // Effect to update volume immediately when slider changes (outside of timeupdate)
+  // Handle Manual Volume Change (Slider)
+  // This needs to interrupt any active fades to feel responsive
   useEffect(() => {
-    const audio = getGlobalAudio();
-    applyVolume(audio);
+      const audio = getGlobalAudio();
+      
+      // Only apply immediate volume if we are logically playing and audio is active
+      if (isPlaying && !audio.paused) {
+          // Kill any running fade animation so the slider takes control
+          if (fadeIntervalRef.current) window.clearInterval(fadeIntervalRef.current);
+          audio.volume = volume;
+      }
   }, [volume]);
 
-  // Volume Slider Handler
+
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       onVolumeChange(parseFloat(e.target.value));
   };
+
+  const isDisabled = !audioSrc;
 
   if (isSetupMode) {
     return (
@@ -157,33 +153,6 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                <span className="flex items-center gap-2"><Music size={14} /> AUDIO_SYSTEM</span>
                {isPlaying ? <Activity size={14} className="animate-pulse" /> : <span>OFF</span>}
            </button>
-           
-           {/* Setup Mode Metadata & Volume */}
-           {isPlaying && (
-               <div className="flex flex-col gap-2 px-2 py-1 animate-fade-in">
-                   <div className="flex justify-between items-center text-[10px] font-mono text-amber-700/80">
-                       <span className="truncate max-w-[60%] flex items-center gap-1">
-                           <span className="w-1 h-1 bg-amber-600 rounded-full animate-pulse"></span>
-                           {SONG_INFO.title}
-                       </span>
-                       <span className="opacity-70">{SONG_INFO.composer}</span>
-                   </div>
-                   
-                   <div className="flex items-center gap-2">
-                       <Volume1 size={10} className="text-amber-700/70" />
-                       <input 
-                           type="range" 
-                           min="0" 
-                           max="1" 
-                           step="0.01" 
-                           value={volume}
-                           onChange={handleVolumeChange}
-                           className="flex-1 h-1 bg-amber-900/30 rounded-lg appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-2 [&::-webkit-slider-thumb]:h-2 [&::-webkit-slider-thumb]:bg-amber-600 [&::-webkit-slider-thumb]:rounded-full hover:[&::-webkit-slider-thumb]:scale-125 transition-all"
-                       />
-                       <span className="text-[9px] font-mono text-amber-700/70 w-6 text-right">{Math.round(volume * 100)}%</span>
-                   </div>
-               </div>
-           )}
        </div>
     );
  }
@@ -192,15 +161,18 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     <div className="flex flex-col gap-1 w-full">
         <button 
         onClick={onToggle}
+        disabled={isDisabled}
         className={`flex items-center justify-between w-full px-3 py-3 border-2 transition-all duration-300 shadow-hard group
-            ${isPlaying 
-            ? 'bg-ash-light text-ash-black border-ash-light' 
-            : 'bg-ash-black text-ash-gray border-ash-gray/50 hover:border-ash-light hover:text-ash-light'
+            ${isDisabled 
+                ? 'bg-ash-black text-ash-gray border-ash-gray/30 opacity-50 cursor-not-allowed'
+                : isPlaying 
+                    ? 'bg-ash-light text-ash-black border-ash-light' 
+                    : 'bg-ash-black text-ash-gray border-ash-gray/50 hover:border-ash-light hover:text-ash-light'
             }`}
         >
             <div className="flex items-center gap-3">
                 <div className="relative">
-                    {isPlaying ? <Disc size={16} className="animate-spin" /> : <Volume2 size={16} />}
+                    {isPlaying && !isDisabled ? <Disc size={16} className="animate-spin" /> : <Volume2 size={16} />}
                 </div>
                 <span className="text-[10px] font-mono font-bold uppercase">
                     BGM
@@ -208,23 +180,25 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             </div>
             
             <div className="flex items-center gap-2">
-                {isPlaying ? (
+                {isPlaying && !isDisabled ? (
                     <div className="flex gap-0.5 items-end h-3">
                         <div className="w-0.5 bg-current animate-[bounce_1s_infinite] h-2"></div>
                         <div className="w-0.5 bg-current animate-[bounce_1.2s_infinite] h-3"></div>
                         <div className="w-0.5 bg-current animate-[bounce_0.8s_infinite] h-1"></div>
                     </div>
                 ) : (
-                    <span className="text-[10px] font-mono font-bold">OFF</span>
+                    <span className="text-[10px] font-mono font-bold">
+                        {isDisabled ? 'NO_SIGNAL' : 'OFF'}
+                    </span>
                 )}
             </div>
         </button>
         
-        {isPlaying && (
+        {isPlaying && !isDisabled && (
             <div className="flex flex-col gap-2 px-3 py-2 border-l-2 border-ash-light bg-ash-dark/30 animate-fade-in">
                 <div className="flex justify-between items-center text-[9px] font-mono text-ash-gray">
-                    <span className="truncate max-w-[60%]">{SONG_INFO.title}</span>
-                    <span className="opacity-50 truncate max-w-[35%] text-right">{SONG_INFO.composer}</span>
+                    <span className="truncate max-w-[60%]">{trackTitle}</span>
+                    <span className="opacity-50 truncate max-w-[35%] text-right">{trackComposer}</span>
                 </div>
                 
                 <div className="flex items-center gap-2">

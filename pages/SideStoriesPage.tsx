@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { sideStoryVolumes } from '../data/sideStories';
 import { Language, SideStoryVolume } from '../types';
@@ -10,9 +11,10 @@ import SideStoryEntryAnimation from '../components/SideStoryEntryAnimation';
 interface SideStoriesPageProps {
   language: Language;
   isLightTheme: boolean;
+  onVolumeChange: (volumeId: string | null) => void;
 }
 
-const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language, isLightTheme }) => {
+const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language, isLightTheme, onVolumeChange }) => {
   // Navigation State: 'volumes' -> 'chapters' -> 'reader'
   const [viewMode, setViewMode] = useState<'volumes' | 'chapters' | 'reader'>('volumes');
   const [activeVolume, setActiveVolume] = useState<SideStoryVolume | null>(null);
@@ -23,6 +25,7 @@ const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language, isLightThem
   // Trigger animation when entering a folder (Volume)
   const handleVolumeSelect = (vol: SideStoryVolume) => {
     setActiveVolume(vol);
+    onVolumeChange(vol.id); // Notify App.tsx to potentially play music
     setIsAnimating(true);
   };
 
@@ -34,6 +37,12 @@ const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language, isLightThem
   const handleChapterSelect = (index: number) => {
     setCurrentChapterIndex(index);
     setViewMode('reader');
+  };
+  
+  const handleBackToVolumes = () => {
+      setActiveVolume(null);
+      onVolumeChange(null); // Notify App.tsx we left the volume
+      setViewMode('volumes');
   };
 
   // Render Animation if active
@@ -72,10 +81,7 @@ const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language, isLightThem
       return (
         <SideStoryChapterList 
             volume={activeVolume}
-            onBack={() => {
-                setActiveVolume(null);
-                setViewMode('volumes');
-            }}
+            onBack={handleBackToVolumes}
             onSelectChapter={handleChapterSelect}
             language={language}
             isLightTheme={isLightTheme}

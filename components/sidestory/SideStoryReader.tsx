@@ -199,31 +199,27 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
                     </Reveal>
                 );
             } else if (voidVisionMatch) {
-                // New Void Vision Effect with Identifier
+                // New Void Vision Effect
                 nodes.push(
-                    <Reveal key={`void-vis-${i}`} className="my-12 w-full max-w-3xl mx-auto">
-                        <div className="relative border-2 border-dashed border-fuchsia-500/50 bg-black/60 p-8 backdrop-blur-md overflow-hidden group select-none shadow-[0_0_20px_rgba(192,38,211,0.1)]">
+                    <Reveal key={`void-vis-${i}`} className="my-8 w-full max-w-2xl mx-auto">
+                        <div className="relative border-y border-fuchsia-900/50 bg-black/40 p-6 backdrop-blur-sm overflow-hidden group select-none">
                              {/* Background Glitch Elements */}
-                             <div className="absolute inset-0 bg-fuchsia-900/10 opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                             <div className="absolute inset-0 bg-fuchsia-900/5 opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                             <div className="absolute top-0 left-0 w-1 h-full bg-fuchsia-600/50"></div>
+                             <div className="absolute top-0 right-0 w-1 h-full bg-fuchsia-600/50"></div>
                              
                              {/* Label */}
-                             <div className="text-xs font-mono text-fuchsia-400 mb-6 tracking-[0.2em] flex items-center justify-center gap-2 animate-pulse font-bold">
-                                 <Eye size={14} /> RETINAL_PROJECTION // UNAUTHORIZED
+                             <div className="text-[10px] font-mono text-fuchsia-800 mb-2 tracking-[0.2em] flex items-center gap-2 animate-pulse">
+                                 <Eye size={12} /> RETINAL_PROJECTION // UNAUTHORIZED
                              </div>
                              
-                             {/* Content - White Highlight */}
-                             <div className="text-white font-bold text-xl md:text-2xl text-center drop-shadow-[0_0_8px_rgba(255,255,255,0.8)] leading-relaxed tracking-wide font-sans relative z-10">
+                             {/* Content */}
+                             <div className="text-fuchsia-300 font-serif italic text-lg text-center drop-shadow-[0_0_5px_rgba(217,70,239,0.5)] leading-relaxed">
                                  "{voidVisionMatch[1]}"
                              </div>
 
-                             {/* VOID IDENTIFIER TAG */}
-                             <div className="absolute bottom-2 right-4 flex items-center gap-1.5 opacity-70 border-t border-fuchsia-500/30 pt-1">
-                                <span className="w-1.5 h-1.5 bg-fuchsia-500 rounded-full animate-pulse shadow-[0_0_4px_#d946ef]"></span>
-                                <span className="text-[9px] font-mono text-fuchsia-400 tracking-[0.2em] font-bold">SENDER: VOID</span>
-                             </div>
-
                              {/* Decorative Scanline */}
-                             <div className="absolute top-0 left-0 w-full h-px bg-fuchsia-500/30 shadow-[0_0_10px_rgba(217,70,239,0.5)] animate-scanline pointer-events-none"></div>
+                             <div className="absolute top-0 left-0 w-full h-px bg-fuchsia-500/20 shadow-[0_0_10px_rgba(217,70,239,0.5)] animate-scanline pointer-events-none"></div>
                         </div>
                     </Reveal>
                 );
