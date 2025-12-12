@@ -3,6 +3,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { SideStoryVolume, Language, ChapterTranslation } from '../../types';
 import { ArrowLeft, List, ShieldAlert, FileText, ChevronLeft, ChevronRight, Activity, Image as ImageIcon, AlertTriangle, Loader2, Eye } from 'lucide-react';
 import Reveal from '../Reveal';
+import MaskedText from '../MaskedText';
 
 // --- Internal Reader Logic (Shared with ReaderPage) ---
 const VoidLog: React.FC<{ lines: string[] }> = ({ lines }) => {
@@ -36,6 +37,26 @@ const VoidLog: React.FC<{ lines: string[] }> = ({ lines }) => {
       </div>
     </Reveal>
   );
+};
+
+// Updated Helper to parse inline tags like [[MASK::...]] and [[GLITCH_GREEN::...]]
+const parseRichText = (text: string) => {
+  const parts = text.split(/(\[\[(?:MASK|GLITCH_GREEN)::.*?\]\])/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('[[MASK::') && part.endsWith(']]')) {
+      const content = part.slice(8, -2);
+      return <MaskedText key={index}>{content}</MaskedText>;
+    } else if (part.startsWith('[[GLITCH_GREEN::') && part.endsWith(']]')) {
+      const content = part.slice(16, -2);
+      return (
+        <span key={index} className="text-emerald-400 font-black tracking-widest drop-shadow-[0_0_10px_rgba(52,211,153,0.8)] inline-block animate-pulse relative px-1">
+            <span className="absolute inset-0 animate-ping opacity-30 blur-sm bg-emerald-500/20 rounded-full"></span>
+            <span className="relative z-10">{content}</span>
+        </span>
+      );
+    }
+    return part;
+  });
 };
 
 interface SideStoryReaderProps {
@@ -125,7 +146,7 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
             nodes.push(
                 <Reveal key={`p-${nodes.length}`}>
                     <p className={className}>
-                        {joinedText}
+                        {parseRichText(joinedText)}
                     </p>
                 </Reveal>
             );
@@ -183,7 +204,7 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
                 nodes.push(
                     <Reveal key={`blue-${i}`}>
                         <p className={blueClass}>
-                            {blueMatch[1]}
+                            {parseRichText(blueMatch[1])}
                         </p>
                     </Reveal>
                 );
@@ -194,7 +215,7 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
                 nodes.push(
                     <Reveal key={`danger-${i}`}>
                         <p className={dangerClass}>
-                            {dangerMatch[1]}
+                            {parseRichText(dangerMatch[1])}
                         </p>
                     </Reveal>
                 );
@@ -202,24 +223,31 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
                 // New Void Vision Effect
                 nodes.push(
                     <Reveal key={`void-vis-${i}`} className="my-8 w-full max-w-2xl mx-auto">
-                        <div className="relative border-y border-fuchsia-900/50 bg-black/40 p-6 backdrop-blur-sm overflow-hidden group select-none">
+                        <div className="relative border-y border-fuchsia-900/50 bg-black/80 p-6 backdrop-blur-sm overflow-hidden group select-none shadow-[0_0_30px_-10px_rgba(192,38,211,0.3)]">
                              {/* Background Glitch Elements */}
-                             <div className="absolute inset-0 bg-fuchsia-900/5 opacity-0 group-hover:opacity-20 transition-opacity"></div>
-                             <div className="absolute top-0 left-0 w-1 h-full bg-fuchsia-600/50"></div>
-                             <div className="absolute top-0 right-0 w-1 h-full bg-fuchsia-600/50"></div>
+                             <div className="absolute inset-0 bg-fuchsia-900/10 opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                             <div className="absolute top-0 left-0 w-0.5 h-full bg-fuchsia-500/50 box-shadow-[0_0_10px_rgba(217,70,239,0.8)]"></div>
+                             <div className="absolute top-0 right-0 w-0.5 h-full bg-fuchsia-500/50 box-shadow-[0_0_10px_rgba(217,70,239,0.8)]"></div>
                              
-                             {/* Label */}
-                             <div className="text-[10px] font-mono text-fuchsia-800 mb-2 tracking-[0.2em] flex items-center gap-2 animate-pulse">
-                                 <Eye size={12} /> RETINAL_PROJECTION // UNAUTHORIZED
+                             {/* Label Header */}
+                             <div className="flex items-center justify-between mb-4 border-b border-fuchsia-900/30 pb-2">
+                                <div className="text-[10px] font-mono text-fuchsia-600 tracking-[0.2em] flex items-center gap-2">
+                                     <Eye size={12} className="animate-pulse" /> RETINAL_PROJECTION
+                                </div>
+                                <div className="text-[10px] font-black font-mono bg-fuchsia-100 text-fuchsia-950 px-2 py-0.5 tracking-widest shadow-[0_0_15px_rgba(255,255,255,0.6)] animate-pulse">
+                                    SOURCE: VOID
+                                </div>
                              </div>
                              
-                             {/* Content */}
-                             <div className="text-fuchsia-300 font-serif italic text-lg text-center drop-shadow-[0_0_5px_rgba(217,70,239,0.5)] leading-relaxed">
-                                 "{voidVisionMatch[1]}"
+                             {/* Content - Bright White High Contrast */}
+                             <div className="relative z-10">
+                                 <div className="text-white font-serif italic text-lg md:text-xl text-center drop-shadow-[0_0_8px_rgba(255,255,255,0.9)] leading-relaxed tracking-wide">
+                                     "{voidVisionMatch[1]}"
+                                 </div>
                              </div>
 
-                             {/* Decorative Scanline */}
-                             <div className="absolute top-0 left-0 w-full h-px bg-fuchsia-500/20 shadow-[0_0_10px_rgba(217,70,239,0.5)] animate-scanline pointer-events-none"></div>
+                             {/* Decorative Scanline - White for brightness */}
+                             <div className="absolute top-0 left-0 w-full h-[2px] bg-white/30 shadow-[0_0_15px_rgba(255,255,255,1)] animate-scanline pointer-events-none mix-blend-overlay"></div>
                         </div>
                     </Reveal>
                 );

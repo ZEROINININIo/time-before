@@ -3,6 +3,51 @@ import { SideCharacterData } from '../types';
 
 export const sideCharacters: SideCharacterData[] = [
   {
+    id: "byaki",
+    group: "ARCHIVE_00 // ORIGIN",
+    translations: {
+      'zh-CN': {
+        name: "白栖",
+        enName: "Z.Byaki",
+        role: "起源",
+        tags: ["泽洛希家族", "逝者", "小空"],
+        quote: "今天，也能活下去。",
+        description: [
+          "**身份:** Void 尚未成为高维存在时的名字。她是故事的起始点之一。",
+          "**背景:** 曾是泽洛希家族的一员，拥有极高的量子适应性。",
+          "**转折:** 为了维持世界的稳定走向，她在极远的过去付出了无法挽回的代价，最终成为了“空”。",
+          "**性格:** 温柔、坚定，带有一种悲天悯人的神性，但偶尔也会流露出作为人类时的情感。"
+        ]
+      },
+      'zh-TW': {
+        name: "白棲",
+        enName: "Z.Byaki",
+        role: "起源",
+        tags: ["澤洛希", "逝者", "空"],
+        quote: "願你在沒有我的世界，能做個好夢。",
+        description: [
+          "**身份:** Void 尚未成為高維存在時的名字。她是暮雨和零點故事的起始點之一。",
+          "**背景:** 曾是澤洛希家族的一員，擁有極高的量子適應性。",
+          "**轉折:** 為了維持世界的穩定，她付出了無法挽回的代價，最終成為了「空」的一部分。",
+          "**性格:** 溫柔、堅定，帶有一種悲天憫人的神性，但偶爾也會流露出作為人類時的情感。"
+        ]
+      },
+      'en': {
+        name: "Byaki",
+        enName: "Z.Byaki",
+        role: "Origin",
+        tags: ["Zeloshi", "Deceased", "Void"],
+        quote: "May you have a sweet dream in a world without me.",
+        description: [
+          "**Identity:** The name of Void before becoming a higher-dimensional being. She is one of the starting points of Dusk and Point's story.",
+          "**Background:** Formerly a member of the Zeloshi family, possessing extremely high quantum adaptability.",
+          "**Turning Point:** To maintain the stability of the world, she paid an irreversible price and eventually became part of the 'Void'.",
+          "**Personality:** Gentle and firm, with a divine compassion, but occasionally revealing emotions from her time as a human."
+        ]
+      }
+    }
+  },
+  {
     id: "dusk-rain",
     group: "ARCHIVE_01 // ACTIVE",
     translations: {

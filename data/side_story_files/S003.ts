@@ -83,6 +83,40 @@ export const chapterS003: Chapter = {
 
 音乐声在风中飘荡，仿佛在诉说着那些无法言说的告别。
 
+一曲终了，零点轻轻鼓起了掌。
+
+零点：“好听！不愧是你。”
+
+我把吉他轻轻放在一旁，从口袋里摸出了终端。屏幕的反光映照着黄昏的火烧云。
+
+暮雨：“零点，过来。”
+
+零点：“哎？干嘛？”
+
+我举起终端，切换到了前置摄像头。
+
+暮雨：“难得来一次，合个影吧。”
+
+零点显然愣住了，眼睛瞪得大大的，像是不敢相信自己的耳朵。
+
+零点：“哇！太阳打西边出来了？平时那个看到镜头就躲的大记者居然主动要拍照？”
+
+暮雨：“少啰嗦。拍不拍？不拍我收起来了。”
+
+零点：“拍拍拍！当然拍！”
+
+她立刻凑了过来，为了配合我的高度还特意垫了垫脚，脸上绽放出比夕阳还要灿烂的笑容，比了一个大大的剪刀手。
+
+暮雨：“别乱动，要对不了焦了。”
+
+零点：“是你手在抖吧？来，笑一个嘛暮雨！茄子——”
+
+看着屏幕里那个没心没肺的笑脸，我也忍不住勾起了嘴角。
+
+【咔嚓】
+
+夕阳的余晖洒在我们身上，将这一刻定格。照片里的我们，背景是废墟与新城的交界，仿佛站在两个时代的边缘。
+
 天色渐晚，黄昏的余晖即将燃尽。
 
 [[BLUE::【数据记录中断……】]]`
@@ -162,6 +196,40 @@ export const chapterS003: Chapter = {
 
 音樂聲在風中飄盪，彷彿在訴說著那些無法言說的告別。
 
+一曲終瞭，零點輕輕鼓起了掌，眼角似乎有些濕潤，但很快就被她標誌性的笑容掩蓋了。
+
+零點：「好聽！不愧是我的專屬吉他手。」
+
+我把吉他輕輕放在一旁，從口袋裡摸出了終端。屏幕的反光映照著黃昏的火燒雲。
+
+暮雨：「零點，過來。」
+
+零點：「哎？幹嘛？」
+
+我舉起終端，切換到了前置攝像頭。
+
+暮雨：「難得來一次，合個影吧。」
+
+零點顯然愣住了，眼睛瞪得大大的，像是不敢相信自己的耳朵。
+
+零點：「哇！太陽打西邊出來了？平時那個看到鏡頭就躲的大記者居然主動要拍照？」
+
+暮雨：「少囉嗦。拍不拍？不拍我收起來了。」
+
+零點：「拍拍拍！當然拍！」
+
+她立刻湊了過來，為了配合我的高度還特意墊了墊腳，臉上綻放出比夕陽還要燦爛的笑容，比了一個大大的剪刀手。
+
+暮雨：「別亂動，要虛了。」
+
+零點：「是妳手在抖吧？來，笑一個嘛暮雨！茄子——」
+
+看著屏幕裡那個沒心沒肺的笑臉，我也忍不住勾起了嘴角。
+
+【咔嚓】
+
+夕陽的餘暉灑在我們身上，將這一刻定格。照片裡的我們，背景是廢墟與新城的交界，彷彿站在兩個時代的邊緣。
+
 天色漸晚，黃昏的餘暉即將燃盡。
 
 [[BLUE::【數據記錄中斷……】]]`
@@ -240,6 +308,40 @@ It was a very old tune, simple and sad. I had played it countless times on the s
 Point listened quietly, the tea-colored glass cover of the pocket watch in her hand refracting the setting sun.
 
 The music floated in the wind, seemingly telling of those unspeakable farewells.
+
+When the song ended, Point clapped gently. The corners of her eyes seemed a bit moist, but she quickly covered it with her signature smile.
+
+Point: "That was great! As expected of my personal guitarist."
+
+I gently set the guitar aside and fished my terminal out of my pocket. The screen reflected the fiery clouds of twilight.
+
+Dusk: "Point, come here."
+
+Point: "Eh? What for?"
+
+I raised the terminal and switched to the front camera.
+
+Dusk: "We rarely come here. Let's take a photo together."
+
+Point was obviously stunned, her eyes wide as if she couldn't believe her ears.
+
+Point: "Woah! Did the sun rise from the west? The big reporter who usually hides from cameras is actually asking to take a photo?"
+
+Dusk: "Cut the chatter. Are we doing this or not? If not, I'm putting it away."
+
+Point: "Yes yes yes! Of course!"
+
+She immediately leaned in, standing on her tiptoes to match my height, a smile brighter than the sunset blooming on her face as she flashed a big peace sign.
+
+Dusk: "Don't move, it's going to blur."
+
+Point: "It's your hand shaking, isn't it? Come on, smile, Dusk! Cheese—"
+
+Looking at that carefree smile on the screen, I couldn't help but curl my lips into a smile too.
+
+[Click]
+
+The afterglow of the setting sun fell upon us, freezing this moment in time. In the photo, we stood at the boundary between the ruins and the new city, as if standing on the edge of two eras.
 
 It was getting late, and the twilight was about to burn out.
 

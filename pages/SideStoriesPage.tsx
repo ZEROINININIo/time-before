@@ -46,11 +46,12 @@ const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language, isLightThem
   };
 
   // Render Animation if active
-  if (isAnimating) {
+  if (isAnimating && activeVolume) {
     return (
         <SideStoryEntryAnimation 
             onComplete={handleAnimationComplete}
             language={language}
+            volumeId={activeVolume.id}
         />
     );
   }

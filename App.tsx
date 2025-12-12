@@ -15,7 +15,7 @@ import { Language } from './types';
 // The requested track: Sharou - The Truth of Spirit Hiding
 const SPECIFIC_TRACK_URL = "https://music.163.com/song/media/outer/url?id=1831400969.mp3";
 
-const STORAGE_KEY = 'nova_labs_config_v4';
+const STORAGE_KEY = 'nova_labs_config_v5';
 
 interface AppConfig {
   language: Language;
@@ -31,7 +31,7 @@ const defaultConfig: AppConfig = {
   crtEnabled: true,
   isLightTheme: false,
   setupCompleted: false,
-  bgmPlaying: false,
+  bgmPlaying: true, // Changed default to true
   bgmVolume: 0.15 // Requested 15% default volume
 };
 

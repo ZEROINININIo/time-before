@@ -4,7 +4,7 @@ import { Chapter } from '../../types';
 export const chapterSLegacy: Chapter = {
   id: "special-legacy-dusk",
   date: "F-6年34月13日", // Keeping the exact date format from prompt
-  status: 'locked', // Explicitly locked as requested
+  status: 'published',
   translations: {
     'zh-CN': {
       title: "legacy",
@@ -14,6 +14,8 @@ export const chapterSLegacy: Chapter = {
        不知这段文字是谁在看，希望是点酱，因为我有话想对你说。很抱歉就这般不辞而别了，还是永别。
 
        我说谎了。那时对你说要去很远的地方,实际上是要离开人世 。如此说来倒是说得没错了，地狱确实很远啊(笑) 选择死亡的原因嘛.我和零空做了一笔交易,祂告诉我一切的结局，代价就是我去死。不要对零空心存芥蒂啊...这只是我的选择罢了。
+
+       抱歉零点，其实‘昼星’这个看似整的还不错的组织，仅仅由我一个人组成。
 
        所以这封遗书是我在知晓一切前写下的,介时我大抵会用随身带的刺刀来亲手了却自己罢...说起来这把刀还是因为之前很喜欢那部叫《剃刀党》的电影，特地定制的。
 
@@ -33,6 +35,8 @@ export const chapterSLegacy: Chapter = {
 
        我說謊了。那時對妳說要去很遠的地方,實際上是要離開人世 。如此說來倒是說得沒錯了，地獄確實很遠啊(笑) 選擇死亡的原因嘛.我和零空做了一筆交易,祂告訴我一切的結局，代價就是我去死。不要對零空心存芥蒂啊...這只是我的選擇罷了。
 
+       抱歉零點，其實『晝星』這個看似整的還不錯的組織，僅僅由我一個人組成。
+
        所以這封遺書是我在知曉一切前寫下的,介時我大抵會用隨身帶的刺刀來親手了卻自己罷...說起來這把刀還是因為之前很喜歡那部叫《剃刀黨》的電影，特地定制的。
 
        留給妳的東西有兩樣：一個是我的吉他，妳想彈的話可以試試去學,不想彈當個擺件也行。重要的是壓力太大了就該好好釋放;一個是懷表，當時我還跟個謎語人一樣(笑)現在便告訴妳:我在做記者時曾採訪過一位作家，他叫寧思，我十分敬佩他那般智慧的學者。寧思把他的懷表送給了我，以作紀念。所以,這個懷表現在送給妳,代表著寧靜地思考。
@@ -50,6 +54,8 @@ export const chapterSLegacy: Chapter = {
        I don't know who is reading this text, I hope it's Point-chan, because I have something to say to you. I'm sorry to leave without saying goodbye like this... or rather, goodbye forever.
 
        I lied. Back then I told you I was going to a place far away, but actually, I was leaving this world. In that sense, I wasn't wrong, Hell is indeed very far away (lol). As for the reason for choosing death... I made a deal with Void. He told me the ending of everything, and the price was my death. Don't hold a grudge against Void... this was just my choice.
+
+       Sorry Point, actually 'DiurnalStar', this seemingly decent organization, consists solely of me.
 
        So this suicide note was written before I knew everything. By then, I will probably use the bayonet I carry with me to end myself with my own hands... Speaking of which, this knife was custom-made because I really liked that movie called "Peaky Blinders".
 

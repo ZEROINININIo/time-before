@@ -154,7 +154,7 @@ export const characters: Character[] = [
   },
   {
     id: "void",
-    alias: "Void",
+    alias: "Void [[MASK::Z.Byaki]]",
     themeColor: "text-white",
     stats: {
       strength: 0,

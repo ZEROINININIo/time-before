@@ -1,9 +1,11 @@
+
 import React, { useState, useEffect, useRef } from 'react';
 import { novelData } from '../data/novelData';
 import { BookOpen, List, ChevronLeft, ChevronRight, Image as ImageIcon, FileText, Activity, AlertTriangle, Terminal, Grid, Folder, Lock, ArrowLeft, MousePointer2 } from 'lucide-react';
 import { ChapterTranslation, Language } from '../types';
 import Reveal from '../components/Reveal';
 import StoryEntryAnimation from '../components/StoryEntryAnimation';
+import MaskedText from '../components/MaskedText';
 
 interface ReaderPageProps {
   currentIndex: number;
@@ -21,7 +23,7 @@ const VoidLog: React.FC<{ lines: string[] }> = ({ lines }) => {
       <div className="my-10 border-l-4 border-fuchsia-600 bg-fuchsia-950/10 font-mono text-xs md:text-sm shadow-[0_0_15px_-3px_rgba(192,38,211,0.2)]">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="w-full text-left p-3 md:p-4 bg-fuchsia-950/20 hover:bg-fuchsia-900/30 text-fuchsia-300 font-bold flex items-center gap-3 transition-all group border-b border-fuchsia-500/20"
+          className="w-full text-left p-3 md:p-4 bg-fuchsia-950/20 hover:bg-fuchsia-900/30 text-fuchsia-300 font-bold flex items-center gap-3 transition-all group border-b border-fuchsia-500/20 focus:outline-none focus:bg-fuchsia-900/40"
         >
           <div className={`transition-transform duration-300 ${isOpen ? 'rotate-90' : ''}`}>
              <AlertTriangle size={16} />
@@ -63,6 +65,26 @@ const VoidLog: React.FC<{ lines: string[] }> = ({ lines }) => {
       </div>
     </Reveal>
   );
+};
+
+// Updated Helper to parse inline tags like [[MASK::...]] and [[GLITCH_GREEN::...]]
+const parseRichText = (text: string) => {
+  const parts = text.split(/(\[\[(?:MASK|GLITCH_GREEN)::.*?\]\])/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('[[MASK::') && part.endsWith(']]')) {
+      const content = part.slice(8, -2);
+      return <MaskedText key={index}>{content}</MaskedText>;
+    } else if (part.startsWith('[[GLITCH_GREEN::') && part.endsWith(']]')) {
+      const content = part.slice(16, -2);
+      return (
+        <span key={index} className="text-emerald-400 font-black tracking-widest drop-shadow-[0_0_10px_rgba(52,211,153,0.8)] inline-block animate-pulse relative px-1">
+            <span className="absolute inset-0 animate-ping opacity-30 blur-sm bg-emerald-500/20 rounded-full"></span>
+            <span className="relative z-10">{content}</span>
+        </span>
+      );
+    }
+    return part;
+  });
 };
 
 const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, language, isLightTheme }) => {
@@ -114,6 +136,26 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
       onChapterChange(currentIndex - 1);
     }
   };
+
+  // Keyboard Navigation
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+        // Only allow keyboard navigation in reader mode
+        if (viewMode !== 'reader') return;
+        
+        // Prevent interference with form inputs
+        if ((e.target as HTMLElement).tagName === 'INPUT' || (e.target as HTMLElement).tagName === 'TEXTAREA') return;
+
+        if (e.key === 'ArrowLeft') {
+            handlePrev();
+        } else if (e.key === 'ArrowRight') {
+            handleNext();
+        }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [viewMode, currentIndex]);
 
   // Custom content renderer to handle special blocks like Void Logs and merge paragraphs
   const renderContent = (text: string) => {
@@ -179,7 +221,7 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
             nodes.push(
                 <Reveal key={`p-${nodes.length}`}>
                     <p className={className}>
-                        {joinedText}
+                        {parseRichText(joinedText)}
                     </p>
                 </Reveal>
             );
@@ -237,7 +279,7 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
                 nodes.push(
                     <Reveal key={`blue-${i}`}>
                         <p className={blueClass}>
-                            {blueMatch[1]}
+                            {parseRichText(blueMatch[1])}
                         </p>
                     </Reveal>
                 );
@@ -248,7 +290,7 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
                 nodes.push(
                     <Reveal key={`danger-${i}`}>
                         <p className={dangerClass}>
-                            {dangerMatch[1]}
+                            {parseRichText(dangerMatch[1])}
                         </p>
                     </Reveal>
                 );
@@ -421,13 +463,17 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
         <div className="p-4 border-b-2 border-ash-gray bg-ash-black text-ash-light flex justify-between items-center shrink-0">
           <button 
              onClick={() => setViewMode('directory')}
-             className="flex items-center gap-2 text-xs font-mono font-bold hover:text-ash-gray transition-colors group"
+             className="flex items-center gap-2 text-xs font-mono font-bold hover:text-ash-gray transition-colors group focus:outline-none focus:bg-ash-dark focus:text-ash-white p-1"
           >
              <ArrowLeft size={14} className="group-hover:-translate-x-1 transition-transform" /> 
              {language === 'en' ? 'DIRECTORY' : '返回目录'}
           </button>
           
-          <button onClick={() => setIsSidebarOpen(false)} className="md:hidden text-ash-gray hover:text-ash-light">
+          <button 
+            onClick={() => setIsSidebarOpen(false)} 
+            className="md:hidden text-ash-gray hover:text-ash-light focus:outline-none focus:text-ash-light"
+            aria-label="Close Sidebar"
+          >
             <ChevronLeft size={16} />
           </button>
         </div>
@@ -448,7 +494,7 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
                    }
                 }}
                 disabled={isLocked}
-                className={`w-full text-left p-4 text-xs font-mono border-b border-ash-dark transition-none group relative overflow-hidden ${
+                className={`w-full text-left p-4 text-xs font-mono border-b border-ash-dark transition-none group relative overflow-hidden focus:outline-none focus:bg-ash-dark ${
                   index === currentIndex
                     ? 'bg-ash-light text-ash-black'
                     : isLocked ? 'bg-ash-dark/10 text-ash-gray cursor-not-allowed' : 'text-ash-gray hover:bg-ash-dark hover:text-ash-white'
@@ -477,7 +523,8 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
       {!isSidebarOpen && (
         <button 
           onClick={() => setIsSidebarOpen(true)}
-          className="absolute top-4 left-4 z-10 p-2 bg-ash-black text-ash-light border-2 border-ash-light hover:bg-ash-light hover:text-ash-black shadow-hard"
+          className="absolute top-4 left-4 z-10 p-2 bg-ash-black text-ash-light border-2 border-ash-light hover:bg-ash-light hover:text-ash-black shadow-hard focus:outline-none focus:ring-2 focus:ring-ash-light focus:bg-ash-light focus:text-ash-black transition-colors"
+          aria-label={language === 'en' ? "Open Sidebar" : "打开侧边栏"}
         >
           <List size={20} />
         </button>
@@ -528,7 +575,7 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
                         <button 
                         onClick={handlePrev}
                         disabled={currentIndex === 0}
-                        className="flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-ash-gray text-ash-gray hover:bg-ash-light hover:text-ash-black hover:border-ash-light disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-ash-gray transition-colors uppercase font-bold text-sm font-mono"
+                        className="flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-ash-gray text-ash-gray hover:bg-ash-light hover:text-ash-black hover:border-ash-light disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-ash-gray transition-colors uppercase font-bold text-sm font-mono focus:outline-none focus:bg-ash-light focus:text-ash-black"
                         >
                         <ChevronLeft size={16} /> PREV_FILE
                         </button>
@@ -540,7 +587,7 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
                         <button 
                         onClick={handleNext}
                         disabled={currentIndex === novelData.chapters.length - 1} // Logic checks total length, but navigation handles locks separately or allows browsing up to lock
-                        className="flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-ash-gray text-ash-gray hover:bg-ash-light hover:text-ash-black hover:border-ash-light disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-ash-gray transition-colors uppercase font-bold text-sm font-mono"
+                        className="flex-1 flex items-center justify-center gap-2 px-6 py-4 border-2 border-ash-gray text-ash-gray hover:bg-ash-light hover:text-ash-black hover:border-ash-light disabled:opacity-20 disabled:hover:bg-transparent disabled:hover:text-ash-gray transition-colors uppercase font-bold text-sm font-mono focus:outline-none focus:bg-ash-light focus:text-ash-black"
                         >
                         NEXT_FILE <ChevronRight size={16} />
                         </button>

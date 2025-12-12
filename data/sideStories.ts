@@ -4,7 +4,9 @@ import { chapterS001 } from './side_story_files/S001';
 import { chapterS002 } from './side_story_files/S002';
 import { chapterS003 } from './side_story_files/S003';
 import { chapterS004 } from './side_story_files/S004';
-import { chapterS005 } from './side_story_files/S005';
+import { chapterX001 } from './side_story_files/X001';
+import { chapterX002 } from './side_story_files/X002';
+import { chapterX003 } from './side_story_files/X003';
 import { chapterSLegacy } from './side_story_files/S_Legacy';
 
 // Helper to create garbled chapters
@@ -39,10 +41,11 @@ export const sideStoryVolumes: SideStoryVolume[] = [
     titleEn: "Time Line Daily",
     status: 'unlocked',
     chapters: [
-        chapterS005,
+        chapterX001,
+        chapterX002,
+        chapterX003,
         // Garbled Chapters
-        createGarbledChapter("ERR_002", "档案记录: X-002"),
-        createGarbledChapter("ERR_003", "档案记录: X-003"),
+        createGarbledChapter("ERR_004", "档案记录: X-004"),
     ]
   },
   {

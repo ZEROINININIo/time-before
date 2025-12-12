@@ -4,208 +4,456 @@ import { Chapter } from '../../types';
 export const chapterS004: Chapter = {
   id: "story-frag-rain-4",
   date: "档案记录: S-004",
-  status: 'locked',
+  status: 'published',
   translations: {
     'zh-CN': {
-      title: "那场仍未结束的零碎之雨 (四) // 交易",
-      summary: "与虚空的交易，只为了那个必然的结局。",
-      content: `[[BLUE::记忆提取中... 场景重构：深夜办公室]]
+      title: "那场仍未结束的零碎之雨 (四) // 真相",
+      summary: "既然结局无法更改，那么知晓真相便是我最后的执念。",
+      content: `[[BLUE::记忆提取中... 场景重构：深夜的星联办公室]]
 
 [[DIVIDER]]
 
-深夜，办公室。
+从观景台回来时，特殊的时域节区已经进入了低功耗的“夜间模式”。
 
-只有显示屏微弱的蓝光照亮着房间。零点已经趴在旁边的沙发上睡着了，那块金色的怀表依然被她紧紧握在手里。
+刚推开办公室的门，就撞见正准备下班的泽洛和芷漓。
 
-暮雨坐在椅子上，静静地注视着她，随后转过头，看向房间里那片空无一物的黑暗角落。
+泽洛：“哇！稀客稀客！暮雨先生和零点终于‘私奔’回来了？”
 
-暮雨：“出来吧。我知道你在听。”
+泽洛趴在椅背上，一脸八卦地看着我们。旁边的芷漓正在整理最后的数据板，听到动静也抬起了头，目光在我们身上打转。
 
-空气中泛起一阵肉眼可见的涟漪，仿佛空间本身发生了扭曲。一个没有实体、仿佛由数据和阴影构成的存在逐渐显现。
+芷漓：“（无奈地叹了口气）看来某人彻底断电了啊。”
 
-Void：“……你比我想象的要敏锐，人类。”
+她指的是跟在我身后，像游魂一样飘进来，然后直接一头栽进沙发里的零点。
 
-暮雨：“关于那个‘结局’，我想通了。”
+暮雨：“只是去上面吹了吹风。她今天大概是耗尽精力了。”
 
-Void：“哦？你打算接受命运的安排吗？看着这个世界崩塌，看着她……随着世界一起湮灭？”
+泽洛：“嘻嘻，那我们就不当电灯泡啦！芷漓姐，我们走吧？”
 
-暮雨：“不。正因为不想看到那个结局，所以我才把你叫出来。我可不想看着她消失。”
+芷漓叹了口气，拿起包走到门口，停顿了一下，意味深长地看了我一眼。
 
-暮雨站起身，直视着那个不可名状的存在。虽然他的身体在微微颤抖，但眼神却异常坚定，甚至嘴角带上了一丝无畏的笑意。
+芷漓：“虽然不知道你们聊了什么……但我在你身上看见了一些东西，你需要冷静。暮雨。别太勉强。”
 
-暮雨：“你一直想要一个‘容器’，对吧？一个能够承载你在这个维度力量，从而干涉现实的容器。”
+暮雨：“放心吧。路上小心。”
 
-Void：“零点是最完美的适配者。她的量子适应性是独一无二的。”
+随着自动门“滴”的一声合上，喧嚣彻底隔绝在门外。
 
-暮雨：“但如果她现在就承受你的力量，她会死。她的精神无法负荷那种层级的信息冲击。这种事我绝不允许。”
+并没有什么惊天动地的告别仪式。一切都安静得像是一场默剧。
 
-Void：“这是必要的代价。”
+只有显示屏微弱的蓝光照亮着房间，勾勒出她熟睡的轮廓。
 
-暮雨：“那……如果我来买单呢？”
+暮雨坐在椅子上，手里把玩着那把锋利的定制刺刀，指腹轻轻划过冰冷的刀刃。不知何时，零点的头上已经有了一个淡淡的黑色光环，光环散发着极微弱的惨白的光芒。
 
-Void 似乎停顿了一下，周围的涟漪变得剧烈起来。
+他停下动作，看向沙发方向，语气平静。
 
-Void：“你？你只是一个普通的观测者。你的身体会瞬间崩溃。”
+暮雨：“既然醒了，就起来聊聊吧。Void。”
 
-暮雨：“不需要我的身体。我指的是……‘引导’。我可以作为你和她之间的缓冲层。我会让你进入她的身体，但我会用我的意识来构筑一道防火墙，过滤掉那些会摧毁她的信息流。”
+沙发上的“零点”并没有立刻起身。她先是像往常一样翻了个身，揉了揉眼睛，然后才慢慢坐直身体。
 
-Void：“你会为此付出什么，你知道吗？你的意识会被撕碎，你会成为她潜意识里的一抹幽灵，永远无法再以‘暮雨’的身份存在。”
+她整理了一下有些凌乱的衣角，然后站起身，动作轻柔地走到暮雨对面坐下。那双眼睛虽然是零点的，但眼神中没有平日的躁动，只有一种平静的温和。
 
-暮雨回头看了一眼熟睡的零点。她睡得很安稳，嘴角还挂着一丝浅笑，似乎梦到了什么开心的事情。
+零点 (Void)：“晚上好，暮雨先生。这么晚了还不休息，是有什么心事吗？”
 
-暮雨：“这就是我的交易。”
+她的声音很轻，带着一种非常有教养的礼貌感，仿佛一位深夜造访的谦逊客人。
 
-暮雨：“尽管夺舍她吧，Void。用你的力量去拯救这个世界。但是……你必须替我保护好她的意识。这是条件。”
+暮雨：“抱歉打扰你休息了。但我……有些事情必须现在确认。”
 
-Void 沉默了许久。
+零点 (Void)：“没关系，我并不介意。您看起来很焦虑，是因为那块怀表吗？”
 
-Void：“……有趣的提案。凡人的自我牺牲……多么无趣又令人着迷的剧本。”
+暮雨：“是的。我父母的死，还有这个世界的现状……我想听真话。不是官方的通报，也不是为了安慰我的谎言。”
 
-Void：“成交。”
+Void 轻轻叹了口气，脸上露出一丝遗憾和敬佩交织的神情。
 
-黑色的阴影瞬间膨胀，吞没了整个房间。
+零点 (Void)：“其实，我一直不太希望您深究这件事，因为那太沉重了……不过，既然您这么坚持。”
 
-暮雨最后一次看向零点，轻轻闭上了眼睛，脸上露出了往常那种温暖的笑容。
+她双手交叠放在膝盖上，语气诚恳而庄重。
 
-“晚安啦，零点。”
+零点 (Void)：“关于令尊和令堂……他们是非常伟大的先行者。为了维持这个‘相对泛义世界’的微妙平衡，他们不得不高强度地运作‘时空泡’。”
 
-[[DANGER::【系统警告：检测到主要意识源置换……人格覆写中……】]]
+暮雨：“平衡……？”
+
+零点 (Void)：“是的。世界的架构并不稳定，需要巨大的能量来锚定。您的父母承担了这份责任，但那个能量量级实在太庞大了。常年的辐射与负荷，让他们的身体患上了严重的‘时空适应性慢性病’。”
+
+暮雨的手指微微颤抖了一下，握紧了刺刀的手骨节发白。
+
+暮雨：“……慢性病。原来是因为能量反噬。他们是为了维持这个世界才……”
+
+零点 (Void)：“我很遗憾。那是一种在基因层面不可逆的崩坏，哪怕是我们也无法治愈。当身体到达极限的那一刻，便是您所知道的‘事故’。”
+
+暮雨深吸了一口气，眼眶微红，但眼神却变得前所未有的清明。
+
+暮雨：“原来不是阴谋，也不是意外。是代价……是作为守望者的代价啊。”
+
+“零点”抬起手，掌心向上，动作优雅而克制。
+
+零点 (Void)：“虽然他们付出了生命，但这个世界的终局依然无法避免。您想看看那个时刻吗？以及……如果不加以阻止，这个世界将会迎来的结局。”
+
+暮雨：“给我看吧。既然我已经知道了因，我也该看看果。我想知道……他们最后一刻到底经历了什么。”
+
+Void 沉默了片刻，那双眼睛里流露出一丝悲悯。
+
+零点 (Void)：“如您所愿。”
+
+暮雨深吸一口气，重新握紧了手中的刺刀。
+
+暮雨：“作为交换，我会用生命来保守这个秘密的。”
+
+他看了一眼熟睡的“零点”，眼中闪过一丝决绝。
+
+暮雨：“替我跟她们说声……算了，什么也别说。就当我又去哪里出差了吧。别让她们太难过。”
+
+他突然伸手摸向口袋，指尖触碰到了那个在观景台时还没抽完的、皱巴巴的烟盒。他掏出一根，动作熟练地点燃。
+
+淡蓝色的烟雾在昏暗的房间里升腾，模糊了 Void 那张平静的脸，也模糊了那些即将到来的恐惧。尼古丁带来的短暂眩晕感让他紧绷的神经终于得到了一丝迟来的放松。
+
+暮雨：“呼……最后一根了。味道还是这么呛啊。”
+
+他并没有抽完，只是深深吸了一口，感受着那股灼热的气流在肺叶里回荡，然后将烟蒂重重地按灭在扶手上，像是掐灭了自己最后一丝犹豫。
+
+他深吸一口气，空气中弥漫着熟悉的、干燥的臭氧味，混杂着尚未散去的烟草气息。他闭上眼睛，调整了刀尖的角度，对准了心脏的间隙。
+
+没有颤抖。
+
+手腕发力。
+
+噗嗤。
+
+冰冷的金属刺破了皮肤，撕裂了温热的血肉。
+
+那一瞬间，随着剧痛和寒意一同涌入脑海的，是海量的信息流。
+
+[[VOID_VISION::【神经连接强行建立……时空回溯开启……】]]
+
+[[VOID_VISION::【场景一：C区反应堆（过去）。并没有爆炸，只有刺耳的警报。你的父亲试图拉下最后的闸门，但他已经来不及，所有人都收到了来自泛义宇宙的“馈赠”】]]
+
+[[VOID_VISION::【场景二：世界线变动-β（未来）。天空裂开了巨大的口子。重力常数失效。你所熟悉的街道、高楼大厦连同里面尖叫的人群被吸入天际的空洞。他们在半空中被引力潮汐撕扯成红色的血雾。没有幸存者，没有救援，没有希望。只有无尽的、绝望的红色。】]]
+
+剧烈的冲击让暮雨的身体在椅子上痉挛了一下，但他的嘴角却缓缓勾起了一个凄惨的弧度。
+
+咚。
+
+咚。
+
+心脏的搏动越来越慢，那些恐怖的画面却越来越清晰。
+
+暮雨（濒死思考）：“啊……原来是这样。爸爸，妈妈……原来这就是你们当时承担的痛苦吗...”
+
+视线开始模糊，红色的血雾与蓝色的房间交织在一起。
+
+暮雨（濒死思考）：“太好了……至少，我看见了，大家……要好好活下去啊。”
+
+暮雨倒在椅子上，彻底停止了呼吸。那抹笑容凝固在脸上，带着一丝解脱，也带着一丝对亲人的思念。
+
+“零点”静静地坐在对面，看着那个不再跳动的身影。她没有立刻离开，而是微微欠身，行了一个标准的告别礼。
+
+[[GLITCH_GREEN::白栖]] (Void)：“晚安，暮雨先生。愿您在没有我[[MASK::（白栖丶泽洛希）]]的世界，能做一个好梦。”
+
+【Xbot：受指派的生物质回收】
+
+将剩余的污渍清理完，她将暮雨的终端总机放在桌子上，闭上眼睛，身体软软地倒回了沙发上，光环渐渐消失，仿佛只是做了一场短暂的梦。
+
+房间里恢复了死寂，只有那块怀表，还在滴答作响，像是在为这场漫长的雨季，画上最后的句点。
+
+[[DANGER::【检测到生命体征消失……】]]
 [[DANGER::【暮雨 ID 下线】]]
-[[BLUE::【Void ID 上线】]]`
+[[BLUE::【真相已归档。】]]`
     },
     'zh-TW': {
-      title: "那場仍未結束的零碎之雨 (四) // 交易",
-      summary: "與虛空的交易，只為了那個必然的結局。",
+      title: "那場仍未結束的零碎之雨 (四) // 真相",
+      summary: "既然結局無法更改，那麼知曉真相便是我最後的執念。",
       content: `[[BLUE::記憶提取中... 場景重構：深夜辦公室]]
 
 [[DIVIDER]]
 
-深夜，辦公室。
+從觀景台回來時，特殊的時域節區已經進入了低功耗的「夜間模式」。
 
-只有顯示屏微弱的藍光照亮著房間。零點已經趴在旁邊的沙發上睡著了，那塊金色的懷表依然被她緊緊握在手裡。
+剛推開辦公室的門，就撞見正準備下班的澤洛和芷漓。
 
-暮雨坐在椅子上，靜靜地注視著她，隨後轉過頭，看向房間里那片空無一物的黑暗角落。
+澤洛：「哇！稀客稀客！暮雨先生和零點終於『私奔』回來了？」
 
-暮雨：「出來吧。我知道你在聽。」
+澤洛趴在椅背上，一臉八卦地看著我們。旁邊的芷漓正在整理最後的數據板，聽到動靜也抬起了頭，目光在我們身上打轉。
 
-空氣中泛起一陣肉眼可見的漣漪，彷彿空間本身發生了扭曲。一個沒有實體、彷彿由數據和陰影構成的存在逐漸顯現。
+芷漓：「（無奈地嘆了口氣）看來某人徹底斷電了啊。」
 
-Void：「……你比我想像的要敏銳，人類。」
+她指的是跟在我身後，像遊魂一樣飄進來，然後直接一頭栽進沙發裡的零點。懷裡還死死抱著那個裝有懷錶的盒子。
 
-暮雨：「關於那個『結局』，我想通了。」
+暮雨：「只是去上面吹了吹風。她今天大概是耗盡精力了。」
 
-Void：「哦？你打算接受命運的安排嗎？看著這個世界崩塌，看著她……隨著世界一起湮滅？」
+澤洛：「嘻嘻，那我們就不當電燈泡啦！芷漓姐，我們走吧？」
 
-暮雨：「不。正因為不想看到那個結局，所以我才把你叫出來。我可不想看著她消失。」
+芷漓嘆了口氣，拿起包走到門口，停頓了一下，意味深長地看了我一眼。
 
-暮雨站起身，直視著那個不可名狀的存在。雖然他的身體在微微顫抖，但眼神卻異常堅定，甚至嘴角帶上了一絲無畏的笑意。
+芷漓：「雖然不知道你們聊了什麼……但我在妳身上看見了一些東西，妳需要冷靜。暮雨。別太勉強。」
 
-暮雨：「你一直想要一個『容器』，對吧？一個能夠承載你在這個維度力量，從而干涉現實的容器。」
+暮雨：「放心吧。路上小心。」
 
-Void：「零點是最完美的適配者。她的量子適應性是獨一無二的。」
+隨著自動門「滴」的一聲合上，喧囂徹底隔絕在門外。
 
-暮雨：「但如果她現在就承受你的力量，她會死。她的精神無法負荷那種層級的信息衝擊。這種事我絕不允許。」
+並沒有什麼驚天動地的告別儀式。一切都安靜得像是一場默劇。
 
-Void：「這是必要的代價。」
+只有顯示屏微弱的藍光照亮著房間，勾勒出她熟睡的輪廓。
 
-暮雨：「那……如果我來買單呢？」
+暮雨坐在椅子上，手裡把玩著那把鋒利的刺刀，指腹輕輕劃過冰冷的刀刃。片刻後，他停下動作，看向沙發方向，語氣平靜。
 
-Void 似乎停頓了一下，周圍的漣漪變得劇烈起來。
+暮雨：「既然醒了，就起來聊聊吧。Void。」
 
-Void：「你？你只是一個普通的觀測者。你的身體會瞬間崩潰。」
+沙發上的「零點」並沒有立刻起身。她先是像往常一樣翻了個身，揉了揉眼睛，然後才慢慢坐直身體。
 
-暮雨：「不需要我的身體。我指的是……『引導』。我可以作為你和她之間的緩衝層。我會讓你進入她的身體，但我會用我的意識來構築一道防火牆，過濾掉那些會摧毀她的信息流。」
+她整理了一下有些凌亂的衣角，然後站起身，動作輕柔地走到暮雨對面坐下。那雙眼睛雖然是零點的，但眼神中沒有平日的躁動，只有一種平靜的溫和。
 
-Void：「你會為此付出什麼，你知道嗎？你的意識會被撕碎，你會成為她潛意識裡的一抹幽靈，永遠無法再以『暮雨』的身分存在。」
+零點 (Void)：「晚上好，暮雨先生。這麼晚了還不休息，是有什麼心事嗎？」
 
-暮雨回頭看了一眼熟睡的零點。她睡得很安穩，嘴角還掛著一絲淺笑，似乎夢到了什麼開心的事情。
+她的聲音很輕，帶著一種非常有教養的禮貌感，彷彿一位深夜造訪的謙遜客人。
 
-暮雨：「這就是我的交易。」
+暮雨：「抱歉打擾你休息了。但我……有些事情必須現在確認。」
 
-暮雨：「儘管奪舍她吧，Void。用你的力量去拯救這個世界。但是……你必須替我保護好她的意識。這是條件。」
+零點 (Void)：「沒關係，我並不介意。您看起來很焦慮，是因為那塊懷表嗎？」
 
-Void 沉默了許久。
+暮雨：「是的。我父母的死，還有這個世界的現狀……我想聽真話。不是官方的通報，也不是為了安慰我的謊言。」
 
-Void：「……有趣的提案。凡人的自我犧牲……多麼無趣又令人著迷的劇本。」
+Void 輕輕嘆了口氣，臉上露出一絲遺憾和敬佩交織的神情。
 
-Void：「成交。」
+零點 (Void)：「其實，我一直不太希望您深究這件事，因為那太沉重了……不過，既然您這麼堅持。」
 
-黑色的陰影瞬間膨脹，吞沒了整個房間。
+她雙手交疊放在膝蓋上，語氣誠懇而莊重。
 
-暮雨最後一次看向零點，輕輕閉上了眼睛，臉上露出了往常那種溫暖的笑容。
+零點 (Void)：「關於令尊和令堂……他們是非常偉大的先行者。為了維持這個『相對泛義世界』的微妙平衡，他們不得不高強度地運作『時空泡』。」
 
-「晚安啦，零點。」
+暮雨：「平衡……？」
 
-[[DANGER::【系統警告：檢測到主要意識源置換……人格覆寫中……】]]
+零點 (Void)：「是的。世界的架構並不穩定，需要巨大的能量來錨定。您的父母承擔了這份責任，但那個能量量級實在太龐大了。常年的輻射與負荷，讓他們的身體患上了嚴重的『時空適應性慢性病』。」
+
+暮雨的手指微微顫抖了一下，握緊了刺刀的手骨節發白。
+
+暮雨：「……慢性病。原來是因為能量反噬。他們是為了維持這個世界才……」
+
+零點 (Void)：「我很遺憾。那是一種在基因層面不可逆的崩壞，哪怕是我們也無法治癒。當身體到達極限的那一刻，便是您所知道的『事故』。」
+
+暮雨深吸了一口氣，眼眶微紅，但眼神卻變得前所未有的清明。
+
+暮雨：「原來不是陰謀，也不是意外。是代價……是作為守望者的代價啊。」
+
+「零點」抬起手，掌心向上，動作優雅而克制。
+
+零點 (Void)：「雖然他們付出了生命，但這個世界的終局依然無法避免。您想看看那個時刻嗎？以及……如果不加以阻止，這個世界將會迎來的結局。」
+
+暮雨：「給我看吧。既然我已經知道了因，我也該看看果。我想知道……他們最後一刻到底經歷了什麼。」
+
+Void 沉默了片刻，那雙眼睛裡流露出一絲悲憫。
+
+零點 (Void)：「如您所願。」
+
+暮雨深吸一口氣，重新握緊了手中的刺刀。
+
+暮雨：「作為交換，我會用生命來保守這個秘密的。」
+
+他看了一眼熟睡的「零點」，眼中閃過一絲決絕。
+
+暮雨：「替我跟她們說聲……算了，什麼也別說。就當我又去哪裡出差了吧。別讓她們太難過。」
+
+他突然伸手摸向口袋，指尖觸碰到了那個在觀景台時還沒抽完的、皺巴巴的菸盒。他掏出一根，動作熟練地點燃。
+
+淡藍色的煙霧在昏暗的房間裡升騰，模糊了 Void 那張平靜的臉，也模糊了那些即將到來的恐懼。尼古丁帶來的短暫眩暈感讓他緊繃的神經終於得到了一絲遲來的放鬆。
+
+暮雨：「呼……最後一根了。味道還是這麼嗆啊。」
+
+他並沒有抽完，只是深深吸了一口，感受著那股灼熱的氣流在肺葉裡迴盪，然後將菸蒂重重地按滅在扶手上，像是掐滅了自己最後一絲猶豫。
+
+他深吸一口氣，空氣中瀰漫著熟悉的、乾燥的臭氧味，混雜著尚未散去的菸草氣息。他閉上眼睛，調整了刀尖的角度，對準了心臟的間隙。
+
+沒有顫抖。
+
+手腕發力。
+
+噗嗤。
+
+冰冷的金屬刺破了皮膚，撕裂了溫熱的血肉。
+
+那一瞬間，隨著劇痛和寒意一同湧入腦海的，是海量的信息流。
+
+[[VOID_VISION::【神經連接強行建立……時空回溯開啟……】]]
+
+[[VOID_VISION::【場景一：C區反應堆（過去）。並沒有爆炸，只有刺耳的警報。你的父親試圖拉下最後的閘門，但他已經來不及，所有人都收到了來自泛義宇宙的「餽贈」】]]
+
+[[VOID_VISION::【場景二：世界線變動-β（未來）。天空裂開了巨大的口子。重力常數失效。你所熟悉的街道、高樓大廈連同裡面尖叫的人群被吸入天際的空洞。他們在半空中被引力潮汐撕扯成紅色的血霧。沒有倖存者，沒有救援，沒有希望。只有無盡的、絕望的紅色。】]]
+
+劇烈的衝擊讓暮雨的身體在椅子上痙攣了一下，但他的嘴角卻緩緩勾起了一個凄慘的弧度。
+
+咚。
+
+咚。
+
+心臟的搏動越來越慢，那些恐怖的畫面卻越來越清晰。
+
+暮雨（瀕死思考）：「啊……原來是這樣。爸爸，媽媽……原來這就是你們當時承擔的痛苦嗎...」
+
+視線開始模糊，紅色的血霧與藍色的房間交織在一起。
+
+暮雨（瀕死思考）：「太好了……至少，我看見了，大家……要好好活下去啊。」
+
+暮雨倒在椅子上，徹底停止了呼吸。那抹笑容凝固在臉上，帶著一絲解脫，也帶著一絲對親人的思念。
+
+「零點」靜靜地坐在對面，看著那個不再跳動的身影。她沒有立刻離開，而是微微欠身，行了一個標準的告別禮。
+
+[[GLITCH_GREEN::白棲]] (Void)：「晚安，暮雨先生。願您在沒有我[[MASK::（白棲丶澤洛希）]]的世界，能做個好夢。」
+
+【Xbot：受指派的生物質回收】
+
+將剩餘的污漬清理完，她將暮雨的終端總機放在桌子上，閉上眼睛，身體軟軟地倒回了沙發上，光環漸漸消失，彷彿只是做了一場短暫的夢。
+
+房間裡恢復了死寂，只有那塊懷表，還在滴答作響，像是在為這場漫長的雨季，畫上最後的句點。
+
+[[DANGER::【檢測到生命體徵消失……】]]
 [[DANGER::【暮雨 ID 下線】]]
-[[BLUE::【Void ID 上線】]]`
+[[BLUE::【真相已歸檔。】]]`
     },
     'en': {
-      title: "The Fragmented Rain That Never Ended (Part IV) // Transaction",
-      summary: "A deal with the Void, only for that inevitable ending.",
+      title: "The Fragmented Rain That Never Ended (Part IV) // Truth",
+      summary: "Since the ending cannot be changed, knowing the truth is my final obsession.",
       content: `[[BLUE::Memory Extraction... Scene Reconstruction: Late Night Office]]
 
 [[DIVIDER]]
 
-Late night, office.
+When we returned from the observation deck, the Time Sector had already entered its low-power "Night Mode".
 
-Only the faint blue light of the monitor illuminated the room. Point had fallen asleep on the sofa nearby, the golden pocket watch still tightly clutched in her hand.
+As soon as I pushed open the office door, I ran into Zelo and Zeri, who were just getting ready to leave work.
 
-Dusk sat in his chair, watching her quietly, then turned his head to look at the empty dark corner of the room.
+Zelo: "Wow! Rare guests! Did Mr. Dusk and Point finally come back from their 'elopement'?"
 
-Dusk: "Come out. I know you're listening."
+Zelo leaned on the back of her chair, looking at us with a gossipy face. Beside her, Zeri was organizing the last of her data pads. Hearing the commotion, she looked up, her gaze circling around us.
 
-A visible ripple appeared in the air, as if space itself was distorted. An entity without physical form, seemingly composed of data and shadows, gradually emerged.
+Zeri: "(Sighs helplessly) Looks like someone completely powered down."
 
-Void: "...You are sharper than I imagined, human."
+She was referring to Point, who drifted in behind me like a wandering spirit and then planted herself face-first into the sofa. She was still hugging the box containing the pocket watch tightly.
 
-Dusk: "About that 'ending', I've thought it through."
+Dusk: "We just went up for some air. She probably exhausted all her energy today."
 
-Void: "Oh? Are you planning to accept the arrangement of fate? Watch this world collapse, watch her... annihilate along with the world?"
+Zelo: "Hehe, then we won't be third wheels! Zeri-sis, shall we go?"
 
-Dusk: "Nope. Precisely because I don't want to see that ending, that's why I called you. I'm not letting her disappear."
+Zeri sighed, picked up her bag and walked to the door. She paused, giving me a meaningful look.
 
-Dusk stood up and looked directly at the indescribable existence. Although his body was trembling slightly, his eyes were exceptionally firm, and there was even a fearless smile on his lips.
+Zeri: "I don't know what you talked about... but I saw something in you. You need to calm down, Dusk. Don't push yourself too hard."
 
-Dusk: "You've always wanted a 'vessel', right? A vessel that can carry your power in this dimension and interfere with reality."
+Dusk: "Don't worry. Safe trip home."
 
-Void: "Point is the perfect adapter. Her quantum adaptability is unique."
+As the automatic door closed with a beep, the noise was completely shut out.
 
-Dusk: "But if she bears your power now, she will die. Her mind cannot handle that level of information impact. I won't let that happen."
+There was no earth-shattering farewell ceremony. Everything was quiet, like a mime.
 
-Void: "This is a necessary price."
+Only the faint blue light of the monitor illuminated the room, outlining her sleeping silhouette.
 
-Dusk: "Then... what if I foot the bill?"
+Dusk sat in his chair, playing with the sharp bayonet, his fingertips gently gliding over the cold blade. A moment later, he stopped and looked towards the sofa, his tone calm.
 
-Void seemed to pause, and the surrounding ripples became violent.
+Dusk: "Since you're awake, let's talk. Void."
 
-Void: "You? You are just an ordinary observer. Your body will collapse instantly."
+'Point' on the sofa didn't get up immediately. She first turned over as usual, rubbed her eyes, and then slowly sat up straight.
 
-Dusk: "I don't need my body. I mean... 'guidance'. I can act as a buffer layer between you and her. I will let you enter her body, but I will use my consciousness to build a firewall to filter out the information flow that would destroy her."
+She tidied up her slightly messy clothes, then stood up and walked gently to the chair opposite Dusk and sat down. Those eyes were Point's, but the gaze lacked the usual restlessness, holding only a calm gentleness.
 
-Void: "Do you know what you will pay for this? Your consciousness will be torn apart, and you will become a ghost in her subconscious, never able to exist as 'Dusk' again."
+Point (Void): "Good evening, Mr. Dusk. Not sleeping yet? Is something troubling you?"
 
-Dusk looked back at the sleeping Point. She slept peacefully, a slight smile on her lips, seemingly dreaming of something happy.
+Her voice was soft, carrying a very cultured sense of politeness, like a humble guest visiting late at night.
 
-Dusk: "That's the deal."
+Dusk: "Sorry to disturb your rest. But... there are some things I must confirm now."
 
-Dusk: "Go ahead and possess her, Void. Use your power to save this world. But... you must protect her consciousness for me. That's the condition."
+Point (Void): "It's alright, I don't mind. You look anxious. Is it because of that pocket watch?"
 
-Void was silent for a long time.
+Dusk: "Yes. My parents' death, and the current state of this world... I want the truth. Not the official report, nor lies to comfort me."
 
-Void: "...Interesting proposal. Mortal self-sacrifice... what a boring yet fascinating script."
+Void sighed softly, a look of regret and admiration appearing on her face.
 
-Void: "Deal."
+Point (Void): "Actually, I never really wanted you to delve too deeply into this, because it is too heavy... But, since you insist."
 
-The black shadow expanded instantly, swallowing the entire room.
+She folded her hands on her lap, her tone sincere and solemn.
 
-Dusk looked at Point for the last time, gently closed his eyes, and showed his usual warm smile.
+Point (Void): "About your parents... they were great pioneers. To maintain the delicate balance of this 'Relative Generalized World', they had to operate the 'Time-Space Bubble' at high intensity."
 
-"Goodnight, Point."
+Dusk: "Balance...?"
 
-[[DANGER::[SYSTEM WARNING: PRIMARY CONSCIOUSNESS SOURCE DISPLACEMENT DETECTED... PERSONALITY OVERWRITE IN PROGRESS...]]]
+Point (Void): "Yes. The architecture of the world is unstable and requires immense energy to anchor it. Your parents bore this responsibility, but the energy magnitude was simply too vast. Years of radiation and load caused their bodies to suffer from severe 'Chronic Time-Space Adaptation Disease'."
+
+Dusk's fingers trembled slightly, his knuckles turning white as he gripped the bayonet.
+
+Dusk: "...Chronic disease. So it was energy backlash. They did it to maintain this world..."
+
+Point (Void): "I am sorry. It was an irreversible collapse at the genetic level, something even we could not cure. The moment their bodies reached the limit was the 'accident' you know of."
+
+Dusk took a deep breath, his eyes slightly red, but his gaze became clearer than ever before.
+
+Dusk: "So it wasn't a conspiracy, nor an accident. It was the price... the price of being a watcher."
+
+'Point' raised her hand, palm up, her movements elegant and restrained.
+
+Point (Void): "Although they gave their lives, the endgame of this world remains unavoidable. Do you wish to see that moment? And... the ending this world will face if not stopped."
+
+Dusk: "Show me. Since I know the cause, I should see the effect. I want to know... what exactly did they go through in their final moments."
+
+Void fell silent for a moment. A trace of compassion appeared in those eyes.
+
+Point (Void): "As you wish."
+
+Dusk took a deep breath and gripped the bayonet tightly again.
+
+Dusk: "In exchange, I will guard this secret with my life."
+
+He glanced at the sleeping 'Point', a flash of determination in his eyes.
+
+Dusk: "Say goodbye to them for me... actually, never mind, don't say anything. Just pretend I went on a business trip again. Don't let them be too sad."
+
+He suddenly reached into his pocket, his fingertips brushing against the crumpled cigarette pack left over from the observation deck. He took one out and lit it with practiced ease.
+
+Pale blue smoke rose in the dim room, blurring Void's calm face and the impending fear. The brief dizziness brought by the nicotine finally offered his taut nerves a moment of belated relaxation.
+
+Dusk: "Phew... the last one. The taste is still so harsh."
+
+He didn't finish it. He just took a deep drag, feeling the burning airflow echoing in his lungs, then crushed the cigarette butt heavily against the armrest, as if extinguishing his last shred of hesitation.
+
+He took a deep breath, the air filled with the familiar, dry scent of ozone, mixed with the lingering smell of tobacco. He closed his eyes, adjusted the angle of the blade tip, and aimed it at the gap in his heart.
+
+No trembling.
+
+The wrist exerted force.
+
+Squelch.
+
+The cold metal pierced the skin, tearing through the warm flesh.
+
+In that instant, accompanying the intense pain and chill flooding into his brain, was a massive stream of information.
+
+[[VOID_VISION::[NEURAL CONNECTION FORCED... TIME-SPACE REGRESSION ACTIVE...] ]]
+
+[[VOID_VISION::[SCENE 1: SECTOR C REACTOR (PAST). NO EXPLOSION, ONLY PIERCING ALARMS. YOUR FATHER TRIED TO PULL THE FINAL LEVER, BUT HE WAS TOO LATE. EVERYONE RECEIVED A "GIFT" FROM THE GENERALIZED UNIVERSE.] ]]
+
+[[VOID_VISION::[SCENE 2: WORLDLINE SHIFT-BETA (FUTURE). THE SKY TORE OPEN A MASSIVE GAP. GRAVITY CONSTANTS FAILED. THE STREETS YOU KNOW, THE SKYSCRAPERS, AND THE SCREAMING CROWDS INSIDE WERE SUCKED INTO THE VOID IN THE SKY. THEY WERE TORN INTO A RED MIST OF BLOOD BY TIDAL FORCES IN MID-AIR. NO SURVIVORS, NO RESCUE, NO HOPE. ONLY ENDLESS, DESPERATE RED.] ]]
+
+The violent shock caused Dusk's body to spasm in the chair, but the corners of his mouth slowly curled into a miserable arc.
+
+Thump.
+
+Thump.
+
+The heartbeat slowed down, but those terrifying images became clearer and clearer.
+
+Dusk (Dying Thought): "Ah... so that's it. Dad, Mom... so this is the pain you bore back then..."
+
+Vision began to blur, the red mist intertwined with the blue room.
+
+Dusk (Dying Thought): "Thank goodness... at least, I saw it. Everyone... live well."
+
+Dusk slumped in the chair, breathing ceased completely. That smile froze on his face, carrying a hint of relief, and also a longing for his family.
+
+'Point' sat quietly opposite, watching the figure that was no longer beating. She did not leave immediately, but bowed slightly, performing a standard farewell.
+
+[[GLITCH_GREEN::Byaki]] (Void): "Goodnight, Mr. Dusk. May you have a sweet dream in a place without me [[MASK::(Z.Byaki)]]."
+
+[Xbot: Assigned Biomass Recovery]
+
+After cleaning up the remaining stains, she placed Dusk's master terminal on the table, closed her eyes, her body going limp and falling back onto the sofa, the halo fading away, as if she had just had a brief dream.
+
+The room returned to dead silence, only the pocket watch ticking away, as if drawing the final period for this long rainy season.
+
+[[DANGER::[VITAL SIGNS CEASED...]]]
 [[DANGER::[DUSK ID OFFLINE]]]
-[[BLUE::[VOID ID ONLINE]]]`
+[[BLUE::[TRUTH ARCHIVED.] ]]`
     }
   }
 };

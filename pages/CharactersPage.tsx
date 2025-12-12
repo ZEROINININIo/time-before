@@ -4,6 +4,7 @@ import { novelData } from '../data/novelData';
 import { sideCharacters } from '../data/sideCharacters';
 import { User, Activity, Shield, Sparkles, Hash, Zap, Cpu, Brain, Heart, Wind, Share2, Network } from 'lucide-react';
 import { CharacterStats, Language } from '../types';
+import MaskedText from '../components/MaskedText';
 
 interface CharactersPageProps {
     language: Language;
@@ -46,6 +47,20 @@ const getCharInfo = (id: string, language: Language) => {
   }
 
   return null;
+};
+
+// Helper to parse inline tags like [[MASK::...]]
+const parseTextWithMask = (text: string) => {
+  const parts = text.split(/(\[\[MASK::.*?\]\])/g);
+  return parts.map((part, index) => {
+    if (part.startsWith('[[MASK::') && part.endsWith(']]')) {
+      const content = part.slice(8, -2);
+      return (
+        <MaskedText key={index}>{content}</MaskedText>
+      );
+    }
+    return part;
+  });
 };
 
 // --- Components ---
@@ -318,7 +333,9 @@ export default function CharactersPage({ language }: CharactersPageProps) {
                                 <span className="font-bold uppercase tracking-wider truncate text-xs md:text-sm">{charT.name}</span>
                                 <div className="scale-75 origin-top-right">{getIcon(charT.role)}</div>
                             </div>
-                            <div className="text-[10px] font-mono opacity-70 z-10 relative truncate">{char.alias}</div>
+                            <div className="text-[10px] font-mono opacity-70 z-10 relative truncate">
+                                {parseTextWithMask(char.alias || "")}
+                            </div>
                             {selectedId === char.id && (
                                 <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0IiBoZWlnaHQ9IjQiPgo8cmVjdCB3aWR0aD0iNCIgaGVpZ2h0PSI0IiBmaWxsPSIjZmZmIiBmaWxsLW9wYWNpdHk9IjAuMSIvPgo8L3N2Zz4=')] opacity-50 pointer-events-none" />
                             )}
@@ -348,7 +365,7 @@ export default function CharactersPage({ language }: CharactersPageProps) {
                              </h1>
                              <div className="flex flex-wrap items-center gap-2 md:gap-4 text-xs md:text-sm font-mono text-ash-gray">
                                  <span className="px-2 py-1 bg-ash-light text-ash-black font-bold uppercase">
-                                     {selectedChar.alias}
+                                     {parseTextWithMask(selectedChar.alias || "")}
                                  </span>
                                  <span> // ROLE: {tChar.role}</span>
                                  <span> // ID: {selectedChar.id.toUpperCase()}</span>
@@ -410,7 +427,7 @@ export default function CharactersPage({ language }: CharactersPageProps) {
                         {tChar.description.map((para, idx) => (
                             <div key={idx} className="flex gap-3">
                                 <span className="text-ash-light font-bold shrink-0">[{String(idx + 1).padStart(2, '0')}]</span>
-                                <p>{para}</p>
+                                <p>{parseTextWithMask(para)}</p>
                             </div>
                         ))}
                     </div>

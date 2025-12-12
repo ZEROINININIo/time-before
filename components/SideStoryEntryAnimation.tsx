@@ -1,15 +1,18 @@
 
 import React, { useEffect, useState } from 'react';
-import { Binary, Database, Brain } from 'lucide-react';
+import { Binary, Database, Brain, CloudRain, Sparkle, Clock } from 'lucide-react';
 import { Language } from '../types';
 
 interface SideStoryEntryAnimationProps {
   onComplete: () => void;
   language: Language;
+  volumeId?: string;
 }
 
-const SideStoryEntryAnimation: React.FC<SideStoryEntryAnimationProps> = ({ onComplete, language }) => {
+const SideStoryEntryAnimation: React.FC<SideStoryEntryAnimationProps> = ({ onComplete, language, volumeId }) => {
   const [stage, setStage] = useState(0);
+
+  const isRainTheme = volumeId === 'VOL_MEMORIES';
 
   // Animation Sequence
   useEffect(() => {
@@ -36,22 +39,115 @@ const SideStoryEntryAnimation: React.FC<SideStoryEntryAnimationProps> = ({ onCom
       accessing: "访问记忆扇区...",
       decompressing: "解压碎片数据",
       syncing: "神经同步中",
-      complete: "重构完成"
+      complete: "重构完成",
+      // Rain Theme Specific
+      rain_init: "正在回溯时间轴...",
+      rain_mem: "检索关键节点：[雨]",
+      rain_sync: "VoidOS部署中"
     },
     'zh-TW': {
       accessing: "訪問記憶扇區...",
       decompressing: "解壓碎片數據",
       syncing: "神經同步中",
-      complete: "重構完成"
+      complete: "重構完成",
+      // Rain Theme Specific
+      rain_init: "正在回溯時間軸...",
+      rain_mem: "檢索關鍵節點：[雨]",
+      rain_sync: "VoidOS部署中"
     },
     'en': {
       accessing: "ACCESSING_MEMORY_SECTOR...",
       decompressing: "DECOMPRESSING_FRAGMENTS",
       syncing: "NEURAL_SYNC_IN_PROGRESS",
-      complete: "RECONSTRUCTION_COMPLETE"
+      complete: "RECONSTRUCTION_COMPLETE",
+      // Rain Theme Specific
+      rain_init: "REWINDING_TIMELINE...",
+      rain_mem: "SEARCHING_NODE: [RAIN]",
+      rain_sync: "DEPLOYING_VOID_OS"
     }
   }[language];
 
+  // --- Rain Theme Render ---
+  if (isRainTheme) {
+    return (
+        <div className="fixed inset-0 z-[99999] bg-slate-950 text-cyan-100 overflow-hidden flex flex-col items-center justify-center font-mono cursor-none">
+             {/* Skip */}
+            <button 
+                onClick={onComplete}
+                className="absolute top-4 right-4 z-[100000] text-[10px] font-mono border border-cyan-400/30 text-cyan-400 px-2 py-1 hover:bg-cyan-400 hover:text-slate-900 transition-colors opacity-70 hover:opacity-100 cursor-pointer"
+            >
+                [SKIP_MEMORY]
+            </button>
+
+            {/* Background - Elegant Rain */}
+            <div className={`absolute inset-0 bg-gradient-to-b from-slate-900 via-slate-950 to-black transition-opacity duration-1000 ${stage > 0 ? 'opacity-100' : 'opacity-0'}`}></div>
+            
+            {/* Elegant Rain Drops */}
+            <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-40">
+                {Array.from({ length: 40 }).map((_, i) => (
+                    <div 
+                        key={i} 
+                        className="absolute w-[1px] bg-gradient-to-b from-transparent via-cyan-400 to-transparent animate-data-rain"
+                        style={{
+                            height: `${30 + Math.random() * 50}px`,
+                            left: `${Math.random() * 100}%`,
+                            top: '-20%',
+                            animationDuration: `${0.8 + Math.random() * 1.5}s`,
+                            animationDelay: `${Math.random() * 2}s`,
+                        }}
+                    >
+                    </div>
+                ))}
+            </div>
+
+            {/* Central Visuals */}
+            <div className="relative z-10 flex flex-col items-center gap-12">
+                
+                {/* Icons Circle - Clock/CloudRain/Sparkle */}
+                <div className="relative w-48 h-48 flex items-center justify-center">
+                    {/* Ring 1 */}
+                    <div className={`absolute inset-0 border border-cyan-500/20 rounded-full transition-all duration-1000 ${stage >= 1 ? 'scale-100 opacity-100 rotate-180' : 'scale-50 opacity-0 rotate-0'}`}></div>
+                    {/* Ring 2 */}
+                    <div className={`absolute inset-4 border border-cyan-500/30 rounded-full border-dashed transition-all duration-1000 ${stage >= 1 ? 'scale-100 opacity-100 -rotate-180' : 'scale-90 opacity-0 rotate-0'}`}></div>
+                    
+                    {/* Central Icon Switch */}
+                    <div className={`transition-all duration-700 absolute ${stage === 1 ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}`}>
+                         <Clock size={48} className="text-cyan-400" />
+                    </div>
+                    <div className={`transition-all duration-700 absolute ${stage === 2 ? 'scale-100 opacity-100' : 'scale-50 opacity-0'}`}>
+                         <CloudRain size={56} className="text-cyan-200" />
+                    </div>
+                    <div className={`transition-all duration-700 absolute ${stage === 3 ? 'scale-125 opacity-100 blur-sm' : 'scale-50 opacity-0'}`}>
+                         <Sparkle size={64} className="text-white fill-white/20" />
+                    </div>
+                </div>
+
+                {/* Text Status - Typewriter style */}
+                <div className="text-center space-y-4 h-16">
+                    <div className="text-xl md:text-2xl font-light tracking-[0.3em] text-cyan-100/90 font-serif italic">
+                        {stage === 0 && ""}
+                        {stage === 1 && t.rain_init}
+                        {stage === 2 && t.rain_mem}
+                        {stage === 3 && t.rain_sync}
+                    </div>
+                    
+                    {/* Thin Progress Line */}
+                    <div className="w-32 h-[1px] bg-cyan-900/50 mx-auto overflow-hidden">
+                        <div 
+                            className="h-full bg-cyan-400 shadow-[0_0_10px_rgba(34,211,238,0.8)] transition-all duration-300 ease-linear"
+                            style={{ width: `${(stage / 3) * 100}%` }}
+                        ></div>
+                    </div>
+                </div>
+            </div>
+
+             {/* Flash to White at end (Soft Fade) */}
+             <div className={`absolute inset-0 bg-white pointer-events-none transition-opacity duration-1000 ease-in-out ${stage === 3 ? 'opacity-100' : 'opacity-0'}`}></div>
+        </div>
+    );
+  }
+
+  // --- Default Theme Render ---
   return (
     <div className="fixed inset-0 z-[99999] bg-ash-black text-ash-light overflow-hidden flex flex-col items-center justify-center font-mono cursor-none">
       
