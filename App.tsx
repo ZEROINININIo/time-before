@@ -16,11 +16,11 @@ import LoadingOverlay from './components/LoadingOverlay';
 import { Language } from './types';
 import { ReaderFont } from './components/fonts/fontConfig';
 
-// BGM Configuration - Using actual filenames, URL encoding handled by BackgroundMusic component
-const BGM_MAIN = "bgm/TIMELINE-MAIN.mp3";
-const BGM_DAILY = "bgm/TIMELINE-DAILY.mp3";
-// Using actual filename without URL encoding
-const BGM_RAIN = "bgm/神隠しの真相.mp3";
+// BGM Configuration - Using public directory path for Vercel deployment
+const BGM_MAIN = "/bgm/TIMELINE-MAIN.mp3";
+const BGM_DAILY = "/bgm/TIMELINE-DAILY.mp3";
+// Using public directory path for Vercel deployment
+const BGM_RAIN = "/bgm/神隠しの真相.mp3";
 
 const STORAGE_KEY = 'nova_labs_config_v6'; // Version bumped for font config
 
