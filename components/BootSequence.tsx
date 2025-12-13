@@ -39,7 +39,7 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = 
             }, delay);
         });
 
-        // Instead of auto-completing, wait for user input to satisfy Audio Context policy
+        // Force input wait to unlock audio
         setTimeout(() => {
             setWaitingForInput(true);
         }, delay + 500);
@@ -97,7 +97,7 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = 
             "LOADING_BACKUP_CONFIG...",
             tip,
             "RESTORING_USER_INTERFACE...",
-            "PLEASE_CONFIGURE_SYSTEM_PARAMETERS."
+            "SYSTEM RESTORED."
         ];
 
         let recDelay = 0;
@@ -108,7 +108,10 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = 
             }, recDelay);
         });
 
-        setTimeout(onComplete, recDelay + 1000);
+        // Force input wait here too
+        setTimeout(() => {
+            setWaitingForInput(true);
+        }, recDelay + 500);
 
     }, delay + 2500);
 
@@ -122,7 +125,7 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = 
 
   if (phase === 'ERROR') {
     return (
-      <div className="h-screen w-screen bg-black flex flex-col items-center justify-center p-8 overflow-hidden animate-crash relative z-50">
+      <div className="fixed inset-0 bg-black flex flex-col items-center justify-center p-8 overflow-hidden animate-crash z-[100]">
         <div className="absolute inset-0 bg-red-900/20 z-0"></div>
         <AlertTriangle size={128} className="text-red-500 mb-8 animate-ping" />
         <h1 className="text-6xl md:text-9xl font-black text-red-500 glitch-text-heavy mb-4" data-text="FATAL_ERROR">FATAL_ERROR</h1>
@@ -140,7 +143,7 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = 
 
   return (
     <div 
-        className={`h-screen w-screen bg-black text-green-500 p-8 font-mono text-xs md:text-sm overflow-hidden flex flex-col justify-end z-50 transition-colors duration-500 ${phase === 'RECOVERY' ? 'text-amber-500' : ''} ${waitingForInput ? 'cursor-pointer hover:bg-green-950/10' : ''}`}
+        className={`fixed inset-0 bg-black text-green-500 p-8 pb-32 md:pb-8 font-mono text-xs md:text-sm overflow-hidden flex flex-col justify-end z-[100] transition-colors duration-500 touch-manipulation ${phase === 'RECOVERY' ? 'text-amber-500' : ''} ${waitingForInput ? 'cursor-pointer hover:bg-green-950/10' : ''}`}
         onClick={handleInteraction}
     >
       <div className="mb-auto opacity-50 flex items-center gap-4">

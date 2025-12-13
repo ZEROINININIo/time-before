@@ -1,6 +1,6 @@
 
 import React, { useEffect, useRef, useState } from 'react';
-import { Volume2, Volume1, Activity, Music, Disc, AlertCircle } from 'lucide-react';
+import { Volume2, Volume1, Activity, Music, Disc, AlertCircle, Loader2, ChevronRight, ChevronLeft } from 'lucide-react';
 
 interface BackgroundMusicProps {
     isSetupMode?: boolean;
@@ -11,79 +11,52 @@ interface BackgroundMusicProps {
     audioSrc?: string | null;
     trackTitle?: string;
     trackComposer?: string;
+    className?: string;
 }
 
-const FADE_IN_DURATION = 2000; // ms
-const FADE_OUT_DURATION = 1500; // ms
+const FADE_OUT_DURATION = 1500; // ms to fade out old track
+const FADE_IN_DURATION = 2000;  // ms to fade in new track
+const TOGGLE_FADE_DURATION = 800; // ms for pause/play toggle
 
-// Global singleton to persist audio across component unmounts (e.g. Setup -> Main transition)
+// Global singleton to persist audio across component unmounts
 let globalAudio: HTMLAudioElement | null = null;
-let audioCleanupTimer: number | null = null;
 
 const getGlobalAudio = () => {
     if (!globalAudio) {
-        globalAudio = new Audio(); // Source set dynamically
+        globalAudio = new Audio();
         globalAudio.loop = true;
-        globalAudio.volume = 0; // Init at 0
-        // Add crossorigin attribute to avoid CORS issues
-        globalAudio.crossOrigin = 'anonymous';
+        globalAudio.preload = 'auto'; 
     }
     return globalAudio;
 };
 
-// Helper to reliably get absolute URL in various environments
+// Helper to unlock audio context on user interaction
+export const unlockGlobalAudio = () => {
+    const audio = getGlobalAudio();
+    if (audio.paused) {
+        // Try to play silence or empty promise to unlock the audio engine on mobile/browsers
+        const playPromise = audio.play();
+        if (playPromise !== undefined) {
+            playPromise.then(() => {
+                audio.pause(); 
+            }).catch(e => {
+                // Ignore AbortError which happens if we pause immediately
+            });
+        }
+    }
+};
+
+// Helper to reliably get absolute URL for comparison
 const getAbsoluteUrl = (url: string): string => {
     try {
-        // Check if already absolute URL
-        if (/^https?:\/\//i.test(url) || /^\/\//.test(url)) {
-            return url;
-        }
-        
-        // Handle Vercel environment specifically
+        if (/^https?:\/\//i.test(url) || /^\/\//.test(url)) return url;
         if (typeof window !== 'undefined' && window.location) {
-            const base = window.location.href;
-            return new URL(url, document.baseURI || base).href;
+            return new URL(url, window.location.href).href;
         }
-        
-        // Fallback for SSR/SSG environments like Vercel
         return url;
     } catch (e) {
-        // Ultimate fallback: DOM element resolution
-        try {
-            const a = document.createElement('a');
-            a.href = url;
-            return a.href;
-        } catch(e2) {
-            return url; // Should not happen in browser
-        }
+        return url;
     }
-};
-
-// Helper to check if audio format is supported
-const isAudioFormatSupported = (format: string): boolean => {
-    const audio = new Audio();
-    return audio.canPlayType(format) !== '';
-};
-
-// Helper to get supported audio extension based on browser support
-const getSupportedAudioExtension = (baseUrl: string): string => {
-    // Check if URL already has extension
-    if (/.(mp3|wav|ogg|aac)$/i.test(baseUrl)) {
-        return baseUrl;
-    }
-    
-    // Test different formats
-    const formats = ['.mp3', '.wav', '.ogg', '.aac'];
-    for (const format of formats) {
-        const testUrl = baseUrl + format;
-        const mimeType = `audio/${format.slice(1)}`;
-        if (isAudioFormatSupported(mimeType)) {
-            return testUrl;
-        }
-    }
-    
-    // Fallback to mp3
-    return baseUrl + '.mp3';
 };
 
 const BackgroundMusic: React.FC<BackgroundMusicProps> = ({ 
@@ -94,264 +67,239 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     onVolumeChange,
     audioSrc = null,
     trackTitle = "UNKNOWN",
-    trackComposer = "UNKNOWN"
+    trackComposer = "UNKNOWN",
+    className = ""
 }) => {
   const fadeIntervalRef = useRef<number | null>(null);
+  const currentSrcRef = useRef<string | null>(null);
   const [error, setError] = useState<boolean>(false);
-
-  // Helper to perform smooth volume transition
-  const performFade = (audio: HTMLAudioElement, targetVol: number, duration: number, onComplete?: () => void) => {
-      // Clear any existing fade
-      if (fadeIntervalRef.current) window.clearInterval(fadeIntervalRef.current);
-
-      const startVol = audio.volume;
-      const diff = targetVol - startVol;
-      
-      // If no change needed
-      if (Math.abs(diff) < 0.01) {
-          audio.volume = targetVol;
-          if (onComplete) onComplete();
-          return;
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  
+  // Retry mechanism state
+  const [retryTrigger, setRetryTrigger] = useState(0);
+  
+  // Controls the overall visibility of the panel (Play Button + Volume)
+  const [isExpanded, setIsExpanded] = useState(true);
+  
+  // Auto-expand when play starts manually
+  useEffect(() => {
+      if (isPlaying && !isSetupMode) {
+          setIsExpanded(true);
       }
+  }, [isPlaying, isSetupMode]);
 
-      const startTime = Date.now();
+  // Initial Load Watchdog: Retry up to 3 times if stuck
+  useEffect(() => {
+      if (!audioSrc || !isPlaying || isSetupMode) return;
 
-      fadeIntervalRef.current = window.setInterval(() => {
-          const elapsed = Date.now() - startTime;
-          const progress = Math.min(elapsed / duration, 1);
-          
-          // Linear interpolation
-          audio.volume = startVol + (diff * progress);
+      const maxRetries = 3;
+      let attempt = 0;
+      let timer: number;
 
-          if (progress >= 1) {
-              if (fadeIntervalRef.current) window.clearInterval(fadeIntervalRef.current);
-              audio.volume = targetVol; // Ensure exact target is hit
-              if (onComplete) onComplete();
+      const checkAndRetry = () => {
+          const audio = getGlobalAudio();
+          // Check if it should be playing but is paused, stuck, or not ready
+          // readyState < 3 means not enough data to play current frame
+          if (attempt < maxRetries && (audio.paused || audio.readyState < 3)) {
+              attempt++;
+              console.log(`[BGM] Audio appears stuck. Force reloading attempt ${attempt}/${maxRetries}`);
+              setRetryTrigger(prev => prev + 1); // Trigger the source effect to reload
+              timer = window.setTimeout(checkAndRetry, 2500); // Wait 2.5s before next check
           }
-      }, 50); // Update every 50ms
+      };
+
+      // Start the first check after 1.5s to give normal load a chance
+      timer = window.setTimeout(checkAndRetry, 1500);
+
+      return () => window.clearTimeout(timer);
+  }, []); // Empty dependency array = runs once on mount (page load)
+
+  // Advanced Volume Fader
+  const performFade = (targetVol: number, duration: number): Promise<void> => {
+      return new Promise((resolve) => {
+          const audio = getGlobalAudio();
+          if (fadeIntervalRef.current) window.clearInterval(fadeIntervalRef.current);
+
+          const startVol = audio.volume;
+          const diff = targetVol - startVol;
+          
+          if (Math.abs(diff) < 0.01) {
+              audio.volume = targetVol;
+              resolve();
+              return;
+          }
+
+          const startTime = Date.now();
+          fadeIntervalRef.current = window.setInterval(() => {
+              const elapsed = Date.now() - startTime;
+              const progress = Math.min(elapsed / duration, 1);
+              audio.volume = Math.max(0, Math.min(1, startVol + (diff * progress)));
+
+              if (progress >= 1) {
+                  if (fadeIntervalRef.current) window.clearInterval(fadeIntervalRef.current);
+                  audio.volume = targetVol;
+                  resolve();
+              }
+          }, 50);
+      });
   };
 
-  // Effect to handle user interaction for autoplay
-  useEffect(() => {
-    const audio = getGlobalAudio();
-    
-    // Function to try playing audio after user interaction
-    const handleUserInteraction = () => {
-      if (isPlaying && audioSrc && !error && audio.paused) {
-        const playAudio = async () => {
-          try {
-            // Start from silence for fade-in
-            audio.volume = 0;
-            
-            // Load audio if not already loaded
-            if (audio.readyState < 3) { // HAVE_FUTURE_DATA
-              await audio.load();
-            }
-            
-            const playPromise = audio.play();
-            if (playPromise !== undefined) {
-              await playPromise;
-              // Fade In
-              performFade(audio, volume, FADE_IN_DURATION);
-            }
-          } catch (e) {
-            console.warn("User interaction playback attempt failed:", e);
-            // Don't set error state here as it might be recoverable
-          }
-        };
-        
-        playAudio();
-      }
-      
-      // Remove the event listeners after first successful interaction
-      window.removeEventListener('click', handleUserInteraction);
-      window.removeEventListener('touchstart', handleUserInteraction);
-      window.removeEventListener('keydown', handleUserInteraction);
-    };
-    
-    // Add event listeners for user interaction
-    window.addEventListener('click', handleUserInteraction);
-    window.addEventListener('touchstart', handleUserInteraction);
-    window.addEventListener('keydown', handleUserInteraction);
-    
-    return () => {
-      // Cleanup event listeners
-      window.removeEventListener('click', handleUserInteraction);
-      window.removeEventListener('touchstart', handleUserInteraction);
-      window.removeEventListener('keydown', handleUserInteraction);
-    };
-  }, [isPlaying, audioSrc, error, volume]);
-
-  // Manage Playback State & Source
+  // 1. Initialize Listeners
   useEffect(() => {
     const audio = getGlobalAudio();
 
-    // Error handling listener - enhanced for Vercel environment
-    const handleError = (e: Event) => {
-        console.warn("Audio Playback Error:", audio.error);
-        console.warn("Audio Source:", audio.src);
-        setError(true);
-    };
-    
-    // Canplaythrough listener - ensures audio is loaded before playing
-    const handleCanPlayThrough = () => {
-        console.log("Audio can play through");
-        // Try to play immediately when canplaythrough is fired if we're supposed to be playing
-        if (isPlaying && !error && audio.paused) {
-            const playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    // Fade In
-                    performFade(audio, volume, FADE_IN_DURATION);
-                }).catch(playError => {
-                    console.warn("Canplaythrough playback attempt failed:", playError);
-                    // Will try again on user interaction
-                });
-            }
-        }
-    };
-    
-    // Play listener - for debugging and state management
-    const handlePlay = () => {
-        console.log("Audio playing");
-    };
-    
-    // Pause listener - for debugging and state management
-    const handlePause = () => {
-        console.log("Audio paused");
-    };
-    
-    // Loadedmetadata listener - for debugging
-    const handleLoadedMetadata = () => {
-        console.log("Audio metadata loaded:", audio.duration);
-    };
-    
-    // Waiting listener - for debugging buffering issues
-    const handleWaiting = () => {
-        console.log("Audio waiting for more data");
-    };
-    
-    // Add all event listeners
-    audio.addEventListener('error', handleError);
-    audio.addEventListener('canplaythrough', handleCanPlayThrough);
-    audio.addEventListener('play', handlePlay);
-    audio.addEventListener('pause', handlePause);
-    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
-    audio.addEventListener('waiting', handleWaiting);
-
-    // 1. Handle Audio Source Update
-    // IMPORTANT: Compare absolute URLs to prevent infinite loop with relative paths
-    // DECODING: Decode both to standard text to avoid "%20" vs " " mismatches
-    const currentAbsSrc = audio.src;
-    const newAbsSrc = audioSrc ? getAbsoluteUrl(audioSrc) : '';
-
-    const currentDecoded = decodeURIComponent(currentAbsSrc);
-    const newDecoded = decodeURIComponent(newAbsSrc);
-
-    if (audioSrc && currentDecoded !== newDecoded) {
-        // Reset error state on track change
+    const handleCanPlay = () => {
+        setIsLoading(false);
         setError(false);
-        
-        // Set audio source with proper compatibility handling
-        const supportedUrl = getSupportedAudioExtension(audioSrc);
-        const absoluteSupportedUrl = getAbsoluteUrl(supportedUrl);
-        audio.src = absoluteSupportedUrl;
-        
-        // Preload audio for smoother playback
-        audio.preload = 'auto';
-        
-        // If we switch tracks while playing, load the new track
-        if (isPlaying) {
-            // Load the new track before attempting to play
-            audio.load();
-        }
-    }
-
-    // 2. Handle Play/Stop Logic with Fades
-    if (isPlaying && audioSrc && !error) {
-        // --- DESIRED STATE: PLAYING ---
-        if (audio.paused) {
-            // Start from silence for fade-in
-            audio.volume = 0;
-            
-            // Try to play immediately - will fail if no user interaction yet
-            // but will be retried on canplaythrough or user interaction
-            const playAudio = async () => {
-                try {
-                    // Load audio if not already loaded
-                    if (audio.readyState < 3) { // HAVE_FUTURE_DATA
-                        await audio.load();
-                    }
-                    
-                    const playPromise = audio.play();
-                    if (playPromise !== undefined) {
-                        await playPromise;
-                        // Fade In
-                        performFade(audio, volume, FADE_IN_DURATION);
-                    }
-                } catch (e) {
-                    console.warn("Initial autoplay prevented (browser policy):", e);
-                    // Will try again on user interaction or canplaythrough
-                }
-            };
-            
-            playAudio();
-        } else {
-            // Already playing, ensure we fade to the correct target volume 
-            performFade(audio, volume, FADE_IN_DURATION);
-        }
-    } else {
-        // --- DESIRED STATE: STOPPED ---
-        if (!audio.paused) {
-            // Fade Out -> Pause
-            performFade(audio, 0, FADE_OUT_DURATION, () => {
-                try {
-                    audio.pause();
-                    // Reset current time to start for next play
-                    audio.currentTime = 0;
-                } catch (e) {
-                    console.warn("Error during pause/reset:", e);
-                }
-            });
-        }
-    }
-
-    // Cleanup on unmount
-    return () => {
-        // Clear any pending fade intervals
-        if (fadeIntervalRef.current) {
-            window.clearInterval(fadeIntervalRef.current);
-            fadeIntervalRef.current = null;
-        }
-        
-        // Clear any pending timers
-        if (audioCleanupTimer) {
-            window.clearTimeout(audioCleanupTimer);
-            audioCleanupTimer = null;
-        }
-        
-        // Remove all event listeners
-        audio.removeEventListener('error', handleError);
-        audio.removeEventListener('canplaythrough', handleCanPlayThrough);
-        audio.removeEventListener('play', handlePlay);
-        audio.removeEventListener('pause', handlePause);
-        audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
-        audio.removeEventListener('waiting', handleWaiting);
     };
-  }, [isPlaying, audioSrc, error, volume]); // Add volume to dependencies for better sync
 
-  // Handle Manual Volume Change (Slider)
+    const handleError = (e: Event) => {
+        console.warn("Audio Error:", e);
+        setError(true);
+        setIsLoading(false);
+    };
+
+    const handleWaiting = () => setIsLoading(true);
+    const handlePlaying = () => {
+        setIsLoading(false);
+        setError(false);
+    };
+    
+    if (audio.readyState >= 3) {
+        setIsLoading(false);
+    }
+
+    audio.addEventListener('canplay', handleCanPlay);
+    audio.addEventListener('loadeddata', handleCanPlay); 
+    audio.addEventListener('error', handleError);
+    audio.addEventListener('waiting', handleWaiting);
+    audio.addEventListener('playing', handlePlaying);
+
+    return () => {
+        audio.removeEventListener('canplay', handleCanPlay);
+        audio.removeEventListener('loadeddata', handleCanPlay);
+        audio.removeEventListener('error', handleError);
+        audio.removeEventListener('waiting', handleWaiting);
+        audio.removeEventListener('playing', handlePlaying);
+    };
+  }, []);
+
+  // 2. Handle Source Switching (Depends on audioSrc AND retryTrigger)
+  useEffect(() => {
+    const audio = getGlobalAudio();
+    const newAbsSrc = audioSrc ? getAbsoluteUrl(audioSrc) : "";
+    const audioCurrentAbsSrc = audio.src; 
+
+    // Optimization: If source matches AND it's not a forced retry (trigger > 0), skip reload
+    if (newAbsSrc && audioCurrentAbsSrc === newAbsSrc && retryTrigger === 0) {
+        currentSrcRef.current = audioSrc;
+        // Resume logic
+        if (isPlaying) {
+            if (audio.paused) {
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            setIsLoading(false);
+                            if (audio.volume < volume) performFade(volume, FADE_IN_DURATION);
+                        })
+                        .catch(e => {
+                            console.warn("Resume blocked:", e);
+                            setIsLoading(false);
+                        });
+                }
+            } else {
+                setIsLoading(false);
+                if (audio.volume < volume) performFade(volume, FADE_IN_DURATION);
+            }
+        }
+        return;
+    }
+    
+    currentSrcRef.current = audioSrc;
+
+    const switchTrack = async () => {
+        setIsLoading(true);
+        setError(false);
+
+        if (!audio.paused && audio.volume > 0) {
+            await performFade(0, FADE_OUT_DURATION);
+            audio.pause();
+        } else {
+            audio.volume = 0;
+        }
+
+        if (newAbsSrc) {
+            audio.src = newAbsSrc;
+            audio.load();
+            
+            if (isPlaying) {
+                const playPromise = audio.play();
+                if (playPromise !== undefined) {
+                    playPromise
+                        .then(() => {
+                            setIsLoading(false);
+                            performFade(volume, FADE_IN_DURATION);
+                        })
+                        .catch(e => {
+                            console.warn("Auto-play blocked or load error", e);
+                            setIsLoading(false);
+                        });
+                }
+            } else {
+                setIsLoading(false);
+            }
+        } else {
+            audio.removeAttribute('src');
+            setIsLoading(false);
+        }
+    };
+
+    switchTrack();
+
+  }, [audioSrc, retryTrigger]); // Added retryTrigger dependency
+
+  // 3. Handle Play/Pause Toggle
   useEffect(() => {
       const audio = getGlobalAudio();
-      
-      // Only apply immediate volume if we are logically playing and audio is active
-      if (isPlaying && !audio.paused && !error) {
-          // Kill any running fade animation so the slider takes control
-          if (fadeIntervalRef.current) window.clearInterval(fadeIntervalRef.current);
-          audio.volume = volume;
+      if (!audio.src) return;
+
+      if (isPlaying) {
+          if (audio.paused) {
+              audio.volume = 0;
+              const playPromise = audio.play();
+              if (playPromise !== undefined) {
+                  playPromise
+                    .then(() => {
+                        setIsLoading(false);
+                        performFade(volume, TOGGLE_FADE_DURATION);
+                    })
+                    .catch(e => {
+                        console.warn("Toggle play failed", e);
+                        setIsLoading(false);
+                    });
+              }
+          } else {
+              if (Math.abs(audio.volume - volume) > 0.1) {
+                  performFade(volume, 500);
+              }
+          }
+      } else {
+          if (!audio.paused) {
+              performFade(0, TOGGLE_FADE_DURATION).then(() => {
+                  if (!isPlaying) audio.pause();
+              });
+          }
+      }
+  }, [isPlaying]);
+
+  // 4. Handle Volume Slider Drag
+  useEffect(() => {
+      const audio = getGlobalAudio();
+      if (isPlaying && !audio.paused && !isLoading) {
+          performFade(volume, 200); 
       }
   }, [volume]);
-
 
   const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       onVolumeChange(parseFloat(e.target.value));
@@ -361,7 +309,7 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
 
   if (isSetupMode) {
     return (
-       <div className="flex flex-col gap-1 w-full">
+       <div className={`flex flex-col gap-1 w-full ${className}`}>
            <button 
                onClick={onToggle}
                className={`w-full flex items-center justify-between p-3 border font-mono text-xs transition-colors ${
@@ -377,68 +325,92 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     );
  }
 
+  // Compact Mode UI
   return (
-    <div className="flex flex-col gap-1 w-full">
-        <button 
-        onClick={onToggle}
-        disabled={isDisabled && !isPlaying} // Allow toggling off if playing despite errors (edge case)
-        className={`flex items-center justify-between w-full px-3 py-3 border-2 transition-all duration-300 shadow-hard group
-            ${isDisabled 
-                ? 'bg-ash-black text-ash-gray border-ash-gray/30 cursor-not-allowed opacity-70'
-                : isPlaying 
-                    ? 'bg-ash-light text-ash-black border-ash-light' 
-                    : 'bg-ash-black text-ash-gray border-ash-gray/50 hover:border-ash-light hover:text-ash-light'
-            }`}
-        >
-            <div className="flex items-center gap-3">
-                <div className="relative">
-                    {error ? <AlertCircle size={16} className="text-red-500" /> : 
-                     isPlaying && !isDisabled ? <Disc size={16} className="animate-spin" /> : <Volume2 size={16} />}
+    <div className={`flex items-start justify-end gap-2 ${className}`}>
+        
+        {/* Collapsible Main Controls (Slides out to the left) */}
+        <div className={`
+            flex flex-col gap-1 transition-all duration-500 ease-in-out overflow-hidden
+            ${isExpanded ? 'max-w-[200px] opacity-100' : 'max-w-0 opacity-0'}
+        `}>
+            {/* Main Play/Pause Button */}
+            <button 
+                onClick={onToggle}
+                disabled={isDisabled && !isPlaying} 
+                className={`flex items-center justify-between px-3 py-3 border-2 transition-all duration-300 shadow-hard group min-w-[160px]
+                    ${isDisabled 
+                        ? 'bg-ash-black text-ash-gray border-ash-gray/30 cursor-not-allowed opacity-70'
+                        : isPlaying 
+                            ? 'bg-ash-light text-ash-black border-ash-light' 
+                            : 'bg-ash-black text-ash-gray border-ash-gray/50 hover:border-ash-light hover:text-ash-light'
+                    }`}
+            >
+                <div className="flex items-center gap-3 min-w-0">
+                    <div className="relative shrink-0">
+                        {isLoading ? <Loader2 size={16} className="animate-spin text-ash-gray" /> :
+                        error ? <AlertCircle size={16} className="text-red-500" /> : 
+                        isPlaying && !isDisabled ? <Disc size={16} className="animate-spin" /> : <Volume2 size={16} />}
+                    </div>
+                    <span className="text-[10px] font-mono font-bold uppercase truncate">
+                        {isLoading ? 'BUFFER...' : isPlaying ? 'BGM ON' : 'BGM OFF'}
+                    </span>
                 </div>
-                <span className="text-[10px] font-mono font-bold uppercase">
-                    BGM
-                </span>
-            </div>
-            
-            <div className="flex items-center gap-2">
-                {error ? (
-                    <span className="text-[10px] font-mono font-bold text-red-500 animate-pulse">ERR</span>
-                ) : isPlaying && !isDisabled ? (
-                    <div className="flex gap-0.5 items-end h-3">
+                
+                {isPlaying && !isDisabled && !error && (
+                    <div className="flex gap-0.5 items-end h-3 ml-2 shrink-0">
                         <div className="w-0.5 bg-current animate-[bounce_1s_infinite] h-2"></div>
                         <div className="w-0.5 bg-current animate-[bounce_1.2s_infinite] h-3"></div>
                         <div className="w-0.5 bg-current animate-[bounce_0.8s_infinite] h-1"></div>
                     </div>
-                ) : (
-                    <span className="text-[10px] font-mono font-bold">
-                        {isDisabled ? 'NO_SIGNAL' : 'OFF'}
-                    </span>
                 )}
-            </div>
+            </button>
+
+            {/* Volume Panel (Always visible when expanded) */}
+            {isPlaying && !isDisabled && (
+                <div className="flex flex-col gap-2 px-3 py-2 border-l-2 border-ash-light bg-ash-dark/90 backdrop-blur-sm animate-fade-in shadow-hard-sm min-w-[160px]">
+                    <div className="flex justify-between items-center text-[9px] font-mono text-ash-gray">
+                        <span className="truncate max-w-[60%]">{trackTitle}</span>
+                        <span className="opacity-50 truncate max-w-[35%] text-right">{trackComposer}</span>
+                    </div>
+                    
+                    <div className="flex items-center gap-2">
+                        <Volume1 size={10} className="text-ash-gray shrink-0" />
+                        <div className="flex-1 min-w-0 flex items-center">
+                            <input 
+                            type="range" 
+                            min="0" 
+                            max="1" 
+                            step="0.01" 
+                            value={volume}
+                            onChange={handleVolumeChange}
+                            className="w-full h-1 bg-ash-black border border-ash-gray/30 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-3 [&::-webkit-slider-thumb]:h-3 [&::-webkit-slider-thumb]:bg-ash-light [&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-ash-black hover:[&::-webkit-slider-thumb]:bg-ash-white transition-all rounded-none"
+                            />
+                        </div>
+                    </div>
+                </div>
+            )}
+        </div>
+
+        {/* Master Collapse Toggle Button (Anchor on the right) */}
+        <button
+            onClick={() => setIsExpanded(!isExpanded)}
+            disabled={isDisabled && !isPlaying}
+            className={`
+                h-[44px] w-[44px] flex items-center justify-center border-2 transition-all duration-300 shrink-0
+                ${isExpanded 
+                    ? 'border-ash-light bg-ash-black text-ash-light hover:bg-ash-light hover:text-ash-black' 
+                    : 'bg-ash-black text-ash-light border-ash-gray/50 shadow-hard'
+                }
+                ${isDisabled ? 'opacity-50 cursor-not-allowed' : ''}
+            `}
+        >
+            {isExpanded ? (
+                <ChevronRight size={18} />
+            ) : (
+                <Music size={18} className={isPlaying && !isDisabled ? "animate-pulse text-green-400" : ""} />
+            )}
         </button>
-        
-        {isPlaying && !isDisabled && (
-            <div className="flex flex-col gap-2 px-3 py-2 border-l-2 border-ash-light bg-ash-dark/30 animate-fade-in">
-                <div className="flex justify-between items-center text-[9px] font-mono text-ash-gray">
-                    <span className="truncate max-w-[60%]">{trackTitle}</span>
-                    <span className="opacity-50 truncate max-w-[35%] text-right">{trackComposer}</span>
-                </div>
-                
-                <div className="flex items-center gap-2">
-                    <Volume1 size={10} className="text-ash-gray" />
-                    <input 
-                       type="range" 
-                       min="0" 
-                       max="1" 
-                       step="0.01" 
-                       value={volume}
-                       onChange={handleVolumeChange}
-                       className="flex-1 h-1 bg-ash-black border border-ash-gray/30 appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-2 [&::-webkit-slider-thumb]:h-2 [&::-webkit-slider-thumb]:bg-ash-light [&::-webkit-slider-thumb]:border [&::-webkit-slider-thumb]:border-ash-black hover:[&::-webkit-slider-thumb]:bg-ash-white transition-all"
-                    />
-                    <span className="text-[9px] font-mono text-ash-gray w-6 text-right">{Math.round(volume * 100)}%</span>
-                </div>
-            </div>
-        )}
     </div>
   );
 };

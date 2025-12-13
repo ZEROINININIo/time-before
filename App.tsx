@@ -15,14 +15,14 @@ import StoryEntryAnimation from './components/StoryEntryAnimation';
 import LoadingOverlay from './components/LoadingOverlay';
 import { Language } from './types';
 import { ReaderFont } from './components/fonts/fontConfig';
+import { unlockGlobalAudio } from './components/BackgroundMusic';
 
-// BGM Configuration - Using public directory path for Vercel deployment
-const BGM_MAIN = "/bgm/TIMELINE-MAIN.mp3";
-const BGM_DAILY = "/bgm/TIMELINE-DAILY.mp3";
-// Using public directory path for Vercel deployment
-const BGM_RAIN = "/bgm/神隠しの真相.mp3";
+// BGM Configuration - HTTPS Sources
+const BGM_MAIN = "https://zerox.ccccocccc.cc/bgm/main.mp3";
+const BGM_DAILY = "https://zerox.ccccocccc.cc/bgm/daily.mp3";
+const BGM_RAIN = "https://zerox.ccccocccc.cc/bgm/x.mp3";
 
-const STORAGE_KEY = 'nova_labs_config_v6'; // Version bumped for font config
+const STORAGE_KEY = 'nova_labs_config_v6';
 
 interface AppConfig {
   language: Language;
@@ -82,6 +82,19 @@ const App: React.FC = () => {
   const [bgmPlaying, setBgmPlaying] = useState(initialConfig.bgmPlaying);
   const [bgmVolume, setBgmVolume] = useState(initialConfig.bgmVolume);
 
+  // Remove the static HTML loader when React App mounts
+  useEffect(() => {
+    const loader = document.getElementById('initial-loader');
+    if (loader) {
+      // Small delay to ensure render is ready and transition looks smooth
+      setTimeout(() => {
+        loader.style.opacity = '0';
+        loader.style.pointerEvents = 'none';
+        setTimeout(() => loader.remove(), 500);
+      }, 300);
+    }
+  }, []);
+
   // 2. Persist settings whenever they change
   useEffect(() => {
     const config: AppConfig = {
@@ -97,6 +110,9 @@ const App: React.FC = () => {
   }, [language, crtEnabled, isLightTheme, setupCompleted, bgmPlaying, bgmVolume, readerFont]);
 
   const handleBootComplete = () => {
+    // Unlock audio context immediately after user interaction (Boot click)
+    unlockGlobalAudio();
+
     if (setupCompleted) {
       setAppState('READY');
     } else {
@@ -140,13 +156,17 @@ const App: React.FC = () => {
   // --- Dynamic Audio Logic ---
   const getAudioConfig = () => {
     if (activeTab === 'sidestories') {
+        // Only switch BGM if inside a specific volume
         if (activeSideStoryVolumeId === 'VOL_DAILY') {
             return { src: BGM_DAILY, title: "TIMELINE DAILY", composer: "NOVA_OST" };
         }
         if (activeSideStoryVolumeId === 'VOL_MEMORIES') {
-            return { src: BGM_RAIN, title: "神隠しの真相", composer: "NOVA_OST" };
+            return { src: BGM_RAIN, title: "神隠しの真相", composer: "しゃろう" };
         }
+        // If just in the menu (activeSideStoryVolumeId is null) or unknown volume, fall back to MAIN
+        return { src: BGM_MAIN, title: "TIMELINE MAIN", composer: "NOVA_OST" };
     }
+    // Default / Home / Reader
     return { src: BGM_MAIN, title: "TIMELINE MAIN", composer: "NOVA_OST" };
   };
 

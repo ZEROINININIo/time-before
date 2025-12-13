@@ -110,6 +110,20 @@ const Navigation: React.FC<NavigationProps> = ({
 
   return (
     <>
+      {/* Mobile Floating BGM Widget (Independent) - Width auto to allow folding */}
+      <div className="fixed top-4 right-4 z-50 lg:hidden w-auto flex justify-end animate-fade-in max-w-[80vw]">
+          <BackgroundMusic 
+              isPlaying={bgmPlaying} 
+              onToggle={() => setBgmPlaying(!bgmPlaying)}
+              volume={bgmVolume}
+              onVolumeChange={setBgmVolume}
+              audioSrc={audioSrc}
+              trackTitle={trackTitle}
+              trackComposer={trackComposer}
+              className="shadow-2xl opacity-90"
+          />
+      </div>
+
       <nav className="fixed bottom-0 left-0 right-0 lg:static lg:w-72 lg:h-full bg-ash-black border-t-2 lg:border-t-0 lg:border-r-2 border-ash-light/20 z-50 flex lg:flex-col justify-between p-2 lg:p-6 shadow-2xl transition-colors duration-300 lg:overflow-y-auto no-scrollbar">
         <div className="hidden lg:block mb-8 border-b-2 border-ash-light/20 pb-6 shrink-0">
           <div className="flex items-center gap-4 mb-4">
@@ -132,14 +146,13 @@ const Navigation: React.FC<NavigationProps> = ({
             NOVA<br/>LABS
           </h1>
           <div className="text-[10px] text-ash-gray font-mono bg-ash-dark p-1 inline-block border border-ash-gray">
-            ARCHIVE_SYS // TL.1.14-T
+            ARCHIVE_SYS // TL.1.14-Z6
           </div>
         </div>
 
         <div className="flex lg:flex-col justify-between lg:justify-start w-full gap-1 lg:gap-3 lg:mb-auto shrink-0">
           {navItems.map((item, index) => {
             const isStoryItem = item.id === 'reader' || item.id === 'sidestories';
-            // Add a separator before the story items on desktop
             const addSeparator = index === 3; 
 
             return (
@@ -209,20 +222,34 @@ const Navigation: React.FC<NavigationProps> = ({
           </button>
         </div>
 
-        {/* System Configuration Trigger (Desktop Only) */}
-        <div className="hidden lg:flex flex-col gap-2 mt-8 border-t-2 border-dashed border-ash-gray/30 pt-6 shrink-0">
-          <div className="text-[10px] text-ash-gray font-mono mb-1 uppercase px-1">[SYSTEM]</div>
-          <button
-            onClick={() => setShowDesktopSettings(true)}
-            className={`flex items-center gap-3 px-4 py-3 border-2 transition-all duration-300 group shadow-hard ${
-                showDesktopSettings
-                ? 'bg-ash-light text-ash-black border-ash-light'
-                : 'bg-ash-black text-ash-gray border-ash-gray/50 hover:border-ash-light hover:text-ash-light'
-            }`}
-          >
-            <Settings size={18} className={`transition-transform duration-700 ${showDesktopSettings ? 'rotate-180' : ''}`} />
-            <span className="text-sm font-bold tracking-widest uppercase">{t.config}</span>
-          </button>
+        {/* Desktop Sidebar: BGM & System Configuration */}
+        <div className="hidden lg:flex flex-col gap-4 mt-8 border-t-2 border-dashed border-ash-gray/30 pt-6 shrink-0">
+          
+          {/* Independent BGM Control in Sidebar */}
+          <BackgroundMusic 
+              isPlaying={bgmPlaying} 
+              onToggle={() => setBgmPlaying(!bgmPlaying)}
+              volume={bgmVolume}
+              onVolumeChange={setBgmVolume}
+              audioSrc={audioSrc}
+              trackTitle={trackTitle}
+              trackComposer={trackComposer}
+          />
+
+          <div>
+            <div className="text-[10px] text-ash-gray font-mono mb-1 uppercase px-1">[SYSTEM]</div>
+            <button
+                onClick={() => setShowDesktopSettings(true)}
+                className={`w-full flex items-center gap-3 px-4 py-3 border-2 transition-all duration-300 group shadow-hard ${
+                    showDesktopSettings
+                    ? 'bg-ash-light text-ash-black border-ash-light'
+                    : 'bg-ash-black text-ash-gray border-ash-gray/50 hover:border-ash-light hover:text-ash-light'
+                }`}
+            >
+                <Settings size={18} className={`transition-transform duration-700 ${showDesktopSettings ? 'rotate-180' : ''}`} />
+                <span className="text-sm font-bold tracking-widest uppercase">{t.config}</span>
+            </button>
+          </div>
         </div>
 
         <div className="hidden lg:block mt-6 pt-4 border-t-2 border-dashed border-ash-gray/30 text-ash-gray text-[10px] font-mono leading-tight shrink-0">
@@ -234,7 +261,7 @@ const Navigation: React.FC<NavigationProps> = ({
         </div>
       </nav>
 
-      {/* Mobile Settings Overlay */}
+      {/* Mobile Settings Overlay (Without BGM) */}
       {showMobileSettings && (
         <div className="fixed inset-0 bg-black/60 z-40 lg:hidden backdrop-blur-[2px]" onClick={() => setShowMobileSettings(false)}>
             <div 
@@ -246,7 +273,7 @@ const Navigation: React.FC<NavigationProps> = ({
                         <Settings size={16} className="text-ash-light" />
                         <span className="text-xs font-bold text-ash-light font-mono uppercase tracking-wider">{t.config}</span>
                     </div>
-                    <div className="text-[10px] text-ash-gray font-mono">TL.1.14-T</div>
+                    <div className="text-[10px] text-ash-gray font-mono">TL.1.14-Z6</div>
                 </div>
                 
                 <div className="flex flex-col gap-3">
@@ -260,15 +287,7 @@ const Navigation: React.FC<NavigationProps> = ({
                       </div>
                       <span className="text-[10px] font-mono font-bold">{getLangLabel()}</span>
                     </button>
-                    <BackgroundMusic 
-                        isPlaying={bgmPlaying} 
-                        onToggle={() => setBgmPlaying(!bgmPlaying)}
-                        volume={bgmVolume}
-                        onVolumeChange={setBgmVolume}
-                        audioSrc={audioSrc}
-                        trackTitle={trackTitle}
-                        trackComposer={trackComposer}
-                    />
+                    {/* BGM Removed from here as requested */}
                     <FontSelector value={readerFont} onChange={setReaderFont} language={language} />
                     <CRTToggle value={crtEnabled} onChange={setCrtEnabled} language={language} />
                     <FullscreenToggle language={language} />
@@ -282,7 +301,7 @@ const Navigation: React.FC<NavigationProps> = ({
         </div>
       )}
 
-      {/* Desktop Settings Modal (Floating Window) */}
+      {/* Desktop Settings Modal (Floating Window) - Without BGM */}
       {showDesktopSettings && (
         <div 
             className="fixed inset-0 z-[100] hidden lg:flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in"
@@ -323,16 +342,7 @@ const Navigation: React.FC<NavigationProps> = ({
                       <span className="text-xs font-mono font-bold bg-ash-dark px-2 py-1 border border-ash-gray/30 group-hover:border-ash-gray">{getLangLabel()}</span>
                     </button>
 
-                    {/* Full Width Controls */}
-                    <BackgroundMusic 
-                        isPlaying={bgmPlaying} 
-                        onToggle={() => setBgmPlaying(!bgmPlaying)}
-                        volume={bgmVolume}
-                        onVolumeChange={setBgmVolume}
-                        audioSrc={audioSrc}
-                        trackTitle={trackTitle}
-                        trackComposer={trackComposer}
-                    />
+                    {/* BGM Removed from here */}
                     
                     <FontSelector value={readerFont} onChange={setReaderFont} language={language} />
 
