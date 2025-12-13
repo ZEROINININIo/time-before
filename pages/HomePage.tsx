@@ -116,7 +116,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, language, setLanguage }
                 </div>
                 
                 <h2 className="text-xs font-bold text-ash-gray mb-4 flex items-center gap-2 uppercase border-b border-dashed border-ash-gray/30 pb-2">
-                    <Terminal size={14} /> ROOT_CONSOLE // TL.1.14-G
+                    <Terminal size={14} /> ROOT_CONSOLE // TL.1.14-H
                 </h2>
                 
                 <div className="flex-1 font-mono text-xs md:text-sm leading-relaxed whitespace-pre-wrap text-ash-gray">

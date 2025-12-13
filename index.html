@@ -46,6 +46,7 @@
               'zoom-in-fast': 'zoomIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
               'tunnel': 'tunnel 2s linear infinite',
               'data-rain': 'dataRain 2s linear infinite',
+              'data-rain-card': 'dataRainCard 2s linear infinite',
               'shake-violent': 'shakeViolent 0.25s infinite',
               'shimmer': 'shimmer 2s linear infinite',
             },
@@ -326,6 +327,20 @@
       @keyframes text-blink {
         0% { opacity: 0.5; }
         100% { opacity: 1; }
+      }
+      
+      /* Explicit Keyframes for Inline Styles */
+      @keyframes dataRainCard {
+        0% { transform: translateY(0); opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { transform: translateY(300px); opacity: 0; }
+      }
+      @keyframes dataRain {
+        0% { transform: translateY(-100%); opacity: 0; }
+        20% { opacity: 1; }
+        80% { opacity: 1; }
+        100% { transform: translateY(100vh); opacity: 0; }
       }
     </style>
   <link rel="stylesheet" href="/index.css">
