@@ -20,8 +20,8 @@ const LoadingOverlay: React.FC = () => {
       </div>
       
       <div className="mt-4 text-[10px] opacity-50">
-        > DECRYPTING_ASSETS<br/>
-        > ESTABLISHING_LINK
+        &gt; DECRYPTING_ASSETS<br/>
+        &gt; ESTABLISHING_LINK
       </div>
     </div>
   );
