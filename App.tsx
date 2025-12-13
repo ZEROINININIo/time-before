@@ -1,31 +1,38 @@
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Navigation from './components/Navigation';
-// Lazy load pages for performance
-const HomePage = React.lazy(() => import('./pages/HomePage'));
-const CharactersPage = React.lazy(() => import('./pages/CharactersPage'));
-const DatabasePage = React.lazy(() => import('./pages/DatabasePage'));
-const ReaderPage = React.lazy(() => import('./pages/ReaderPage'));
-const SideStoriesPage = React.lazy(() => import('./pages/SideStoriesPage'));
+
+// Static imports for instant navigation (Fixes "Loading Module" slowness)
+import HomePage from './pages/HomePage';
+import CharactersPage from './pages/CharactersPage';
+import DatabasePage from './pages/DatabasePage';
+import ReaderPage from './pages/ReaderPage';
+import SideStoriesPage from './pages/SideStoriesPage';
 
 import BootSequence from './components/BootSequence';
 import InitialSetup from './components/InitialSetup';
 import CustomCursor from './components/CustomCursor';
 import StoryEntryAnimation from './components/StoryEntryAnimation';
-import LoadingOverlay from './components/LoadingOverlay';
 import { Language } from './types';
 import { ReaderFont } from './components/fonts/fontConfig';
 import { unlockGlobalAudio } from './components/BackgroundMusic';
 
-// BGM Configuration - Dual Source Strategy
-const AUDIO_HOST_PRIMARY = "https://zeroxv.tttttttttt.top";
-const AUDIO_HOST_BACKUP = "https://zerox.ccccocccc.cc";
-
-// Helper to generate source array with fallback
-const getSources = (path: string) => [
-  `${AUDIO_HOST_PRIMARY}${path}`,
-  `${AUDIO_HOST_BACKUP}${path}`
-];
+// BGM Configuration - Remote Source Strategy with Fallbacks
+// Defined outside component to ensure stable references for seamless playback
+const AUDIO_MAP = {
+  main: [
+    "https://lz.qaiu.top/parser?url=https://sbcnm.lanzoum.com/i5OIw3dk1rte",
+    "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/fd991fcc1f737774/main.mp3"
+  ],
+  daily: [
+    "https://lz.qaiu.top/parser?url=https://sbcnm.lanzoum.com/i5TeC3dk1q1a",
+    "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/6f611d085fec7cfe/daily.mp3"
+  ],
+  x: [
+    "https://lz.qaiu.top/parser?url=https://sbcnm.lanzoum.com/iekyU3dk1sgh",
+    "https://cik07-cos.7moor-fs2.com/im/4d2c3f00-7d4c-11e5-af15-41bf63ae4ea0/c61f71beeec593f0/x.mp3"
+  ]
+};
 
 const STORAGE_KEY = 'nova_labs_config_v6';
 
@@ -159,23 +166,23 @@ const App: React.FC = () => {
   };
 
   // --- Dynamic Audio Logic ---
-  const getAudioConfig = () => {
+  // Memoize to prevent playback interruption on re-renders unless track actually changes
+  // Using stable AUDIO_MAP references ensures the array prop remains referentially equal
+  const audioConfig = useMemo(() => {
     if (activeTab === 'sidestories') {
         // Only switch BGM if inside a specific volume
         if (activeSideStoryVolumeId === 'VOL_DAILY') {
-            return { sources: getSources("/bgm/daily.mp3"), title: "TIMELINE DAILY", composer: "NOVA_OST" };
+            return { sources: AUDIO_MAP.daily, title: "TIMELINE DAILY", composer: "NOVA_OST" };
         }
         if (activeSideStoryVolumeId === 'VOL_MEMORIES') {
-            return { sources: getSources("/bgm/x.mp3"), title: "神隠しの真相", composer: "しゃろう" };
+            return { sources: AUDIO_MAP.x, title: "神隠しの真相", composer: "しゃろう" };
         }
         // If just in the menu (activeSideStoryVolumeId is null) or unknown volume, fall back to MAIN
-        return { sources: getSources("/bgm/main.mp3"), title: "TIMELINE MAIN", composer: "NOVA_OST" };
+        return { sources: AUDIO_MAP.main, title: "TIMELINE MAIN", composer: "NOVA_OST" };
     }
     // Default / Home / Reader
-    return { sources: getSources("/bgm/main.mp3"), title: "TIMELINE MAIN", composer: "NOVA_OST" };
-  };
-
-  const audioConfig = getAudioConfig();
+    return { sources: AUDIO_MAP.main, title: "TIMELINE MAIN", composer: "NOVA_OST" };
+  }, [activeTab, activeSideStoryVolumeId]);
 
   return (
     <>
@@ -251,39 +258,38 @@ const App: React.FC = () => {
           />
           
           <main className="flex-1 h-full overflow-hidden relative z-10 border-l-2 border-ash-dark">
-            <Suspense fallback={<LoadingOverlay />}>
-                <div 
-                  key={activeTab}
-                  className="h-full overflow-y-auto pb-20 lg:pb-0 bg-ash-black/90 animate-slide-in"
-                >
-                  {activeTab === 'home' && (
-                    <HomePage 
-                      onNavigate={handleHomeNavigate}
-                      language={language}
-                      setLanguage={setLanguage}
-                    />
-                  )}
-                  {activeTab === 'characters' && <CharactersPage language={language} />}
-                  {activeTab === 'database' && <DatabasePage language={language} />}
-                  {activeTab === 'reader' && (
-                    <ReaderPage 
-                      currentIndex={currentChapterIndex} 
-                      onChapterChange={setCurrentChapterIndex} 
-                      language={language}
-                      isLightTheme={isLightTheme}
-                      readerFont={readerFont}
-                    />
-                  )}
-                  {activeTab === 'sidestories' && (
-                    <SideStoriesPage 
-                      language={language} 
-                      isLightTheme={isLightTheme}
-                      onVolumeChange={setActiveSideStoryVolumeId}
-                      readerFont={readerFont}
-                    />
-                  )}
-                </div>
-            </Suspense>
+            {/* Suspense removed to prevent "Loading Module" flicker. Pages are now statically imported. */}
+            <div 
+              key={activeTab}
+              className="h-full overflow-y-auto pb-20 lg:pb-0 bg-ash-black/90 animate-slide-in"
+            >
+              {activeTab === 'home' && (
+                <HomePage 
+                  onNavigate={handleHomeNavigate}
+                  language={language}
+                  setLanguage={setLanguage}
+                />
+              )}
+              {activeTab === 'characters' && <CharactersPage language={language} />}
+              {activeTab === 'database' && <DatabasePage language={language} />}
+              {activeTab === 'reader' && (
+                <ReaderPage 
+                  currentIndex={currentChapterIndex} 
+                  onChapterChange={setCurrentChapterIndex} 
+                  language={language}
+                  isLightTheme={isLightTheme}
+                  readerFont={readerFont}
+                />
+              )}
+              {activeTab === 'sidestories' && (
+                <SideStoriesPage 
+                  language={language} 
+                  isLightTheme={isLightTheme}
+                  onVolumeChange={setActiveSideStoryVolumeId}
+                  readerFont={readerFont}
+                />
+              )}
+            </div>
           </main>
         </div>
       )}
