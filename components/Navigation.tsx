@@ -132,7 +132,7 @@ const Navigation: React.FC<NavigationProps> = ({
             NOVA<br/>LABS
           </h1>
           <div className="text-[10px] text-ash-gray font-mono bg-ash-dark p-1 inline-block border border-ash-gray">
-            ARCHIVE_SYS // TL.1.14-R
+            ARCHIVE_SYS // TL.1.14-T
           </div>
         </div>
 
@@ -246,7 +246,7 @@ const Navigation: React.FC<NavigationProps> = ({
                         <Settings size={16} className="text-ash-light" />
                         <span className="text-xs font-bold text-ash-light font-mono uppercase tracking-wider">{t.config}</span>
                     </div>
-                    <div className="text-[10px] text-ash-gray font-mono">V.3.1</div>
+                    <div className="text-[10px] text-ash-gray font-mono">TL.1.14-T</div>
                 </div>
                 
                 <div className="flex flex-col gap-3">

@@ -34,11 +34,19 @@ const getGlobalAudio = () => {
 // Helper to reliably get absolute URL in various environments
 const getAbsoluteUrl = (url: string): string => {
     try {
-        // Fallback for environments where window.location might be incomplete
-        const base = typeof window !== 'undefined' && window.location 
-            ? window.location.href 
-            : 'http://localhost/';
-        return new URL(url, document.baseURI || base).href;
+        // Check if already absolute URL
+        if (/^https?:\/\//i.test(url) || /^\/\//.test(url)) {
+            return url;
+        }
+        
+        // Handle Vercel environment specifically
+        if (typeof window !== 'undefined' && window.location) {
+            const base = window.location.href;
+            return new URL(url, document.baseURI || base).href;
+        }
+        
+        // Fallback for SSR/SSG environments like Vercel
+        return url;
     } catch (e) {
         // Ultimate fallback: DOM element resolution
         try {
@@ -127,9 +135,10 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
   useEffect(() => {
     const audio = getGlobalAudio();
 
-    // Error handling listener
+    // Error handling listener - enhanced for Vercel environment
     const handleError = (e: Event) => {
         console.warn("Audio Playback Error:", audio.error);
+        console.warn("Audio Source:", audio.src);
         setError(true);
     };
     
@@ -148,11 +157,23 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         console.log("Audio paused");
     };
     
+    // Loadedmetadata listener - for debugging
+    const handleLoadedMetadata = () => {
+        console.log("Audio metadata loaded:", audio.duration);
+    };
+    
+    // Waiting listener - for debugging buffering issues
+    const handleWaiting = () => {
+        console.log("Audio waiting for more data");
+    };
+    
     // Add all event listeners
     audio.addEventListener('error', handleError);
     audio.addEventListener('canplaythrough', handleCanPlayThrough);
     audio.addEventListener('play', handlePlay);
     audio.addEventListener('pause', handlePause);
+    audio.addEventListener('loadedmetadata', handleLoadedMetadata);
+    audio.addEventListener('waiting', handleWaiting);
 
     // 1. Handle Audio Source Update
     // IMPORTANT: Compare absolute URLs to prevent infinite loop with relative paths
@@ -168,7 +189,9 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         setError(false);
         
         // Set audio source with proper compatibility handling
-        audio.src = getSupportedAudioExtension(audioSrc);
+        const supportedUrl = getSupportedAudioExtension(audioSrc);
+        const absoluteSupportedUrl = getAbsoluteUrl(supportedUrl);
+        audio.src = absoluteSupportedUrl;
         
         // Preload audio for smoother playback
         audio.preload = 'auto';
@@ -187,7 +210,7 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             // Start from silence for fade-in
             audio.volume = 0; 
             
-            // Handle different browser autoplay policies
+            // Handle different browser autoplay policies and Vercel environment
             const playAudio = async () => {
                 try {
                     // Load audio if not already loaded
@@ -195,30 +218,33 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                         await audio.load();
                     }
                     
-                    const playPromise = audio.play();
-                    if (playPromise !== undefined) {
-                        await playPromise;
-                        // Fade In
-                        performFade(audio, volume, FADE_IN_DURATION);
-                    }
-                } catch (e) {
-                    console.warn("Playback prevented (autoplay policy or error):", e);
-                    // Don't set error state here as it might be recoverable by user interaction
-                    // Try again after a short delay as fallback
-                    audioCleanupTimer = window.setTimeout(() => {
-                        try {
+                    // Ensure we're in a user-interactive context before playing
+                    if (audio.readyState >= 3) {
+                        const playPromise = audio.play();
+                        if (playPromise !== undefined) {
+                            await playPromise;
+                            // Fade In
+                            performFade(audio, volume, FADE_IN_DURATION);
+                        }
+                    } else {
+                        console.warn("Audio not ready for playback, waiting for data");
+                        // Try again once canplaythrough is fired
+                        const handleCanPlayThroughForPlay = () => {
+                            audio.removeEventListener('canplaythrough', handleCanPlayThroughForPlay);
                             const playPromise = audio.play();
                             if (playPromise !== undefined) {
                                 playPromise.then(() => {
                                     performFade(audio, volume, FADE_IN_DURATION);
-                                }).catch(fallbackError => {
-                                    console.warn("Fallback playback attempt failed:", fallbackError);
+                                }).catch(playError => {
+                                    console.warn("Delayed playback attempt failed:", playError);
                                 });
                             }
-                        } catch (fallbackError) {
-                            console.warn("Fallback playback attempt failed:", fallbackError);
-                        }
-                    }, 500);
+                        };
+                        audio.addEventListener('canplaythrough', handleCanPlayThroughForPlay);
+                    }
+                } catch (e) {
+                    console.warn("Playback prevented (autoplay policy or error):", e);
+                    // Don't set error state here as it might be recoverable by user interaction
                 }
             };
             
@@ -262,6 +288,8 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         audio.removeEventListener('canplaythrough', handleCanPlayThrough);
         audio.removeEventListener('play', handlePlay);
         audio.removeEventListener('pause', handlePause);
+        audio.removeEventListener('loadedmetadata', handleLoadedMetadata);
+        audio.removeEventListener('waiting', handleWaiting);
     };
   }, [isPlaying, audioSrc, error, volume]); // Add volume to dependencies for better sync
 

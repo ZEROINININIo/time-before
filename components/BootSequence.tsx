@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { AlertTriangle, Terminal, Cpu, CheckCircle } from 'lucide-react';
+import { AlertTriangle, Terminal, Cpu, CheckCircle, MousePointer2 } from 'lucide-react';
 import { Language } from '../types';
 
 interface BootSequenceProps {
@@ -12,6 +12,7 @@ interface BootSequenceProps {
 const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = false, language }) => {
   const [lines, setLines] = useState<string[]>([]);
   const [phase, setPhase] = useState<'BIOS' | 'ERROR' | 'RECOVERY' | 'NORMAL'>('BIOS');
+  const [waitingForInput, setWaitingForInput] = useState(false);
 
   useEffect(() => {
     const tip = language === 'zh-CN' ? ">> 提示：开启暗黑模式阅读体验更佳"
@@ -38,7 +39,11 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = 
             }, delay);
         });
 
-        setTimeout(onComplete, delay + 800);
+        // Instead of auto-completing, wait for user input to satisfy Audio Context policy
+        setTimeout(() => {
+            setWaitingForInput(true);
+        }, delay + 500);
+        
         return;
     }
 
@@ -109,6 +114,12 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = 
 
   }, [onComplete, isNormalBoot, language]);
 
+  const handleInteraction = () => {
+      if (waitingForInput) {
+          onComplete();
+      }
+  };
+
   if (phase === 'ERROR') {
     return (
       <div className="h-screen w-screen bg-black flex flex-col items-center justify-center p-8 overflow-hidden animate-crash relative z-50">
@@ -128,7 +139,10 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = 
   }
 
   return (
-    <div className={`h-screen w-screen bg-black text-green-500 p-8 font-mono text-xs md:text-sm overflow-hidden flex flex-col justify-end z-50 ${phase === 'RECOVERY' ? 'text-amber-500' : ''}`}>
+    <div 
+        className={`h-screen w-screen bg-black text-green-500 p-8 font-mono text-xs md:text-sm overflow-hidden flex flex-col justify-end z-50 transition-colors duration-500 ${phase === 'RECOVERY' ? 'text-amber-500' : ''} ${waitingForInput ? 'cursor-pointer hover:bg-green-950/10' : ''}`}
+        onClick={handleInteraction}
+    >
       <div className="mb-auto opacity-50 flex items-center gap-4">
         {isNormalBoot ? <CheckCircle className="text-green-500" /> : 
          phase === 'BIOS' ? <Cpu className="animate-pulse" /> : 
@@ -158,7 +172,22 @@ const BootSequence: React.FC<BootSequenceProps> = ({ onComplete, isNormalBoot = 
                 </div>
             );
         })}
-        <div className="h-4 w-3 bg-current animate-pulse inline-block mt-2"></div>
+        
+        {!waitingForInput && (
+            <div className="h-4 w-3 bg-current animate-pulse inline-block mt-2"></div>
+        )}
+
+        {waitingForInput && (
+            <div className="mt-8 py-4 border-t border-green-500/30 animate-fade-in">
+                <div className="flex items-center gap-3 text-lg md:text-xl font-bold text-green-400 animate-pulse">
+                    <MousePointer2 className="animate-bounce" />
+                    <span>&gt; {language === 'en' ? 'CLICK_TO_INITIALIZE_SYSTEM' : '点击屏幕进入系统'} <span className="animate-[blink_1s_infinite]">_</span></span>
+                </div>
+                <div className="text-[10px] text-green-500/50 mt-1 uppercase">
+                    AWAITING_USER_INPUT // AUDIO_CONTEXT_READY
+                </div>
+            </div>
+        )}
       </div>
 
       {phase === 'RECOVERY' && (
