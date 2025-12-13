@@ -122,13 +122,15 @@ const SideStoryVolumeList: React.FC<SideStoryVolumeListProps> = ({ volumes, onSe
                                                 {Array.from({ length: 12 }).map((_, i) => (
                                                     <div 
                                                         key={i}
-                                                        className={`absolute w-px bg-gradient-to-b from-transparent ${isLightTheme ? 'via-cyan-600' : 'via-cyan-300'} to-transparent`}
+                                                        className={`absolute w-[1.5px] bg-gradient-to-b from-transparent ${isLightTheme ? 'via-cyan-600' : 'via-cyan-300'} to-transparent`}
                                                         style={{
                                                             height: `${20 + Math.random() * 40}%`,
                                                             left: `${Math.random() * 100}%`,
-                                                            top: '-50%',
-                                                            animation: `dataRain ${1.5 + Math.random() * 1.5}s linear infinite`,
-                                                            animationDelay: `${Math.random() * 2}s`
+                                                            top: '-20%',
+                                                            // Using dataRainCard to prevent full viewport traversal on mobile
+                                                            animation: `dataRainCard ${1.5 + Math.random() * 1.5}s linear infinite`,
+                                                            animationDelay: `${Math.random() * 2}s`,
+                                                            willChange: 'transform' // GPU acceleration for mobile
                                                         }}
                                                     />
                                                 ))}

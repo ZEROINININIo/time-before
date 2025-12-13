@@ -84,6 +84,7 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
 
   const currentChapter = volume.chapters[currentChapterIndex];
   const translation: ChapterTranslation = currentChapter.translations[language] || currentChapter.translations['zh-CN'];
+  const isLegacy = currentChapter.id === 'special-legacy-dusk';
 
   // Content Renderer
   const renderContent = (text: string) => {
@@ -118,29 +119,37 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
         if (textBuffer.length > 0) {
             const joinedText = smartJoin(textBuffer);
             
-            // Auto-color logic based on speaker
+            // Default Styling Logic
             let className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-ash-light transition-colors";
             
-            if (joinedText.startsWith('零点') || joinedText.startsWith('Point') || joinedText.startsWith('零點')) {
+            // Legacy Overwrite: Force specific style for legacy chapter text
+            if (isLegacy) {
                 className = isLightTheme
-                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-zinc-600 font-bold"
-                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_2px_rgba(255,255,255,0.4)]";
-            } else if (joinedText.startsWith('芷漓') || joinedText.startsWith('Zeri')) {
-                className = isLightTheme
-                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-600"
-                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-400 drop-shadow-[0_0_2px_rgba(244,114,182,0.4)]";
-            } else if (joinedText.startsWith('泽洛') || joinedText.startsWith('Zelo') || joinedText.startsWith('澤洛')) {
-                className = isLightTheme
-                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-600"
-                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400 drop-shadow-[0_0_2px_rgba(96,165,250,0.4)]";
-            } else if (joinedText.startsWith('???') || joinedText.startsWith('Void') || joinedText.includes('void') || joinedText.includes('Void')) {
-                 className = isLightTheme
-                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-zinc-900 font-bold"
-                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]";
-            } else if (joinedText.startsWith('终端') || joinedText.startsWith('TERMINAL') || joinedText.startsWith('終端')) {
-                 className = isLightTheme
-                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-emerald-700 font-bold"
-                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-emerald-500 font-bold";
+                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-900 legacy-text"
+                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-200 legacy-text";
+            } else {
+                // Standard Logic for other chapters
+                if (joinedText.startsWith('零点') || joinedText.startsWith('Point') || joinedText.startsWith('零點')) {
+                    className = isLightTheme
+                        ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-zinc-600 font-bold"
+                        : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_2px_rgba(255,255,255,0.4)]";
+                } else if (joinedText.startsWith('芷漓') || joinedText.startsWith('Zeri')) {
+                    className = isLightTheme
+                        ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-600"
+                        : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-400 drop-shadow-[0_0_2px_rgba(244,114,182,0.4)]";
+                } else if (joinedText.startsWith('泽洛') || joinedText.startsWith('Zelo') || joinedText.startsWith('澤洛')) {
+                    className = isLightTheme
+                        ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-600"
+                        : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400 drop-shadow-[0_0_2px_rgba(96,165,250,0.4)]";
+                } else if (joinedText.startsWith('???') || joinedText.startsWith('Void') || joinedText.includes('void') || joinedText.includes('Void')) {
+                    className = isLightTheme
+                        ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-zinc-900 font-bold"
+                        : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]";
+                } else if (joinedText.startsWith('终端') || joinedText.startsWith('TERMINAL') || joinedText.startsWith('終端')) {
+                    className = isLightTheme
+                        ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-emerald-700 font-bold"
+                        : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-emerald-500 font-bold";
+                }
             }
 
             nodes.push(
@@ -220,6 +229,9 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
                     </Reveal>
                 );
             } else if (voidVisionMatch) {
+                const content = voidVisionMatch[1];
+                const isRedacted = content.includes('█');
+                
                 // New Void Vision Effect
                 nodes.push(
                     <Reveal key={`void-vis-${i}`} className="my-8 w-full max-w-2xl mx-auto">
@@ -239,10 +251,18 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
                                 </div>
                              </div>
                              
-                             {/* Content - Bright White High Contrast */}
+                             {/* Content - Conditional Styling */}
                              <div className="relative z-10">
-                                 <div className="text-white font-serif italic text-lg md:text-xl text-center drop-shadow-[0_0_8px_rgba(255,255,255,0.9)] leading-relaxed tracking-wide">
-                                     "{voidVisionMatch[1]}"
+                                 <div 
+                                    className={`
+                                        text-center leading-relaxed tracking-wide
+                                        ${isRedacted 
+                                            ? 'text-fuchsia-500 font-mono text-sm md:text-base break-all animate-shake-violent opacity-70 drop-shadow-[0_0_5px_rgba(232,121,249,0.8)]' 
+                                            : 'text-white font-serif italic text-lg md:text-xl drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]'
+                                        }
+                                    `}
+                                 >
+                                     "{content}"
                                  </div>
                              </div>
 
@@ -303,7 +323,7 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
             isSidebarOpen ? 'w-72 translate-x-0' : 'w-0 -translate-x-full md:w-0 md:-translate-x-0 overflow-hidden'
             }`}
         >
-            <div className="p-4 border-b-2 border-ash-gray bg-ash-black text-ash-light flex justify-between items-center shrink-0">
+            <div className={`p-4 border-b-2 border-ash-gray bg-ash-black text-ash-light flex justify-between items-center shrink-0 ${isLegacy ? 'border-dashed' : ''}`}>
                  <button 
                     onClick={onBack}
                     className="flex items-center gap-2 text-xs font-mono hover:text-ash-gray transition-colors"
@@ -331,13 +351,13 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
                             disabled={isLocked}
                             className={`w-full text-left p-4 text-xs font-mono border-b border-ash-dark transition-none group relative overflow-hidden ${
                                 index === currentChapterIndex
-                                    ? 'bg-ash-light text-ash-black'
+                                    ? (isLegacy ? 'bg-blue-950/50 text-blue-200 border-blue-500/50' : 'bg-ash-light text-ash-black')
                                     : isLocked ? 'bg-ash-dark/10 text-ash-gray cursor-not-allowed' : 'text-ash-gray hover:bg-ash-dark hover:text-ash-white'
                             }`}
                         >
                             <div className="relative z-10">
                                 <div className="flex justify-between items-start">
-                                    <span className="font-bold truncate uppercase max-w-[85%]">
+                                    <span className={`font-bold truncate uppercase max-w-[85%] ${isLegacy && index === currentChapterIndex ? 'legacy-text' : ''}`}>
                                         {index === currentChapterIndex && <span className="mr-2">&gt;</span>}{chapTitle}
                                     </span>
                                     {isLocked && <ShieldAlert size={12} className="opacity-70" />}
@@ -366,7 +386,7 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
         <main ref={mainRef} className="flex-1 overflow-y-auto scroll-smooth relative bg-ash-black">
              <div 
                 key={currentChapter.id} 
-                className="max-w-4xl mx-auto min-h-full bg-ash-black border-l-0 md:border-l-2 md:border-r-2 border-ash-dark/50 shadow-2xl relative animate-slide-in"
+                className={`max-w-4xl mx-auto min-h-full bg-ash-black border-l-0 md:border-l-2 md:border-r-2 border-ash-dark/50 shadow-2xl relative animate-slide-in ${isLegacy ? 'border-dashed border-blue-900/30' : ''}`}
              >
                  {currentChapter.status === 'locked' ? (
                      <div className="h-[80vh] flex flex-col items-center justify-center text-ash-gray p-8 text-center">
@@ -394,29 +414,29 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
                  ) : (
                     <>
                         {/* Header */}
-                        <div className="px-8 py-12 lg:px-16 border-b-4 border-double border-ash-gray bg-ash-black text-ash-light mt-12">
+                        <div className={`px-8 py-12 lg:px-16 border-b-4 border-double border-ash-gray bg-ash-black text-ash-light mt-12 ${isLegacy ? 'border-dashed border-blue-900/50' : ''}`}>
                             <Reveal>
-                                <div className="flex justify-between items-start mb-6 font-mono text-[10px] text-ash-gray uppercase tracking-widest">
+                                <div className={`flex justify-between items-start mb-6 font-mono text-[10px] text-ash-gray uppercase tracking-widest ${isLegacy ? 'text-blue-500/70' : ''}`}>
                                     <span>SIDE_ARCHIVE // {currentChapter.id}</span>
                                     <span>FILE_INDEX: {currentChapterIndex + 1}</span>
                                 </div>
-                                <h1 className="text-3xl md:text-5xl font-black mb-6 uppercase tracking-tighter leading-tight">
+                                <h1 className={`text-3xl md:text-5xl font-black mb-6 uppercase tracking-tighter leading-tight ${isLegacy ? 'legacy-text text-blue-200' : ''}`}>
                                     {translation.title}
                                 </h1>
-                                <div className="flex items-center gap-2 text-xs font-mono text-ash-gray bg-ash-dark inline-block px-3 py-1 border border-ash-gray">
-                                    <FileText size={12} />
+                                <div className={`flex items-center gap-2 text-xs font-mono text-ash-gray bg-ash-dark inline-block px-3 py-1 border border-ash-gray ${isLegacy ? 'border-blue-900/50 bg-blue-950/20 text-blue-400' : ''}`}>
+                                    {isLegacy ? <AlertTriangle size={12} className="animate-pulse" /> : <FileText size={12} />}
                                     <span>{currentChapter.date}</span>
                                 </div>
                             </Reveal>
                         </div>
                         
                         {/* Body */}
-                        <article className="px-8 py-12 lg:px-16 max-w-none text-ash-light font-serif leading-loose tracking-wide">
+                        <article className={`px-8 py-12 lg:px-16 max-w-none text-ash-light font-serif leading-loose tracking-wide ${isLegacy ? 'font-mono' : ''}`}>
                             {renderContent(translation.content)}
                         </article>
 
                         {/* Footer Nav */}
-                        <div className="p-8 md:p-16 border-t-4 border-double border-ash-gray bg-ash-dark">
+                        <div className={`p-8 md:p-16 border-t-4 border-double border-ash-gray bg-ash-dark ${isLegacy ? 'border-dashed border-blue-900/30 bg-blue-950/10' : ''}`}>
                              <div className="flex justify-between items-center gap-4">
                                 <button
                                     onClick={() => setCurrentChapterIndex(prev => Math.max(0, prev - 1))}

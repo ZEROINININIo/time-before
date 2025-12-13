@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { novelData } from '../data/novelData';
-import { BookOpen, List, ChevronLeft, ChevronRight, Image as ImageIcon, FileText, Activity, AlertTriangle, Terminal, Grid, Folder, Lock, ArrowLeft, MousePointer2 } from 'lucide-react';
+import { BookOpen, List, ChevronLeft, ChevronRight, Image as ImageIcon, FileText, Activity, AlertTriangle, Terminal, Grid, Folder, Lock, ArrowLeft, MousePointer2, Eye } from 'lucide-react';
 import { ChapterTranslation, Language } from '../types';
 import Reveal from '../components/Reveal';
 import StoryEntryAnimation from '../components/StoryEntryAnimation';
@@ -265,11 +265,12 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
         // 2. Check for Custom Tags
         const blueMatch = trimmed.match(/^\[\[BLUE::(.*?)\]\]$/);
         const dangerMatch = trimmed.match(/^\[\[DANGER::(.*?)\]\]$/);
+        const voidVisionMatch = trimmed.match(/^\[\[VOID_VISION::(.*?)\]\]$/);
         const isDivider = trimmed === '[[DIVIDER]]';
         const isImage = /\[\[IMAGE::(.*?)::(.*?)\]\]/.test(trimmed);
         const isEmpty = !trimmed;
 
-        if (blueMatch || dangerMatch || isDivider || isImage || isEmpty) {
+        if (blueMatch || dangerMatch || voidVisionMatch || isDivider || isImage || isEmpty) {
             flushTextBuffer(); // These elements break the paragraph
             
             if (blueMatch) {
@@ -292,6 +293,49 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
                         <p className={dangerClass}>
                             {parseRichText(dangerMatch[1])}
                         </p>
+                    </Reveal>
+                );
+            } else if (voidVisionMatch) {
+                const content = voidVisionMatch[1];
+                const isRedacted = content.includes('█');
+                
+                // New Void Vision Effect
+                nodes.push(
+                    <Reveal key={`void-vis-${i}`} className="my-8 w-full max-w-2xl mx-auto">
+                        <div className="relative border-y border-fuchsia-900/50 bg-black/80 p-6 backdrop-blur-sm overflow-hidden group select-none shadow-[0_0_30px_-10px_rgba(192,38,211,0.3)]">
+                             {/* Background Glitch Elements */}
+                             <div className="absolute inset-0 bg-fuchsia-900/10 opacity-0 group-hover:opacity-20 transition-opacity"></div>
+                             <div className="absolute top-0 left-0 w-0.5 h-full bg-fuchsia-500/50 box-shadow-[0_0_10px_rgba(217,70,239,0.8)]"></div>
+                             <div className="absolute top-0 right-0 w-0.5 h-full bg-fuchsia-500/50 box-shadow-[0_0_10px_rgba(217,70,239,0.8)]"></div>
+                             
+                             {/* Label Header */}
+                             <div className="flex items-center justify-between mb-4 border-b border-fuchsia-900/30 pb-2">
+                                <div className="text-[10px] font-mono text-fuchsia-600 tracking-[0.2em] flex items-center gap-2">
+                                     <Eye size={12} className="animate-pulse" /> RETINAL_PROJECTION
+                                </div>
+                                <div className="text-[10px] font-black font-mono bg-fuchsia-100 text-fuchsia-950 px-2 py-0.5 tracking-widest shadow-[0_0_15px_rgba(255,255,255,0.6)] animate-pulse">
+                                    SOURCE: VOID
+                                </div>
+                             </div>
+                             
+                             {/* Content - Conditional Styling */}
+                             <div className="relative z-10">
+                                 <div 
+                                    className={`
+                                        text-center leading-relaxed tracking-wide
+                                        ${isRedacted 
+                                            ? 'text-fuchsia-500 font-mono text-sm md:text-base break-all animate-shake-violent opacity-70 drop-shadow-[0_0_5px_rgba(232,121,249,0.8)]' 
+                                            : 'text-white font-serif italic text-lg md:text-xl drop-shadow-[0_0_8px_rgba(255,255,255,0.9)]'
+                                        }
+                                    `}
+                                 >
+                                     "{content}"
+                                 </div>
+                             </div>
+
+                             {/* Decorative Scanline - White for brightness */}
+                             <div className="absolute top-0 left-0 w-full h-[2px] bg-white/30 shadow-[0_0_15px_rgba(255,255,255,1)] animate-scanline pointer-events-none mix-blend-overlay"></div>
+                        </div>
                     </Reveal>
                 );
             } else if (isDivider) {

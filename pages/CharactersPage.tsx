@@ -14,9 +14,9 @@ interface CharactersPageProps {
 
 const relationships: Record<string, string[]> = {
   'point': ['zeri', 'zelo', 'void', 'dusk-rain'],
-  'zeri': ['point', 'zelo'],
-  'zelo': ['point', 'zeri'],
-  'void': ['point'],
+  'zeri': ['point', 'zelo', 'void', 'dusk-rain'],
+  'zelo': ['point', 'zeri', 'void', 'dusk-rain'],
+  'void': ['point', 'zeri', 'zelo', 'dusk-rain'],
 };
 
 const getCharInfo = (id: string, language: Language) => {

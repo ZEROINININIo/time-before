@@ -193,7 +193,7 @@ export const chapterA002: Chapter = {
 
 终端>>图片已保存！
 
-[[IMAGE::https://free.picui.cn/free/2025/12/07/69357a00942db.png::ATTACHMENT:ZERI_MAID.BMP]]
+[[IMAGE::https://free.picui.cn/free/2025/12/13/693ce46f44fd2.jpg::ATTACHMENT:VISX2134442.BMP]]
 
 零点：“我要珍藏一辈子！今天你必须穿一天，然后当我的女仆！”
 

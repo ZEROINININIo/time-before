@@ -1,15 +1,18 @@
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Navigation from './components/Navigation';
-import HomePage from './pages/HomePage';
-import CharactersPage from './pages/CharactersPage';
-import DatabasePage from './pages/DatabasePage';
-import ReaderPage from './pages/ReaderPage';
-import SideStoriesPage from './pages/SideStoriesPage';
+// Lazy load pages for performance
+const HomePage = React.lazy(() => import('./pages/HomePage'));
+const CharactersPage = React.lazy(() => import('./pages/CharactersPage'));
+const DatabasePage = React.lazy(() => import('./pages/DatabasePage'));
+const ReaderPage = React.lazy(() => import('./pages/ReaderPage'));
+const SideStoriesPage = React.lazy(() => import('./pages/SideStoriesPage'));
+
 import BootSequence from './components/BootSequence';
 import InitialSetup from './components/InitialSetup';
 import CustomCursor from './components/CustomCursor';
 import StoryEntryAnimation from './components/StoryEntryAnimation';
+import LoadingOverlay from './components/LoadingOverlay';
 import { Language } from './types';
 
 // The requested track: Sharou - The Truth of Spirit Hiding
@@ -218,35 +221,37 @@ const App: React.FC = () => {
           />
           
           <main className="flex-1 h-full overflow-hidden relative z-10 border-l-2 border-ash-dark">
-            <div 
-              key={activeTab}
-              className="h-full overflow-y-auto pb-20 lg:pb-0 bg-ash-black/90 animate-slide-in"
-            >
-              {activeTab === 'home' && (
-                <HomePage 
-                  onNavigate={handleHomeNavigate}
-                  language={language}
-                  setLanguage={setLanguage}
-                />
-              )}
-              {activeTab === 'characters' && <CharactersPage language={language} />}
-              {activeTab === 'database' && <DatabasePage language={language} />}
-              {activeTab === 'reader' && (
-                <ReaderPage 
-                  currentIndex={currentChapterIndex} 
-                  onChapterChange={setCurrentChapterIndex} 
-                  language={language}
-                  isLightTheme={isLightTheme}
-                />
-              )}
-              {activeTab === 'sidestories' && (
-                <SideStoriesPage 
-                  language={language} 
-                  isLightTheme={isLightTheme}
-                  onVolumeChange={setActiveSideStoryVolumeId}
-                />
-              )}
-            </div>
+            <Suspense fallback={<LoadingOverlay />}>
+                <div 
+                  key={activeTab}
+                  className="h-full overflow-y-auto pb-20 lg:pb-0 bg-ash-black/90 animate-slide-in"
+                >
+                  {activeTab === 'home' && (
+                    <HomePage 
+                      onNavigate={handleHomeNavigate}
+                      language={language}
+                      setLanguage={setLanguage}
+                    />
+                  )}
+                  {activeTab === 'characters' && <CharactersPage language={language} />}
+                  {activeTab === 'database' && <DatabasePage language={language} />}
+                  {activeTab === 'reader' && (
+                    <ReaderPage 
+                      currentIndex={currentChapterIndex} 
+                      onChapterChange={setCurrentChapterIndex} 
+                      language={language}
+                      isLightTheme={isLightTheme}
+                    />
+                  )}
+                  {activeTab === 'sidestories' && (
+                    <SideStoriesPage 
+                      language={language} 
+                      isLightTheme={isLightTheme}
+                      onVolumeChange={setActiveSideStoryVolumeId}
+                    />
+                  )}
+                </div>
+            </Suspense>
           </main>
         </div>
       )}

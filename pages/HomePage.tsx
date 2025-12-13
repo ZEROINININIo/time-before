@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useMemo } from 'react';
 import { Terminal, RefreshCw, BookOpen, GitBranch, ArrowRight, Lock, Database, Wifi } from 'lucide-react';
 import { Language } from '../types';
@@ -115,7 +116,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, language, setLanguage }
                 </div>
                 
                 <h2 className="text-xs font-bold text-ash-gray mb-4 flex items-center gap-2 uppercase border-b border-dashed border-ash-gray/30 pb-2">
-                    <Terminal size={14} /> ROOT_CONSOLE // V.3.2.1
+                    <Terminal size={14} /> ROOT_CONSOLE // TL.1.14-G
                 </h2>
                 
                 <div className="flex-1 font-mono text-xs md:text-sm leading-relaxed whitespace-pre-wrap text-ash-gray">
@@ -128,43 +129,55 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, language, setLanguage }
           {/* Middle Section: Dual Entry Modules */}
           <div className="flex-1 w-full max-w-7xl mx-auto flex flex-col lg:flex-row gap-6 md:gap-8">
                 
-                {/* Module 1: Main Story (Red/Ash Theme) */}
+                {/* Module 1: Main Story (Enhanced Emerald/Green Theme with Animations) */}
                 <Reveal delay={200} className="flex-1">
                     <button 
                         onClick={() => onNavigate('reader')}
-                        className="w-full h-full min-h-[240px] bg-ash-black border-2 border-ash-gray hover:border-ash-light hover:shadow-hard transition-all duration-300 group relative flex flex-col overflow-hidden text-left"
+                        className="w-full h-full min-h-[240px] bg-ash-black border-2 border-ash-gray hover:border-emerald-500/50 hover:shadow-[0_0_20px_rgba(16,185,129,0.2)] transition-all duration-500 group relative flex flex-col overflow-hidden text-left"
                     >
+                        {/* Animated Background Grid - Emerald Tint on Hover */}
+                        <div className="absolute inset-0 bg-[linear-gradient(rgba(20,20,20,0)_1px,transparent_1px),linear-gradient(90deg,rgba(20,20,20,0)_1px,transparent_1px)] bg-[size:20px_20px] opacity-0 group-hover:opacity-100 transition-opacity duration-500 group-hover:bg-[linear-gradient(rgba(16,185,129,0.1)_1px,transparent_1px),linear-gradient(90deg,rgba(16,185,129,0.1)_1px,transparent_1px)]"></div>
+
                         {/* Header */}
-                        <div className="w-full p-4 border-b-2 border-ash-gray bg-ash-dark/30 flex justify-between items-center group-hover:bg-ash-light group-hover:text-ash-black transition-colors">
-                            <div className="flex items-center gap-2 font-bold font-mono">
+                        <div className="w-full p-4 border-b-2 border-ash-gray bg-ash-dark/30 flex justify-between items-center group-hover:bg-emerald-950/30 group-hover:border-emerald-900/50 transition-colors duration-300 z-20 relative">
+                            <div className="flex items-center gap-2 font-bold font-mono group-hover:text-emerald-400 transition-colors">
                                 <BookOpen size={18} />
                                 <span>ARCHIVE_CORE</span>
                             </div>
                             <div className="flex gap-1">
-                                <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                                <div className="w-2 h-2 bg-ash-gray/50 rounded-full"></div>
+                                <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse shadow-[0_0_8px_#10b981]"></div>
+                                <div className="w-2 h-2 bg-ash-gray/50 rounded-full group-hover:bg-emerald-900/50 transition-colors"></div>
                             </div>
                         </div>
 
+                        {/* Scanning Beam */}
+                        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-emerald-500/5 to-transparent h-[200%] w-full -translate-y-1/2 group-hover:animate-scanline opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-0"></div>
+
                         {/* Body */}
                         <div className="p-6 md:p-10 flex-1 flex flex-col justify-center relative z-10">
-                            <h3 className="text-3xl md:text-5xl font-black uppercase text-ash-light mb-4 group-hover:scale-105 transition-transform origin-left">
-                                {t.main_archive}
+                            <h3 className="text-3xl md:text-5xl font-black uppercase text-ash-light mb-4 group-hover:text-emerald-50 transition-colors duration-300 group-hover:translate-x-1" style={{ textShadow: '0 0 0 rgba(0,0,0,0)' }}>
+                                <span className="relative inline-block">
+                                    {t.main_archive}
+                                    <span className="absolute top-0 left-0 -ml-0.5 text-emerald-500 opacity-0 group-hover:opacity-50 group-hover:animate-glitch pointer-events-none mix-blend-screen">{t.main_archive}</span>
+                                    <span className="absolute top-0 left-0 ml-0.5 text-blue-500 opacity-0 group-hover:opacity-50 group-hover:animate-glitch pointer-events-none mix-blend-screen" style={{ animationDirection: 'reverse' }}>{t.main_archive}</span>
+                                </span>
                             </h3>
-                            <p className="text-ash-gray text-xs md:text-sm max-w-sm mb-8 font-mono leading-relaxed">
+                            <p className="text-ash-gray text-xs md:text-sm max-w-sm mb-8 font-mono leading-relaxed group-hover:text-emerald-200/60 transition-colors">
                                 {t.main_desc}
                             </p>
                             
-                            <div className="mt-auto flex items-center gap-2 text-ash-light font-bold text-sm uppercase group-hover:translate-x-2 transition-transform">
+                            <div className="mt-auto flex items-center gap-2 text-ash-light font-bold text-sm uppercase group-hover:text-emerald-400 transition-colors group-hover:gap-4">
                                 {t.enter} <ArrowRight size={16} />
                             </div>
                         </div>
 
-                        {/* Background Decor */}
-                        <div className="absolute right-0 bottom-0 opacity-10 pointer-events-none group-hover:opacity-20 transition-opacity">
+                        {/* Background Decor - Lock */}
+                        <div className="absolute right-[-20px] bottom-[-20px] opacity-10 group-hover:opacity-20 transition-all duration-500 group-hover:scale-110 group-hover:rotate-[-10deg] text-ash-light group-hover:text-emerald-500">
                             <Lock size={180} strokeWidth={0.5} />
                         </div>
-                        <div className="absolute inset-0 bg-halftone opacity-10 pointer-events-none"></div>
+                        
+                        {/* Particle/Noise Overlay */}
+                        <div className="absolute inset-0 bg-halftone opacity-10 pointer-events-none group-hover:opacity-20 transition-opacity"></div>
                     </button>
                 </Reveal>
 

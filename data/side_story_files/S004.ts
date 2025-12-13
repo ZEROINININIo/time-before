@@ -105,7 +105,7 @@ Void 沉默了片刻，那双眼睛里流露出一丝悲悯。
 
 淡蓝色的烟雾在昏暗的房间里升腾，模糊了 Void 那张平静的脸，也模糊了那些即将到来的恐惧。尼古丁带来的短暂眩晕感让他紧绷的神经终于得到了一丝迟来的放松。
 
-暮雨：“呼……最后一根了。味道还是这么呛啊。”
+暮雨：“呼……最后一根了。还是熟悉的雪茄味。”
 
 他并没有抽完，只是深深吸了一口，感受着那股灼热的气流在肺叶里回荡，然后将烟蒂重重地按灭在扶手上，像是掐灭了自己最后一丝犹豫。
 
@@ -123,9 +123,9 @@ Void 沉默了片刻，那双眼睛里流露出一丝悲悯。
 
 [[VOID_VISION::【神经连接强行建立……时空回溯开启……】]]
 
-[[VOID_VISION::【场景一：C区反应堆（过去）。并没有爆炸，只有刺耳的警报。你的父亲试图拉下最后的闸门，但他已经来不及，所有人都收到了来自泛义宇宙的“馈赠”】]]
+[[VOID_VISION::██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████]]
 
-[[VOID_VISION::【场景二：世界线变动-β（未来）。天空裂开了巨大的口子。重力常数失效。你所熟悉的街道、高楼大厦连同里面尖叫的人群被吸入天际的空洞。他们在半空中被引力潮汐撕扯成红色的血雾。没有幸存者，没有救援，没有希望。只有无尽的、绝望的红色。】]]
+[[VOID_VISION::████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████]]
 
 剧烈的冲击让暮雨的身体在椅子上痉挛了一下，但他的嘴角却缓缓勾起了一个凄惨的弧度。
 
@@ -192,7 +192,9 @@ Void 沉默了片刻，那双眼睛里流露出一丝悲悯。
 
 只有顯示屏微弱的藍光照亮著房間，勾勒出她熟睡的輪廓。
 
-暮雨坐在椅子上，手裡把玩著那把鋒利的刺刀，指腹輕輕劃過冰冷的刀刃。片刻後，他停下動作，看向沙發方向，語氣平靜。
+暮雨坐在椅子上，手裡把玩著那把鋒利的定製刺刀，指腹輕輕劃過冰冷的刀刃。不知何時，零點的頭上已經有了一個淡淡的黑色光環，光環散發著極微弱的慘白的光芒。
+
+他停下動作，看向沙發方向，語氣平靜。
 
 暮雨：「既然醒了，就起來聊聊吧。Void。」
 
@@ -254,7 +256,7 @@ Void 沉默了片刻，那雙眼睛裡流露出一絲悲憫。
 
 淡藍色的煙霧在昏暗的房間裡升騰，模糊了 Void 那張平靜的臉，也模糊了那些即將到來的恐懼。尼古丁帶來的短暫眩暈感讓他緊繃的神經終於得到了一絲遲來的放鬆。
 
-暮雨：「呼……最後一根了。味道還是這麼嗆啊。」
+暮雨：「呼……最後一根了。還是熟悉的雪茄味。」
 
 他並沒有抽完，只是深深吸了一口，感受著那股灼熱的氣流在肺葉裡迴盪，然後將菸蒂重重地按滅在扶手上，像是掐滅了自己最後一絲猶豫。
 
@@ -268,13 +270,13 @@ Void 沉默了片刻，那雙眼睛裡流露出一絲悲憫。
 
 冰冷的金屬刺破了皮膚，撕裂了溫熱的血肉。
 
-那一瞬間，隨著劇痛和寒意一同湧入腦海的，是海量的信息流。
+那一瞬間，隨著劇痛和寒意一同涌入腦海的，是海量的信息流。
 
 [[VOID_VISION::【神經連接強行建立……時空回溯開啟……】]]
 
-[[VOID_VISION::【場景一：C區反應堆（過去）。並沒有爆炸，只有刺耳的警報。你的父親試圖拉下最後的閘門，但他已經來不及，所有人都收到了來自泛義宇宙的「餽贈」】]]
+[[VOID_VISION::██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████]]
 
-[[VOID_VISION::【場景二：世界線變動-β（未來）。天空裂開了巨大的口子。重力常數失效。你所熟悉的街道、高樓大廈連同裡面尖叫的人群被吸入天際的空洞。他們在半空中被引力潮汐撕扯成紅色的血霧。沒有倖存者，沒有救援，沒有希望。只有無盡的、絕望的紅色。】]]
+[[VOID_VISION::████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████]]
 
 劇烈的衝擊讓暮雨的身體在椅子上痙攣了一下，但他的嘴角卻緩緩勾起了一個凄慘的弧度。
 
@@ -341,7 +343,9 @@ There was no earth-shattering farewell ceremony. Everything was quiet, like a mi
 
 Only the faint blue light of the monitor illuminated the room, outlining her sleeping silhouette.
 
-Dusk sat in his chair, playing with the sharp bayonet, his fingertips gently gliding over the cold blade. A moment later, he stopped and looked towards the sofa, his tone calm.
+Dusk sat in his chair, playing with the sharp custom bayonet, his fingertips gently gliding over the cold blade. At some point, a faint black halo had appeared above Point's head, emitting a very weak, ghastly pale light.
+
+He stopped his movements, looked towards the sofa, his tone calm.
 
 Dusk: "Since you're awake, let's talk. Void."
 
@@ -379,7 +383,7 @@ Point (Void): "I am sorry. It was an irreversible collapse at the genetic level,
 
 Dusk took a deep breath, his eyes slightly red, but his gaze became clearer than ever before.
 
-Dusk: "So it wasn't a conspiracy, nor an accident. It was the price... the price of being a watcher."
+Dusk: "So it was not a conspiracy, nor an accident. It was the price... the price of being a watcher."
 
 'Point' raised her hand, palm up, her movements elegant and restrained.
 
@@ -403,7 +407,7 @@ He suddenly reached into his pocket, his fingertips brushing against the crumple
 
 Pale blue smoke rose in the dim room, blurring Void's calm face and the impending fear. The brief dizziness brought by the nicotine finally offered his taut nerves a moment of belated relaxation.
 
-Dusk: "Phew... the last one. The taste is still so harsh."
+Dusk: "Phew... the last one. Still the familiar cigar taste."
 
 He didn't finish it. He just took a deep drag, feeling the burning airflow echoing in his lungs, then crushed the cigarette butt heavily against the armrest, as if extinguishing his last shred of hesitation.
 
@@ -421,9 +425,9 @@ In that instant, accompanying the intense pain and chill flooding into his brain
 
 [[VOID_VISION::[NEURAL CONNECTION FORCED... TIME-SPACE REGRESSION ACTIVE...] ]]
 
-[[VOID_VISION::[SCENE 1: SECTOR C REACTOR (PAST). NO EXPLOSION, ONLY PIERCING ALARMS. YOUR FATHER TRIED TO PULL THE FINAL LEVER, BUT HE WAS TOO LATE. EVERYONE RECEIVED A "GIFT" FROM THE GENERALIZED UNIVERSE.] ]]
+[[VOID_VISION::████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████]]
 
-[[VOID_VISION::[SCENE 2: WORLDLINE SHIFT-BETA (FUTURE). THE SKY TORE OPEN A MASSIVE GAP. GRAVITY CONSTANTS FAILED. THE STREETS YOU KNOW, THE SKYSCRAPERS, AND THE SCREAMING CROWDS INSIDE WERE SUCKED INTO THE VOID IN THE SKY. THEY WERE TORN INTO A RED MIST OF BLOOD BY TIDAL FORCES IN MID-AIR. NO SURVIVORS, NO RESCUE, NO HOPE. ONLY ENDLESS, DESPERATE RED.] ]]
+[[VOID_VISION::██████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████]]
 
 The violent shock caused Dusk's body to spasm in the chair, but the corners of his mouth slowly curled into a miserable arc.
 

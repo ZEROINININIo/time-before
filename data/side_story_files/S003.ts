@@ -41,7 +41,7 @@ export const chapterS003: Chapter = {
 
 我吐出一口浑浊的烟，在风中迅速消散。
 
-暮雨：“他们不是死于意外。他们是……最早接触到‘空界’的人。手记里记录了关于这个世界不稳定性的真相，以及……某种必然的终结。”
+暮雨：“他们不是死于意外。他们是……最早接触到‘空界’的人。手记里记录了关于这个世界不稳定性的真相，以及……某种种必然的终结。”
 
 零点：“必然的……终结？”
 
@@ -71,15 +71,15 @@ export const chapterS003: Chapter = {
 
 暮雨：“嗯哼！反正琴就在身上，不弹白不弹。”
 
-我将一直背着的黑色琴包拉链拉开，取出了那把跟随我多年的木吉他。虽然有些旧了，但音色风韵犹存。我试了试音，稍微调准了一下弦轴。
+我将一直背着的黑色琴包拉链拉开，取出了那把跟随我多年的木吉他。虽然有些旧了，但音色风韵犹存。我试了试音，稍微转动了一下旋钮。
 
-夕阳开始下沉，将天空染成了一片血红。旁侧的建筑在余晖中拉出长长的影子。
+夕阳光开始下沉，将天空染成了一片血红。旁侧的建筑在余晖中拉出长长的影子。
 
 我拨动了琴弦。
 
 是一首很老的曲子，旋律简单。在学校的礼堂里，我曾经弹过无数次。
 
-零点静静地听着，怀表的茶色琉璃盖在她手中折射出落日的斜阳。
+零点静静地听著，怀表的茶色琉璃盖在她手中折射出落日的斜阳。
 
 音乐声在风中飘荡，仿佛在诉说着那些无法言说的告别。
 
@@ -87,7 +87,7 @@ export const chapterS003: Chapter = {
 
 零点：“好听！不愧是你。”
 
-我把吉他轻轻放在一旁，从口袋里摸出了终端。屏幕的反光映照着黄昏的火烧云。
+我把吉他轻轻放在一旁，从口袋里摸出了终端。屏幕的反光映照著黄昏的火烧雲。
 
 暮雨：“零点，过来。”
 
@@ -130,25 +130,27 @@ export const chapterS003: Chapter = {
 
 風很大。
 
-零點帶我去的是一個未完工的觀景台，從這裡可以俯瞰整個舊學區的廢墟，以及遠處燈火通明的新城區。
+零點帶我去的是一個未完工的觀景台，從這裡可以俯瞰整個特殊節區，以及遠處燈火通明的新節區。
 
 我們靠在欄杆上，風吹亂了她的頭髮，也吹散了之前實驗室裡的壓抑氣氛。
 
 暮雨：「……以前我經常一個人溜到這種地方來！」
 
-零點：「我知道。因為妳總是一副『眾人皆醉我獨醒』的樣子嘛。」
+零點：「我知道。因為你總是一副『眾人皆醉我獨醒』的樣子嘛。」
 
 暮雨笑了笑，從口袋裡摸出一盒有些皺巴巴的軟殼萬寶路。
 
-零點：「哎？妳什麼時候開始抽菸了？」
+零點：「哎？你什麼時候開始抽菸了？」
 
 暮雨：「最近才開始的。壓力大的時候來一根，稍微能冷靜點。……來一根？」
 
-零點搖搖頭。我點燃了一根，菸草的味道混雜著秋日的涼風鑽入肺部，帶來一陣輕微的眩暈感。
+零點搖搖頭，暮雨一笑：「就算妳真要，我也不會給妳噠..」
+
+我點燃了一根，菸草的味道混雜著秋日的涼風鑽入肺部，隨著尼古丁的侵襲，帶來一陣輕微的眩暈感。
 
 暮雨：「零點，還記得那天……我收到的『啟示』嗎？」
 
-零點：「妳是說……關於『空界』的那個？」
+零點：「你是說……關於『零空前輩』的那個？」
 
 暮雨：「嗯。其實在那之後，我並沒有停止調查。雖然表面上我在做媒體工作，但實際上……我一直在研究我父母留下的手記。」
 
@@ -160,19 +162,19 @@ export const chapterS003: Chapter = {
 
 暮雨：「沒錯。這個世界就像一個不斷崩塌的沙堡，無論我們怎麼修補，最後都會回歸虛無。除非……」
 
-我停頓了一下，沒有繼續說下去。我從懷裡掏出了一塊金色的懷表。那是一塊很舊的機械錶，錶蓋上刻著複雜的紋路。
+我停頓了一下，沒有繼續說下去。我從懷裡掏出了一塊古銅色的懷表。那是一塊很舊的機械錶，錶蓋上刻著複雜的紋路。
 
 [[IMAGE::https://free.picui.cn/free/2025/12/12/693b069e37e26.png::POCKET_WATCH]]
 
 暮雨：「給！這個送妳了。」
 
-零點：「欸？這東西對妳來說挺寶貴的吧...怎麼就突然給我了？」
+零點：「欸？這東西對你來說挺寶貴的吧...怎麼就突然給我了？」
 
 暮雨：「正因為珍貴，所以才要交給妳保管啊！零點，妳是『變數』。如果說這個世界還有什麼希望的話，那一定在妳身上。」
 
 零點接過懷表，有些不知所措地握在手裡。懷表還帶著我的體溫，向這個世界散發微弱的熱輻射。
 
-零點：「暮雨……妳是不是有什麼事情瞞著我？這種像是交代後事一樣的語氣……」
+零點：「暮雨……你是不是有什麼事情瞞著我？這種像是交代後事一樣的語氣……」
 
 暮雨：「哎呀，別多想！只是覺得……放在妳那裡比較安全。畢竟我這麼大大咧咧的，說不定哪天就把自己弄丟了，到時候還得靠妳把這錶找回來呢。」
 
@@ -180,25 +182,25 @@ export const chapterS003: Chapter = {
 
 暮雨：「好啦，不說這些沉重的話題了。既然是在這種地方……想聽歌嗎？」
 
-零點：「哎？妳要現在彈嗎？」
+零點：「哎？你要現在彈嗎？」
 
 暮雨：「嗯哼！反正琴就在身上，不彈白不彈。」
 
-我將一直背著的黑色琴包拉鍊拉開，取出了那把跟隨我多年的木吉他。雖然有些舊了，但音色依然清脆。我試了試音，稍微調準了一下弦軸。
+我將一直背著的黑色琴包拉鍊拉開，取出了那把跟隨我多年的木吉他。雖然有些舊了，但音色風韻猶存。我試了試音，稍微調節了一下旋钮。
 
-夕陽開始下沉，將天空染成了一片血紅。廢墟在餘暉中拉出長長的影子。
+夕陽開始下沉，將天空染成了一片血紅。旁側的建築在餘暉中拉出長長的影子。
 
 我撥動了琴弦。
 
-是一首很老的曲子，旋律簡單而哀傷。在學校的天台上，我曾經彈過無數次。
+是一首很老的曲子，旋律簡單。在學校的禮堂裡，我曾經彈過無數次。
 
 零點靜靜地聽著，懷表的茶色琉璃蓋在她手中折射出落日的斜陽。
 
 音樂聲在風中飄盪，彷彿在訴說著那些無法言說的告別。
 
-一曲終瞭，零點輕輕鼓起了掌，眼角似乎有些濕潤，但很快就被她標誌性的笑容掩蓋了。
+一曲終瞭，零點輕輕鼓起了掌。
 
-零點：「好聽！不愧是我的專屬吉他手。」
+零點：「好聽！不愧是你。」
 
 我把吉他輕輕放在一旁，從口袋裡摸出了終端。屏幕的反光映照著黃昏的火燒雲。
 
@@ -220,9 +222,9 @@ export const chapterS003: Chapter = {
 
 她立刻湊了過來，為了配合我的高度還特意墊了墊腳，臉上綻放出比夕陽還要燦爛的笑容，比了一個大大的剪刀手。
 
-暮雨：「別亂動，要虛了。」
+暮雨：「別亂動，要對不了焦了。」
 
-零點：「是妳手在抖吧？來，笑一個嘛暮雨！茄子——」
+零點：「是你手在抖吧？來，笑一個嘛暮雨！茄子——」
 
 看著屏幕裡那個沒心沒肺的笑臉，我也忍不住勾起了嘴角。
 
@@ -257,11 +259,13 @@ Point: "Eh? When did you start smoking?"
 
 Dusk: "Just started recently. Helps me calm down when the pressure gets high. ...Want one?"
 
-Point shook her head. I lit one, the taste of tobacco mixing with the cold autumn wind into my lungs, bringing a slight dizziness.
+Point shook her head. Dusk smiled: "Even if you really wanted one, I wouldn't give it to you.."
+
+I lit one, the taste of tobacco mixing with the cold autumn wind into my lungs. With the invasion of nicotine, it brought a slight dizziness.
 
 Dusk: "Point, do you remember that day... the 'Revelation' I received?"
 
-Point: "You mean... the one about the 'Void'?"
+Point: "You mean... the one about 'Senior Void'?"
 
 Dusk: "Yeah. Actually, after that, I didn't stop investigating. Although on the surface I'm doing media work, in reality... I've been studying the notes left by my parents."
 
@@ -273,7 +277,7 @@ Point: "Inevitable... end?"
 
 Dusk: "Yep. This world is like a collapsing sandcastle. No matter how we patch it, it will eventually return to nothingness. Unless..."
 
-I paused and didn't continue. I took out a gold pocket watch from my chest. It was a very old mechanical watch with complex patterns engraved on the cover, the only legacy left by my parents.
+I paused and didn't continue. I took out an antique bronze pocket watch from my chest. It was a very old mechanical watch with complex patterns engraved on the cover.
 
 [[IMAGE::https://free.picui.cn/free/2025/12/12/693b069e37e26.png::POCKET_WATCH]]
 
@@ -297,21 +301,21 @@ Point: "Eh? Are you going to play now?"
 
 Dusk: "Uh-huh! The guitar is right here, might as well use it."
 
-I unzipped the black guitar bag I had been carrying and took out the acoustic guitar that had been with me for years. Although it was a bit old, the tone was still crisp. I tested the sound and adjusted the tuning pegs slightly.
+I unzipped the black guitar bag I had been carrying and took out the acoustic guitar that had been with me for years. Although it was a bit old, the tone still had its charm. I tested the sound and I turned the knob slightly..
 
-The sun began to sink, dyeing the sky a blood red. The ruins cast long shadows in the afterglow.
+The sun began to sink, dyeing the sky a blood red. The buildings nearby cast long shadows in the afterglow.
 
 I strummed the strings.
 
-It was a very old tune, simple and sad. I had played it countless times on the school rooftop.
+It was a very old tune, simple and sad. In the school auditorium, I had played it countless times.
 
 Point listened quietly, the tea-colored glass cover of the pocket watch in her hand refracting the setting sun.
 
 The music floated in the wind, seemingly telling of those unspeakable farewells.
 
-When the song ended, Point clapped gently. The corners of her eyes seemed a bit moist, but she quickly covered it with her signature smile.
+When the song ended, Point clapped gently.
 
-Point: "That was great! As expected of my personal guitarist."
+Point: "That was great! As expected of you."
 
 I gently set the guitar aside and fished my terminal out of my pocket. The screen reflected the fiery clouds of twilight.
 
@@ -321,13 +325,13 @@ Point: "Eh? What for?"
 
 I raised the terminal and switched to the front camera.
 
-Dusk: "We rarely come here. Let's take a photo together."
+Dusk: "Since we are here, let's take a photo together."
 
 Point was obviously stunned, her eyes wide as if she couldn't believe her ears.
 
 Point: "Woah! Did the sun rise from the west? The big reporter who usually hides from cameras is actually asking to take a photo?"
 
-Dusk: "Cut the chatter. Are we doing this or not? If not, I'm putting it away."
+Dusk: "Cut the chatter. Yes or no? If not, I'm putting it away."
 
 Point: "Yes yes yes! Of course!"
 

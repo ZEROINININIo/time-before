@@ -44,10 +44,10 @@ const SideStoryChapterList: React.FC<SideStoryChapterListProps> = ({ volume, onB
                         let itemClass = "";
                         
                         if (isLegacy) {
-                             // Special Style for Legacy Chapter
+                             // Special Style for Legacy Chapter (Blue + Broken/Violent Shake)
                              itemClass = isLightTheme
-                                ? 'bg-red-50 border-red-500 text-red-900 shadow-[0_0_10px_rgba(220,38,38,0.3)]'
-                                : 'bg-red-950/20 border-red-700/50 text-red-500 shadow-[0_0_15px_rgba(185,28,28,0.2)]';
+                                ? 'bg-blue-50/80 border-blue-500 text-blue-900 shadow-[0_0_15px_rgba(37,99,235,0.4)] border-dashed animate-shake-violent skew-x-2'
+                                : 'bg-blue-950/30 border-blue-400 text-blue-400 shadow-[0_0_20px_rgba(96,165,250,0.4)] border-dashed animate-shake-violent -skew-x-1';
                         } else if (isLocked) {
                             itemClass = isLightTheme 
                                 ? 'bg-zinc-100 border-zinc-300 text-zinc-400 opacity-60 cursor-not-allowed'
@@ -70,11 +70,11 @@ const SideStoryChapterList: React.FC<SideStoryChapterListProps> = ({ volume, onB
                                     className={`
                                         w-full flex items-center gap-4 p-4 border transition-all duration-200 group relative overflow-hidden
                                         ${itemClass}
-                                        ${isLegacy ? 'hover:scale-[1.01] hover:bg-red-900/10 cursor-not-allowed' : ''}
+                                        ${isLegacy ? 'hover:scale-[1.01] hover:bg-blue-900/10 cursor-not-allowed' : ''}
                                     `}
                                 >
                                     {/* Number Index */}
-                                    <div className={`shrink-0 w-8 text-center font-mono text-xs ${isLegacy ? 'text-red-500 font-bold' : 'opacity-50'}`}>
+                                    <div className={`shrink-0 w-8 text-center font-mono text-xs ${isLegacy ? 'text-blue-500 font-bold' : 'opacity-50'}`}>
                                         {isLegacy ? '!!' : String(index + 1).padStart(2, '0')}
                                     </div>
                                     
@@ -82,7 +82,7 @@ const SideStoryChapterList: React.FC<SideStoryChapterListProps> = ({ volume, onB
                                     <div className={`
                                         shrink-0 p-2 border transition-colors
                                         ${isLegacy
-                                            ? 'bg-red-950 border-red-500 text-red-500 animate-pulse'
+                                            ? 'bg-blue-950 border-blue-500 text-blue-500 animate-pulse'
                                             : isLocked 
                                                 ? 'bg-transparent border-current opacity-50' 
                                                 : isLightTheme 
@@ -94,13 +94,25 @@ const SideStoryChapterList: React.FC<SideStoryChapterListProps> = ({ volume, onB
                                     </div>
                                     
                                     {/* Text Content */}
-                                    <div className="flex-1 text-left relative">
-                                        <div className={`font-bold font-mono text-sm md:text-base uppercase truncate ${isLegacy ? 'glitch-text-heavy tracking-widest' : ''}`} data-text={t.title}>
+                                    <div className="flex-1 text-left relative overflow-hidden">
+                                        <div className={`font-bold font-mono text-sm md:text-base uppercase truncate ${isLegacy ? 'glitch-text-heavy tracking-widest opacity-80' : ''}`} data-text={t.title}>
                                             {t.title}
                                         </div>
-                                        <div className={`text-[10px] font-mono flex items-center gap-2 ${isLegacy ? 'text-red-500/70' : 'opacity-50'}`}>
+                                        {/* Ghost Text Overlay for Legacy */}
+                                        {isLegacy && (
+                                            <>
+                                                <div className="absolute top-0 left-0 w-full h-full text-blue-300 opacity-50 animate-pulse translate-x-[2px] pointer-events-none mix-blend-overlay">
+                                                    {t.title}
+                                                </div>
+                                                <div className="absolute top-0 left-0 w-full h-full text-white opacity-20 animate-glitch translate-x-[-2px] pointer-events-none mix-blend-color-dodge">
+                                                    {t.title}
+                                                </div>
+                                            </>
+                                        )}
+
+                                        <div className={`text-[10px] font-mono flex items-center gap-2 ${isLegacy ? 'text-blue-500/70' : 'opacity-50'}`}>
                                             <span>{chapter.date}</span>
-                                            {isLegacy && <span className="font-bold border border-red-500/50 px-1 bg-red-950/30">LEGACY // RESTRICTED</span>}
+                                            {isLegacy && <span className="font-bold border border-blue-500/50 px-1 bg-blue-950/30">LEGACY // CORRUPTED</span>}
                                             {!isLocked && !isLegacy && <span className="hidden md:inline">| {t.content.length * 2} BYTES</span>}
                                         </div>
                                     </div>
@@ -113,8 +125,8 @@ const SideStoryChapterList: React.FC<SideStoryChapterListProps> = ({ volume, onB
                                     )}
 
                                     {isLegacy && (
-                                         <div className="opacity-70">
-                                             <AlertTriangle size={16} className="text-red-500" />
+                                         <div className="opacity-70 animate-pulse">
+                                             <AlertTriangle size={16} className="text-blue-500" />
                                          </div>
                                     )}
 
@@ -123,7 +135,7 @@ const SideStoryChapterList: React.FC<SideStoryChapterListProps> = ({ volume, onB
                                     
                                     {/* Legacy Special Effects */}
                                     {isLegacy && (
-                                        <div className="absolute inset-0 pointer-events-none bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(220,38,38,0.05)_10px,rgba(220,38,38,0.05)_20px)]"></div>
+                                        <div className="absolute inset-0 pointer-events-none bg-[repeating-linear-gradient(45deg,transparent,transparent_10px,rgba(59,130,246,0.05)_10px,rgba(59,130,246,0.05)_20px)] animate-[pulse_0.1s_infinite]"></div>
                                     )}
                                 </button>
                             </Reveal>
