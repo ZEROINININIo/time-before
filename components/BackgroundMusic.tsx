@@ -8,7 +8,7 @@ interface BackgroundMusicProps {
     onToggle: () => void;
     volume: number;
     onVolumeChange: (val: number) => void;
-    audioSrc?: string | null;
+    audioSources?: string[]; // Changed from audioSrc to support array fallback
     trackTitle?: string;
     trackComposer?: string;
     className?: string;
@@ -65,7 +65,7 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     onToggle,
     volume,
     onVolumeChange,
-    audioSrc = null,
+    audioSources = [],
     trackTitle = "UNKNOWN",
     trackComposer = "UNKNOWN",
     className = ""
@@ -75,12 +75,20 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
   const [error, setError] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   
-  // Retry mechanism state
+  // Manage fallback state
+  const [currentSourceIndex, setCurrentSourceIndex] = useState(0);
+  
+  // Retry mechanism state (for reloading same source)
   const [retryTrigger, setRetryTrigger] = useState(0);
   
   // Controls the overall visibility of the panel (Play Button + Volume)
   const [isExpanded, setIsExpanded] = useState(true);
   
+  // Reset fallback index if the primary track changes
+  useEffect(() => {
+      setCurrentSourceIndex(0);
+  }, [audioSources[0]]);
+
   // Auto-expand when play starts manually
   useEffect(() => {
       if (isPlaying && !isSetupMode) {
@@ -90,7 +98,7 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
 
   // Initial Load Watchdog: Retry up to 3 times if stuck
   useEffect(() => {
-      if (!audioSrc || !isPlaying || isSetupMode) return;
+      if (audioSources.length === 0 || !isPlaying || isSetupMode) return;
 
       const maxRetries = 3;
       let attempt = 0;
@@ -99,7 +107,6 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
       const checkAndRetry = () => {
           const audio = getGlobalAudio();
           // Check if it should be playing but is paused, stuck, or not ready
-          // readyState < 3 means not enough data to play current frame
           if (attempt < maxRetries && (audio.paused || audio.readyState < 3)) {
               attempt++;
               console.log(`[BGM] Audio appears stuck. Force reloading attempt ${attempt}/${maxRetries}`);
@@ -112,7 +119,7 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
       timer = window.setTimeout(checkAndRetry, 1500);
 
       return () => window.clearTimeout(timer);
-  }, []); // Empty dependency array = runs once on mount (page load)
+  }, []); 
 
   // Advanced Volume Fader
   const performFade = (targetVol: number, duration: number): Promise<void> => {
@@ -144,7 +151,7 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
       });
   };
 
-  // 1. Initialize Listeners
+  // 1. Initialize Listeners and Fallback Logic
   useEffect(() => {
     const audio = getGlobalAudio();
 
@@ -154,9 +161,19 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     };
 
     const handleError = (e: Event) => {
-        console.warn("Audio Error:", e);
-        setError(true);
-        setIsLoading(false);
+        console.warn(`Audio Error on source index ${currentSourceIndex}:`, e);
+        
+        // Fallback Logic
+        if (currentSourceIndex < audioSources.length - 1) {
+            console.log(`[BGM] Switching to backup source...`);
+            setCurrentSourceIndex(prev => prev + 1);
+            // This state update will trigger the source switching effect below
+            setError(false);
+        } else {
+            // No more sources to try
+            setError(true);
+            setIsLoading(false);
+        }
     };
 
     const handleWaiting = () => setIsLoading(true);
@@ -182,17 +199,19 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         audio.removeEventListener('waiting', handleWaiting);
         audio.removeEventListener('playing', handlePlaying);
     };
-  }, []);
+  }, [audioSources, currentSourceIndex]); // Re-bind when sources list or index changes
 
-  // 2. Handle Source Switching (Depends on audioSrc AND retryTrigger)
+  // 2. Handle Source Switching (Depends on active source from array)
   useEffect(() => {
     const audio = getGlobalAudio();
-    const newAbsSrc = audioSrc ? getAbsoluteUrl(audioSrc) : "";
+    const activeSrc = audioSources[currentSourceIndex] || "";
+    
+    const newAbsSrc = activeSrc ? getAbsoluteUrl(activeSrc) : "";
     const audioCurrentAbsSrc = audio.src; 
 
     // Optimization: If source matches AND it's not a forced retry (trigger > 0), skip reload
     if (newAbsSrc && audioCurrentAbsSrc === newAbsSrc && retryTrigger === 0) {
-        currentSrcRef.current = audioSrc;
+        currentSrcRef.current = activeSrc;
         // Resume logic
         if (isPlaying) {
             if (audio.paused) {
@@ -216,7 +235,7 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         return;
     }
     
-    currentSrcRef.current = audioSrc;
+    currentSrcRef.current = activeSrc;
 
     const switchTrack = async () => {
         setIsLoading(true);
@@ -257,7 +276,7 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
 
     switchTrack();
 
-  }, [audioSrc, retryTrigger]); // Added retryTrigger dependency
+  }, [audioSources, currentSourceIndex, retryTrigger]);
 
   // 3. Handle Play/Pause Toggle
   useEffect(() => {
@@ -305,7 +324,7 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
       onVolumeChange(parseFloat(e.target.value));
   };
 
-  const isDisabled = !audioSrc || error;
+  const isDisabled = audioSources.length === 0 || error;
 
   if (isSetupMode) {
     return (

@@ -25,7 +25,7 @@ interface NavigationProps {
   readerFont: ReaderFont;
   setReaderFont: (font: ReaderFont) => void;
   // Audio Props
-  audioSrc: string | null;
+  audioSources: string[];
   trackTitle: string;
   trackComposer: string;
 }
@@ -35,7 +35,7 @@ const Navigation: React.FC<NavigationProps> = ({
     crtEnabled, setCrtEnabled, isLightTheme, setIsLightTheme,
     bgmPlaying, setBgmPlaying, bgmVolume, setBgmVolume,
     readerFont, setReaderFont,
-    audioSrc, trackTitle, trackComposer
+    audioSources, trackTitle, trackComposer
 }) => {
   const [showMobileSettings, setShowMobileSettings] = useState(false);
   const [showDesktopSettings, setShowDesktopSettings] = useState(false);
@@ -117,7 +117,7 @@ const Navigation: React.FC<NavigationProps> = ({
               onToggle={() => setBgmPlaying(!bgmPlaying)}
               volume={bgmVolume}
               onVolumeChange={setBgmVolume}
-              audioSrc={audioSrc}
+              audioSources={audioSources}
               trackTitle={trackTitle}
               trackComposer={trackComposer}
               className="shadow-2xl opacity-90"
@@ -146,7 +146,7 @@ const Navigation: React.FC<NavigationProps> = ({
             NOVA<br/>LABS
           </h1>
           <div className="text-[10px] text-ash-gray font-mono bg-ash-dark p-1 inline-block border border-ash-gray">
-            ARCHIVE_SYS // TL.1.14-Z6
+            ARCHIVE_SYS // TL.1.14-Z8
           </div>
         </div>
 
@@ -231,7 +231,7 @@ const Navigation: React.FC<NavigationProps> = ({
               onToggle={() => setBgmPlaying(!bgmPlaying)}
               volume={bgmVolume}
               onVolumeChange={setBgmVolume}
-              audioSrc={audioSrc}
+              audioSources={audioSources}
               trackTitle={trackTitle}
               trackComposer={trackComposer}
           />
@@ -273,7 +273,7 @@ const Navigation: React.FC<NavigationProps> = ({
                         <Settings size={16} className="text-ash-light" />
                         <span className="text-xs font-bold text-ash-light font-mono uppercase tracking-wider">{t.config}</span>
                     </div>
-                    <div className="text-[10px] text-ash-gray font-mono">TL.1.14-Z6</div>
+                    <div className="text-[10px] text-ash-gray font-mono">TL.1.14-Z8</div>
                 </div>
                 
                 <div className="flex flex-col gap-3">

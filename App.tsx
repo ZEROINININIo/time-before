@@ -17,10 +17,15 @@ import { Language } from './types';
 import { ReaderFont } from './components/fonts/fontConfig';
 import { unlockGlobalAudio } from './components/BackgroundMusic';
 
-// BGM Configuration - HTTPS Sources
-const BGM_MAIN = "https://zerox.ccccocccc.cc/bgm/main.mp3";
-const BGM_DAILY = "https://zerox.ccccocccc.cc/bgm/daily.mp3";
-const BGM_RAIN = "https://zerox.ccccocccc.cc/bgm/x.mp3";
+// BGM Configuration - Dual Source Strategy
+const AUDIO_HOST_PRIMARY = "https://zeroxv.tttttttttt.top";
+const AUDIO_HOST_BACKUP = "https://zerox.ccccocccc.cc";
+
+// Helper to generate source array with fallback
+const getSources = (path: string) => [
+  `${AUDIO_HOST_PRIMARY}${path}`,
+  `${AUDIO_HOST_BACKUP}${path}`
+];
 
 const STORAGE_KEY = 'nova_labs_config_v6';
 
@@ -158,16 +163,16 @@ const App: React.FC = () => {
     if (activeTab === 'sidestories') {
         // Only switch BGM if inside a specific volume
         if (activeSideStoryVolumeId === 'VOL_DAILY') {
-            return { src: BGM_DAILY, title: "TIMELINE DAILY", composer: "NOVA_OST" };
+            return { sources: getSources("/bgm/daily.mp3"), title: "TIMELINE DAILY", composer: "NOVA_OST" };
         }
         if (activeSideStoryVolumeId === 'VOL_MEMORIES') {
-            return { src: BGM_RAIN, title: "神隠しの真相", composer: "しゃろう" };
+            return { sources: getSources("/bgm/x.mp3"), title: "神隠しの真相", composer: "しゃろう" };
         }
         // If just in the menu (activeSideStoryVolumeId is null) or unknown volume, fall back to MAIN
-        return { src: BGM_MAIN, title: "TIMELINE MAIN", composer: "NOVA_OST" };
+        return { sources: getSources("/bgm/main.mp3"), title: "TIMELINE MAIN", composer: "NOVA_OST" };
     }
     // Default / Home / Reader
-    return { src: BGM_MAIN, title: "TIMELINE MAIN", composer: "NOVA_OST" };
+    return { sources: getSources("/bgm/main.mp3"), title: "TIMELINE MAIN", composer: "NOVA_OST" };
   };
 
   const audioConfig = getAudioConfig();
@@ -240,7 +245,7 @@ const App: React.FC = () => {
             readerFont={readerFont}
             setReaderFont={setReaderFont}
             // Audio Props
-            audioSrc={audioConfig.src}
+            audioSources={audioConfig.sources}
             trackTitle={audioConfig.title}
             trackComposer={audioConfig.composer}
           />

@@ -97,7 +97,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, language, setLanguage }
   }[language];
 
   return (
-    <div className="flex flex-col min-h-full bg-halftone text-ash-light font-mono relative">
+    <div className="flex flex-col min-h-full bg-halftone text-ash-light font-custom-02 relative">
       
       {/* Scrollable Content Container with Padding */}
       <div className="flex-1 flex flex-col p-4 md:p-8 pb-32 lg:pb-12">
@@ -116,10 +116,10 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, language, setLanguage }
                 </div>
                 
                 <h2 className="text-xs font-bold text-ash-gray mb-4 flex items-center gap-2 uppercase border-b border-dashed border-ash-gray/30 pb-2">
-                    <Terminal size={14} /> ROOT_CONSOLE // TL.1.14-Z6
+                    <Terminal size={14} /> ROOT_CONSOLE // TL.1.14-Z7
                 </h2>
                 
-                <div className="flex-1 font-mono text-xs md:text-sm leading-relaxed whitespace-pre-wrap text-ash-gray">
+                <div className="flex-1 font-custom-02 text-xs md:text-sm leading-relaxed whitespace-pre-wrap text-ash-gray">
                     {typedText}
                     {showCursor && <span className="inline-block w-2 h-4 bg-ash-light ml-1 align-middle"></span>}
                 </div>
@@ -140,7 +140,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, language, setLanguage }
 
                         {/* Header */}
                         <div className="w-full p-4 border-b-2 border-ash-gray bg-ash-dark/30 flex justify-between items-center group-hover:bg-emerald-950/30 group-hover:border-emerald-900/50 transition-colors duration-300 z-20 relative">
-                            <div className="flex items-center gap-2 font-bold font-mono group-hover:text-emerald-400 transition-colors">
+                            <div className="flex items-center gap-2 font-bold font-custom-02 group-hover:text-emerald-400 transition-colors">
                                 <BookOpen size={18} />
                                 <span>ARCHIVE_CORE</span>
                             </div>
@@ -162,7 +162,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, language, setLanguage }
                                     <span className="absolute top-0 left-0 ml-0.5 text-blue-500 opacity-0 group-hover:opacity-50 group-hover:animate-glitch pointer-events-none mix-blend-screen" style={{ animationDirection: 'reverse' }}>{t.main_archive}</span>
                                 </span>
                             </h3>
-                            <p className="text-ash-gray text-xs md:text-sm max-w-sm mb-8 font-mono leading-relaxed group-hover:text-emerald-200/60 transition-colors">
+                            <p className="text-ash-gray text-xs md:text-sm max-w-sm mb-8 font-custom-02 leading-relaxed group-hover:text-emerald-200/60 transition-colors">
                                 {t.main_desc}
                             </p>
                             
@@ -189,7 +189,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, language, setLanguage }
                     >
                         {/* Header */}
                         <div className="w-full p-4 border-b-2 border-slate-700 bg-slate-900/50 flex justify-between items-center group-hover:bg-cyan-400 group-hover:text-black transition-colors">
-                            <div className="flex items-center gap-2 font-bold font-mono text-cyan-500 group-hover:text-black">
+                            <div className="flex items-center gap-2 font-bold font-custom-02 text-cyan-500 group-hover:text-black">
                                 <GitBranch size={18} />
                                 <span>MEMORY_FRAGS</span>
                             </div>
@@ -204,7 +204,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, language, setLanguage }
                             <h3 className="text-3xl md:text-5xl font-black uppercase text-cyan-100 mb-4 group-hover:text-cyan-300 group-hover:scale-105 transition-transform origin-left drop-shadow-[0_0_5px_rgba(34,211,238,0.5)]">
                                 {t.side_archive}
                             </h3>
-                            <p className="text-slate-400 text-xs md:text-sm max-w-sm mb-8 font-mono leading-relaxed group-hover:text-cyan-200/80">
+                            <p className="text-slate-400 text-xs md:text-sm max-w-sm mb-8 font-custom-02 leading-relaxed group-hover:text-cyan-200/80">
                                 {t.side_desc}
                             </p>
                             
@@ -225,7 +225,7 @@ const HomePage: React.FC<HomePageProps> = ({ onNavigate, language, setLanguage }
       </div>
 
       {/* Bottom Status Footer - Adjusted for Mobile to sit above nav bar */}
-      <div className="absolute bottom-20 lg:bottom-0 left-0 right-0 bg-ash-black border-t-2 border-ash-gray p-2 text-[10px] text-ash-gray font-mono flex justify-between items-center select-none z-20">
+      <div className="absolute bottom-20 lg:bottom-0 left-0 right-0 bg-ash-black border-t-2 border-ash-gray p-2 text-[10px] text-ash-gray font-custom-02 flex justify-between items-center select-none z-20">
           <div className="flex items-center gap-2 md:gap-4 px-2 overflow-hidden shrink-0">
                <div className="flex items-center gap-1 shrink-0">
                    <Wifi size={10} /> 
