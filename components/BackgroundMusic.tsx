@@ -131,6 +131,57 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
       }, 50); // Update every 50ms
   };
 
+  // Effect to handle user interaction for autoplay
+  useEffect(() => {
+    const audio = getGlobalAudio();
+    
+    // Function to try playing audio after user interaction
+    const handleUserInteraction = () => {
+      if (isPlaying && audioSrc && !error && audio.paused) {
+        const playAudio = async () => {
+          try {
+            // Start from silence for fade-in
+            audio.volume = 0;
+            
+            // Load audio if not already loaded
+            if (audio.readyState < 3) { // HAVE_FUTURE_DATA
+              await audio.load();
+            }
+            
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+              await playPromise;
+              // Fade In
+              performFade(audio, volume, FADE_IN_DURATION);
+            }
+          } catch (e) {
+            console.warn("User interaction playback attempt failed:", e);
+            // Don't set error state here as it might be recoverable
+          }
+        };
+        
+        playAudio();
+      }
+      
+      // Remove the event listeners after first successful interaction
+      window.removeEventListener('click', handleUserInteraction);
+      window.removeEventListener('touchstart', handleUserInteraction);
+      window.removeEventListener('keydown', handleUserInteraction);
+    };
+    
+    // Add event listeners for user interaction
+    window.addEventListener('click', handleUserInteraction);
+    window.addEventListener('touchstart', handleUserInteraction);
+    window.addEventListener('keydown', handleUserInteraction);
+    
+    return () => {
+      // Cleanup event listeners
+      window.removeEventListener('click', handleUserInteraction);
+      window.removeEventListener('touchstart', handleUserInteraction);
+      window.removeEventListener('keydown', handleUserInteraction);
+    };
+  }, [isPlaying, audioSrc, error, volume]);
+
   // Manage Playback State & Source
   useEffect(() => {
     const audio = getGlobalAudio();
@@ -145,6 +196,19 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     // Canplaythrough listener - ensures audio is loaded before playing
     const handleCanPlayThrough = () => {
         console.log("Audio can play through");
+        // Try to play immediately when canplaythrough is fired if we're supposed to be playing
+        if (isPlaying && !error && audio.paused) {
+            const playPromise = audio.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    // Fade In
+                    performFade(audio, volume, FADE_IN_DURATION);
+                }).catch(playError => {
+                    console.warn("Canplaythrough playback attempt failed:", playError);
+                    // Will try again on user interaction
+                });
+            }
+        }
     };
     
     // Play listener - for debugging and state management
@@ -196,7 +260,7 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         // Preload audio for smoother playback
         audio.preload = 'auto';
         
-        // If we switch tracks while playing, the loop below handles the play trigger
+        // If we switch tracks while playing, load the new track
         if (isPlaying) {
             // Load the new track before attempting to play
             audio.load();
@@ -208,9 +272,10 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         // --- DESIRED STATE: PLAYING ---
         if (audio.paused) {
             // Start from silence for fade-in
-            audio.volume = 0; 
+            audio.volume = 0;
             
-            // Handle different browser autoplay policies and Vercel environment
+            // Try to play immediately - will fail if no user interaction yet
+            // but will be retried on canplaythrough or user interaction
             const playAudio = async () => {
                 try {
                     // Load audio if not already loaded
@@ -218,33 +283,15 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
                         await audio.load();
                     }
                     
-                    // Ensure we're in a user-interactive context before playing
-                    if (audio.readyState >= 3) {
-                        const playPromise = audio.play();
-                        if (playPromise !== undefined) {
-                            await playPromise;
-                            // Fade In
-                            performFade(audio, volume, FADE_IN_DURATION);
-                        }
-                    } else {
-                        console.warn("Audio not ready for playback, waiting for data");
-                        // Try again once canplaythrough is fired
-                        const handleCanPlayThroughForPlay = () => {
-                            audio.removeEventListener('canplaythrough', handleCanPlayThroughForPlay);
-                            const playPromise = audio.play();
-                            if (playPromise !== undefined) {
-                                playPromise.then(() => {
-                                    performFade(audio, volume, FADE_IN_DURATION);
-                                }).catch(playError => {
-                                    console.warn("Delayed playback attempt failed:", playError);
-                                });
-                            }
-                        };
-                        audio.addEventListener('canplaythrough', handleCanPlayThroughForPlay);
+                    const playPromise = audio.play();
+                    if (playPromise !== undefined) {
+                        await playPromise;
+                        // Fade In
+                        performFade(audio, volume, FADE_IN_DURATION);
                     }
                 } catch (e) {
-                    console.warn("Playback prevented (autoplay policy or error):", e);
-                    // Don't set error state here as it might be recoverable by user interaction
+                    console.warn("Initial autoplay prevented (browser policy):", e);
+                    // Will try again on user interaction or canplaythrough
                 }
             };
             
