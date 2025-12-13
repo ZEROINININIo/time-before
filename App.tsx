@@ -14,11 +14,15 @@ import CustomCursor from './components/CustomCursor';
 import StoryEntryAnimation from './components/StoryEntryAnimation';
 import LoadingOverlay from './components/LoadingOverlay';
 import { Language } from './types';
+import { ReaderFont } from './components/fonts/fontConfig';
 
-// The requested track: Sharou - The Truth of Spirit Hiding
-const SPECIFIC_TRACK_URL = "https://music.163.com/song/media/outer/url?id=1831400969.mp3";
+// BGM Configuration - Using actual filenames, URL encoding handled by BackgroundMusic component
+const BGM_MAIN = "bgm/TIMELINE-MAIN.mp3";
+const BGM_DAILY = "bgm/TIMELINE-DAILY.mp3";
+// Using actual filename without URL encoding
+const BGM_RAIN = "bgm/神隠しの真相.mp3";
 
-const STORAGE_KEY = 'nova_labs_config_v5';
+const STORAGE_KEY = 'nova_labs_config_v6'; // Version bumped for font config
 
 interface AppConfig {
   language: Language;
@@ -27,6 +31,7 @@ interface AppConfig {
   setupCompleted: boolean;
   bgmPlaying: boolean;
   bgmVolume: number;
+  readerFont: ReaderFont;
 }
 
 const defaultConfig: AppConfig = {
@@ -34,8 +39,9 @@ const defaultConfig: AppConfig = {
   crtEnabled: true,
   isLightTheme: false,
   setupCompleted: false,
-  bgmPlaying: true, // Changed default to true
-  bgmVolume: 0.15 // Requested 15% default volume
+  bgmPlaying: true, 
+  bgmVolume: 0.15,
+  readerFont: 'custom-02'
 };
 
 const App: React.FC = () => {
@@ -60,7 +66,6 @@ const App: React.FC = () => {
   const [currentChapterIndex, setCurrentChapterIndex] = useState(0);
   
   // BGM Context State
-  // We track which side story volume is active to determine if music should play
   const [activeSideStoryVolumeId, setActiveSideStoryVolumeId] = useState<string | null>(null);
   
   // Transition State
@@ -71,6 +76,7 @@ const App: React.FC = () => {
   const [crtEnabled, setCrtEnabled] = useState(initialConfig.crtEnabled);
   const [isLightTheme, setIsLightTheme] = useState(initialConfig.isLightTheme);
   const [setupCompleted, setSetupCompleted] = useState(initialConfig.setupCompleted);
+  const [readerFont, setReaderFont] = useState<ReaderFont>(initialConfig.readerFont);
   
   // BGM State (Lifted)
   const [bgmPlaying, setBgmPlaying] = useState(initialConfig.bgmPlaying);
@@ -84,10 +90,11 @@ const App: React.FC = () => {
       isLightTheme,
       setupCompleted,
       bgmPlaying,
-      bgmVolume
+      bgmVolume,
+      readerFont
     };
     localStorage.setItem(STORAGE_KEY, JSON.stringify(config));
-  }, [language, crtEnabled, isLightTheme, setupCompleted, bgmPlaying, bgmVolume]);
+  }, [language, crtEnabled, isLightTheme, setupCompleted, bgmPlaying, bgmVolume, readerFont]);
 
   const handleBootComplete = () => {
     if (setupCompleted) {
@@ -131,25 +138,19 @@ const App: React.FC = () => {
   };
 
   // --- Dynamic Audio Logic ---
-  // The specific track only plays in Side Story Volume: "那场仍未结束的零碎之雨" (ID: VOL_MEMORIES)
-  const shouldPlaySpecificTrack = activeTab === 'sidestories' && activeSideStoryVolumeId === 'VOL_MEMORIES';
-  
-  // Auto-play effect when entering the specific volume
-  useEffect(() => {
-    if (shouldPlaySpecificTrack) {
-        setBgmPlaying(true);
-    } else {
-        // Optional: Auto-stop when leaving? 
-        // For now, we let it stay 'playing' state, but the BackgroundMusic component 
-        // will handle silence if src is null, or we can force false here.
-        // Let's force false to stop noise when leaving the special zone.
-        setBgmPlaying(false);
+  const getAudioConfig = () => {
+    if (activeTab === 'sidestories') {
+        if (activeSideStoryVolumeId === 'VOL_DAILY') {
+            return { src: BGM_DAILY, title: "TIMELINE DAILY", composer: "NOVA_OST" };
+        }
+        if (activeSideStoryVolumeId === 'VOL_MEMORIES') {
+            return { src: BGM_RAIN, title: "神隠しの真相", composer: "NOVA_OST" };
+        }
     }
-  }, [shouldPlaySpecificTrack]);
+    return { src: BGM_MAIN, title: "TIMELINE MAIN", composer: "NOVA_OST" };
+  };
 
-  const currentAudioSrc = shouldPlaySpecificTrack ? SPECIFIC_TRACK_URL : null;
-  const currentTrackTitle = shouldPlaySpecificTrack ? "神隠しの真相" : "NO_SIGNAL";
-  const currentTrackComposer = shouldPlaySpecificTrack ? "しゃろう" : "";
+  const audioConfig = getAudioConfig();
 
   return (
     <>
@@ -179,6 +180,8 @@ const App: React.FC = () => {
             setBgmPlaying={setBgmPlaying}
             bgmVolume={bgmVolume}
             setBgmVolume={setBgmVolume}
+            readerFont={readerFont}
+            setReaderFont={setReaderFont}
         />
       )}
 
@@ -214,10 +217,12 @@ const App: React.FC = () => {
             setBgmPlaying={setBgmPlaying}
             bgmVolume={bgmVolume}
             setBgmVolume={setBgmVolume}
+            readerFont={readerFont}
+            setReaderFont={setReaderFont}
             // Audio Props
-            audioSrc={currentAudioSrc}
-            trackTitle={currentTrackTitle}
-            trackComposer={currentTrackComposer}
+            audioSrc={audioConfig.src}
+            trackTitle={audioConfig.title}
+            trackComposer={audioConfig.composer}
           />
           
           <main className="flex-1 h-full overflow-hidden relative z-10 border-l-2 border-ash-dark">
@@ -241,6 +246,7 @@ const App: React.FC = () => {
                       onChapterChange={setCurrentChapterIndex} 
                       language={language}
                       isLightTheme={isLightTheme}
+                      readerFont={readerFont}
                     />
                   )}
                   {activeTab === 'sidestories' && (
@@ -248,6 +254,7 @@ const App: React.FC = () => {
                       language={language} 
                       isLightTheme={isLightTheme}
                       onVolumeChange={setActiveSideStoryVolumeId}
+                      readerFont={readerFont}
                     />
                   )}
                 </div>

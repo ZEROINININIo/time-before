@@ -1,11 +1,13 @@
 
 import React, { useState } from 'react';
-import { Database, Book, Users, Home, GitBranch, Settings, Globe } from 'lucide-react';
+import { Database, Book, Users, Home, GitBranch, Settings, Globe, X } from 'lucide-react';
 import BackgroundMusic from './BackgroundMusic';
 import CRTToggle from './CRTToggle';
 import ThemeToggle from './ThemeToggle';
 import FullscreenToggle from './FullscreenToggle';
+import FontSelector from './fonts/FontSelector';
 import { Language } from '../types';
+import { ReaderFont } from './fonts/fontConfig';
 
 interface NavigationProps {
   activeTab: string;
@@ -20,6 +22,8 @@ interface NavigationProps {
   setBgmPlaying: (val: boolean) => void;
   bgmVolume: number;
   setBgmVolume: (val: number) => void;
+  readerFont: ReaderFont;
+  setReaderFont: (font: ReaderFont) => void;
   // Audio Props
   audioSrc: string | null;
   trackTitle: string;
@@ -30,9 +34,11 @@ const Navigation: React.FC<NavigationProps> = ({
     activeTab, setActiveTab, language, setLanguage,
     crtEnabled, setCrtEnabled, isLightTheme, setIsLightTheme,
     bgmPlaying, setBgmPlaying, bgmVolume, setBgmVolume,
+    readerFont, setReaderFont,
     audioSrc, trackTitle, trackComposer
 }) => {
   const [showMobileSettings, setShowMobileSettings] = useState(false);
+  const [showDesktopSettings, setShowDesktopSettings] = useState(false);
 
   const translations = {
     'zh-CN': {
@@ -46,7 +52,8 @@ const Navigation: React.FC<NavigationProps> = ({
       mobileChars: '人员',
       mobileData: '数据',
       mobileRead: '阅读',
-      mobileSide: '支线'
+      mobileSide: '支线',
+      settingsTitle: '系统配置面板'
     },
     'zh-TW': {
       home: '根控制台',
@@ -59,7 +66,8 @@ const Navigation: React.FC<NavigationProps> = ({
       mobileChars: '人員',
       mobileData: '數據',
       mobileRead: '閱讀',
-      mobileSide: '支線'
+      mobileSide: '支線',
+      settingsTitle: '系統配置面板'
     },
     'en': {
       home: 'ROOT_MENU',
@@ -72,7 +80,8 @@ const Navigation: React.FC<NavigationProps> = ({
       mobileChars: 'TEAM',
       mobileData: 'DATA',
       mobileRead: 'READ',
-      mobileSide: 'SIDE'
+      mobileSide: 'SIDE',
+      settingsTitle: 'SYSTEM CONFIGURATION'
     }
   };
 
@@ -123,7 +132,7 @@ const Navigation: React.FC<NavigationProps> = ({
             NOVA<br/>LABS
           </h1>
           <div className="text-[10px] text-ash-gray font-mono bg-ash-dark p-1 inline-block border border-ash-gray">
-            ARCHIVE_SYS // TL.1.14-I
+            ARCHIVE_SYS // TL.1.14-R
           </div>
         </div>
 
@@ -200,31 +209,20 @@ const Navigation: React.FC<NavigationProps> = ({
           </button>
         </div>
 
-        {/* System Configuration Controls (Desktop Only) */}
+        {/* System Configuration Trigger (Desktop Only) */}
         <div className="hidden lg:flex flex-col gap-2 mt-8 border-t-2 border-dashed border-ash-gray/30 pt-6 shrink-0">
-          <div className="text-[10px] text-ash-gray font-mono mb-1 uppercase px-1">[SYSTEM_CONFIG]</div>
-          <button 
-            onClick={cycleLanguage}
-            className="flex items-center justify-between w-full px-3 py-3 border-2 transition-all duration-300 shadow-hard bg-ash-black text-ash-gray border-ash-gray/50 hover:border-ash-light hover:text-ash-light group"
+          <div className="text-[10px] text-ash-gray font-mono mb-1 uppercase px-1">[SYSTEM]</div>
+          <button
+            onClick={() => setShowDesktopSettings(true)}
+            className={`flex items-center gap-3 px-4 py-3 border-2 transition-all duration-300 group shadow-hard ${
+                showDesktopSettings
+                ? 'bg-ash-light text-ash-black border-ash-light'
+                : 'bg-ash-black text-ash-gray border-ash-gray/50 hover:border-ash-light hover:text-ash-light'
+            }`}
           >
-            <div className="flex items-center gap-3">
-              <Globe size={16} />
-              <span className="text-[10px] font-mono font-bold uppercase">Language</span>
-            </div>
-            <span className="text-[10px] font-mono font-bold">{getLangLabel()}</span>
+            <Settings size={18} className={`transition-transform duration-700 ${showDesktopSettings ? 'rotate-180' : ''}`} />
+            <span className="text-sm font-bold tracking-widest uppercase">{t.config}</span>
           </button>
-          <BackgroundMusic 
-             isPlaying={bgmPlaying} 
-             onToggle={() => setBgmPlaying(!bgmPlaying)}
-             volume={bgmVolume}
-             onVolumeChange={setBgmVolume}
-             audioSrc={audioSrc}
-             trackTitle={trackTitle}
-             trackComposer={trackComposer}
-          />
-          <CRTToggle value={crtEnabled} onChange={setCrtEnabled} language={language} />
-          <FullscreenToggle language={language} />
-          <ThemeToggle value={isLightTheme} onChange={setIsLightTheme} />
         </div>
 
         <div className="hidden lg:block mt-6 pt-4 border-t-2 border-dashed border-ash-gray/30 text-ash-gray text-[10px] font-mono leading-tight shrink-0">
@@ -271,6 +269,7 @@ const Navigation: React.FC<NavigationProps> = ({
                         trackTitle={trackTitle}
                         trackComposer={trackComposer}
                     />
+                    <FontSelector value={readerFont} onChange={setReaderFont} language={language} />
                     <CRTToggle value={crtEnabled} onChange={setCrtEnabled} language={language} />
                     <FullscreenToggle language={language} />
                     <ThemeToggle value={isLightTheme} onChange={setIsLightTheme} />
@@ -278,6 +277,78 @@ const Navigation: React.FC<NavigationProps> = ({
                 
                 <div className="mt-4 pt-2 border-t border-dashed border-ash-gray/30 text-[10px] text-ash-gray font-mono text-center">
                     NOVA_LABS_ARCHIVE // SYSTEM_OVERLAY
+                </div>
+            </div>
+        </div>
+      )}
+
+      {/* Desktop Settings Modal (Floating Window) */}
+      {showDesktopSettings && (
+        <div 
+            className="fixed inset-0 z-[100] hidden lg:flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in"
+            onClick={() => setShowDesktopSettings(false)}
+        >
+            <div 
+                className="w-[450px] bg-ash-black border-2 border-ash-light p-6 shadow-[0_0_50px_rgba(0,0,0,0.7)] relative animate-zoom-in-fast"
+                onClick={e => e.stopPropagation()}
+            >
+                {/* Modal Header */}
+                <div className="flex items-center justify-between mb-6 border-b-2 border-ash-gray/30 pb-4">
+                    <div className="flex items-center gap-3">
+                        <div className="p-1.5 bg-ash-light text-ash-black">
+                            <Settings size={20} />
+                        </div>
+                        <h2 className="text-lg font-black text-ash-light uppercase tracking-widest">{t.settingsTitle}</h2>
+                    </div>
+                    <button 
+                        onClick={() => setShowDesktopSettings(false)} 
+                        className="text-ash-gray hover:text-ash-light transition-colors hover:bg-ash-dark p-1"
+                    >
+                        <X size={24} />
+                    </button>
+                </div>
+
+                {/* Modal Content Grid */}
+                <div className="flex flex-col gap-4 max-h-[70vh] overflow-y-auto custom-scrollbar">
+                    
+                    {/* Language Row */}
+                    <button 
+                      onClick={cycleLanguage}
+                      className="flex items-center justify-between w-full px-4 py-3 border-2 transition-all duration-300 shadow-hard bg-ash-black text-ash-gray border-ash-gray/50 hover:border-ash-light hover:text-ash-light group"
+                    >
+                      <div className="flex items-center gap-3">
+                        <Globe size={18} />
+                        <span className="text-xs font-mono font-bold uppercase">Language Select</span>
+                      </div>
+                      <span className="text-xs font-mono font-bold bg-ash-dark px-2 py-1 border border-ash-gray/30 group-hover:border-ash-gray">{getLangLabel()}</span>
+                    </button>
+
+                    {/* Full Width Controls */}
+                    <BackgroundMusic 
+                        isPlaying={bgmPlaying} 
+                        onToggle={() => setBgmPlaying(!bgmPlaying)}
+                        volume={bgmVolume}
+                        onVolumeChange={setBgmVolume}
+                        audioSrc={audioSrc}
+                        trackTitle={trackTitle}
+                        trackComposer={trackComposer}
+                    />
+                    
+                    <FontSelector value={readerFont} onChange={setReaderFont} language={language} />
+
+                    {/* Grid Controls */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <CRTToggle value={crtEnabled} onChange={setCrtEnabled} language={language} />
+                        <ThemeToggle value={isLightTheme} onChange={setIsLightTheme} />
+                    </div>
+                    
+                    <FullscreenToggle language={language} />
+                </div>
+
+                {/* Modal Footer */}
+                <div className="mt-6 pt-3 border-t border-dashed border-ash-gray/30 flex justify-between items-center text-[10px] text-ash-gray font-mono">
+                    <span>SYS_CFG // USER_PREF</span>
+                    <span className="opacity-50">NOVA_ARCHIVE_OS</span>
                 </div>
             </div>
         </div>

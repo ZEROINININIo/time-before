@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
@@ -7,15 +8,17 @@
 
     <link rel="icon" href="https://free.picui.cn/free/2025/12/08/6936e856897d6.png" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=Noto+Serif+SC:wght@400;700&family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
               sans: ['"Noto Sans SC"', 'sans-serif'],
+              serif: ['"Noto Serif SC"', 'serif'],
               mono: ['"JetBrains Mono"', 'monospace'],
               display: ['"JetBrains Mono"', 'monospace'],
+              'custom-02': ['"CustomFont02"', '"Noto Sans SC"', 'sans-serif'],
             },
             colors: {
               'ash-black': 'var(--ash-black)',
@@ -36,12 +39,28 @@
               'zoom-in-fast': 'zoomIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards',
               'tunnel': 'tunnel 2s linear infinite',
               'data-rain': 'dataRain 2s linear infinite',
+              'data-rain-card': 'dataRainCard 2s linear infinite',
+              'shake-violent': 'shakeViolent 0.25s infinite',
+              'shimmer': 'shimmer 2s linear infinite',
             },
             keyframes: {
               glitch: {
                 '2%, 64%': { transform: 'translate(2px,0) skew(0deg)' },
                 '4%, 60%': { transform: 'translate(-2px,0) skew(0deg)' },
                 '62%': { transform: 'translate(0,0) skew(5deg)' },
+              },
+              shakeViolent: {
+                '0%': { transform: 'translate(1px, 1px) rotate(0deg)' },
+                '10%': { transform: 'translate(-1px, -2px) rotate(-1deg)' },
+                '20%': { transform: 'translate(-3px, 0px) rotate(1deg)' },
+                '30%': { transform: 'translate(3px, 2px) rotate(0deg)' },
+                '40%': { transform: 'translate(1px, -1px) rotate(1deg)' },
+                '50%': { transform: 'translate(-1px, 2px) rotate(-1deg)' },
+                '60%': { transform: 'translate(-3px, 1px) rotate(0deg)' },
+                '70%': { transform: 'translate(3px, 1px) rotate(-1deg)' },
+                '80%': { transform: 'translate(-1px, -1px) rotate(1deg)' },
+                '90%': { transform: 'translate(1px, 2px) rotate(0deg)' },
+                '100%': { transform: 'translate(1px, -2px) rotate(-1deg)' }
               },
               scanline: {
                 '0%': { transform: 'translateY(-100%)' },
@@ -83,6 +102,16 @@
                 '20%': { opacity: '1' },
                 '80%': { opacity: '1' },
                 '100%': { transform: 'translateY(100vh)', opacity: '0' }
+              },
+              dataRainCard: {
+                '0%': { transform: 'translateY(0)', opacity: '0' },
+                '10%': { opacity: '1' },
+                '90%': { opacity: '1' },
+                '100%': { transform: 'translateY(300px)', opacity: '0' }
+              },
+              shimmer: {
+                '0%': { transform: 'translateX(-100%)' },
+                '100%': { transform: 'translateX(200%)' }
               }
             }
           }
@@ -104,6 +133,13 @@
         
         --grid-color: #27272a;
         --halftone-color: #27272a;
+      }
+
+      @font-face {
+        font-family: 'CustomFont02';
+        src: url('./02.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
       }
 
       body.light-theme {
@@ -215,6 +251,97 @@
         pointer-events: none;
         animation: scanline 8s linear infinite;
       }
+
+      /* Legacy Readable Glitch Effect */
+      .legacy-text {
+        text-shadow: 1px 0 0 rgba(255,0,0,0.4), -1px 0 0 rgba(0,0,255,0.4);
+        animation: text-flicker 4s infinite;
+      }
+      @keyframes text-flicker {
+        0% { opacity: 1; }
+        95% { opacity: 1; }
+        96% { opacity: 0.8; transform: skewX(1deg); }
+        97% { opacity: 1; transform: skewX(0deg); }
+        98% { opacity: 1; }
+        99% { opacity: 0.9; }
+        100% { opacity: 1; }
+      }
+
+      /* Pre-loader specific styles */
+      .loading-container {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: #09090b;
+        color: #71717a;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-family: 'JetBrains Mono', monospace;
+        z-index: 10000;
+      }
+      .star-icon {
+        width: 64px;
+        height: 64px;
+        margin-bottom: 32px;
+        fill: #e4e4e7;
+        animation: star-pulse 2s infinite ease-in-out;
+        filter: drop-shadow(0 0 8px rgba(228, 228, 231, 0.4));
+      }
+      .loading-text {
+        font-size: 12px;
+        letter-spacing: 0.2em;
+        margin-bottom: 24px;
+        text-transform: uppercase;
+        animation: text-blink 1s infinite alternate;
+      }
+      .loading-bar {
+        width: 160px;
+        height: 1px;
+        background-color: #27272a;
+        position: relative;
+        overflow: hidden;
+      }
+      .loading-bar::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 30%;
+        background-color: #e4e4e7;
+        box-shadow: 0 0 10px #e4e4e7;
+        animation: loader-anim 1.2s infinite cubic-bezier(0.4, 0, 0.2, 1);
+      }
+      @keyframes loader-anim {
+        0% { left: -30%; }
+        100% { left: 100%; }
+      }
+      @keyframes star-pulse {
+        0%, 100% { transform: scale(0.9); opacity: 0.7; }
+        50% { transform: scale(1.1); opacity: 1; filter: drop-shadow(0 0 12px rgba(228, 228, 231, 0.8)); }
+      }
+      @keyframes text-blink {
+        0% { opacity: 0.5; }
+        100% { opacity: 1; }
+      }
+      
+      /* Explicit Keyframes for Inline Styles */
+      @keyframes dataRainCard {
+        0% { transform: translateY(0); opacity: 0; }
+        10% { opacity: 1; }
+        90% { opacity: 1; }
+        100% { transform: translateY(300px); opacity: 0; }
+      }
+      @keyframes dataRain {
+        0% { transform: translateY(-100%); opacity: 0; }
+        20% { opacity: 1; }
+        80% { opacity: 1; }
+        100% { transform: translateY(100vh); opacity: 0; }
+      }
     </style>
   <link rel="stylesheet" href="/index.css">
     <script type="importmap">
@@ -227,9 +354,19 @@
       }
     }
     </script>
-  <script type="module" crossorigin src="/assets/index-DuLAFkMM.js"></script>
+  <script type="module" crossorigin src="/assets/index-DbG6vy4y.js"></script>
 </head>
   <body>
-    <div id="root"></div>
+    <div id="root">
+        <!-- Initial Pre-loader -->
+        <div class="loading-container">
+            <!-- Four-Pointed Star SVG -->
+            <svg class="star-icon" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <path d="M50 0 C50 0 65 35 100 50 C65 65 50 100 50 100 C50 100 35 65 0 50 C35 35 50 0 50 0Z" />
+            </svg>
+            <div class="loading-text">ESTABLISHING LINK...</div>
+            <div class="loading-bar"></div>
+        </div>
+    </div>
 </body>
 </html>

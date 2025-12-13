@@ -6,12 +6,14 @@ import { ChapterTranslation, Language } from '../types';
 import Reveal from '../components/Reveal';
 import StoryEntryAnimation from '../components/StoryEntryAnimation';
 import MaskedText from '../components/MaskedText';
+import { ReaderFont, getFontClass } from '../components/fonts/fontConfig';
 
 interface ReaderPageProps {
   currentIndex: number;
   onChapterChange: (index: number) => void;
   language: Language;
   isLightTheme: boolean;
+  readerFont: ReaderFont;
 }
 
 // Special collapsible component for Void logs
@@ -87,7 +89,7 @@ const parseRichText = (text: string) => {
   });
 };
 
-const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, language, isLightTheme }) => {
+const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, language, isLightTheme, readerFont }) => {
   // viewMode state: 'directory' shows the grid of chapters, 'reader' shows the text content
   const [viewMode, setViewMode] = useState<'directory' | 'reader'>('directory');
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
@@ -194,28 +196,28 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
             
             // Auto-color logic based on speaker
             // Default styling
-            let className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-ash-light transition-colors";
+            let className = `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-ash-light transition-colors ${getFontClass(readerFont)}`;
             
             if (joinedText.startsWith('零点') || joinedText.startsWith('Point') || joinedText.startsWith('零點')) {
                 // Point: Special white with glow in Dark Mode, Dark Grey in Light Mode
                 className = isLightTheme
-                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-zinc-600 font-bold"
-                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_2px_rgba(255,255,255,0.4)]";
+                    ? `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-zinc-600 font-bold ${getFontClass(readerFont)}`
+                    : `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_2px_rgba(255,255,255,0.4)] ${getFontClass(readerFont)}`;
             } else if (joinedText.startsWith('芷漓') || joinedText.startsWith('Zeri')) {
                 // Zeri: Pink with glow in Dark Mode
                 className = isLightTheme
-                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-600"
-                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-400 drop-shadow-[0_0_2px_rgba(244,114,182,0.4)]";
+                    ? `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-pink-600 ${getFontClass(readerFont)}`
+                    : `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-pink-400 drop-shadow-[0_0_2px_rgba(244,114,182,0.4)] ${getFontClass(readerFont)}`;
             } else if (joinedText.startsWith('泽洛') || joinedText.startsWith('Zelo') || joinedText.startsWith('澤洛')) {
                 // Zelo: Blue with glow in Dark Mode
                 className = isLightTheme
-                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-600"
-                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400 drop-shadow-[0_0_2px_rgba(96,165,250,0.4)]";
+                    ? `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-blue-600 ${getFontClass(readerFont)}`
+                    : `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-blue-400 drop-shadow-[0_0_2px_rgba(96,165,250,0.4)] ${getFontClass(readerFont)}`;
             } else if (joinedText.startsWith('???') || joinedText.startsWith('Void') || joinedText.includes('void') || joinedText.includes('Void')) {
                  // Void
                  className = isLightTheme
-                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-zinc-900 font-bold"
-                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]";
+                    ? `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-zinc-900 font-bold ${getFontClass(readerFont)}`
+                    : `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)] ${getFontClass(readerFont)}`;
             }
 
             nodes.push(
@@ -275,8 +277,8 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
             
             if (blueMatch) {
                 const blueClass = isLightTheme 
-                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-600 font-bold"
-                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400 font-bold";
+                    ? `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-blue-600 font-bold ${getFontClass(readerFont)}`
+                    : `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-blue-400 font-bold ${getFontClass(readerFont)}`;
                 nodes.push(
                     <Reveal key={`blue-${i}`}>
                         <p className={blueClass}>
@@ -286,8 +288,8 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
                 );
             } else if (dangerMatch) {
                 const dangerClass = isLightTheme
-                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-red-600 font-black animate-crash origin-left"
-                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-red-500 font-black animate-crash origin-left";
+                    ? `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-red-600 font-black animate-crash origin-left ${getFontClass(readerFont)}`
+                    : `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-red-500 font-black animate-crash origin-left ${getFontClass(readerFont)}`;
                 nodes.push(
                     <Reveal key={`danger-${i}`}>
                         <p className={dangerClass}>
@@ -609,7 +611,7 @@ const ReaderPage: React.FC<ReaderPageProps> = ({ currentIndex, onChapterChange, 
                     </Reveal>
                 </div>
 
-                <article className="px-8 py-12 lg:px-16 max-w-none text-ash-light font-serif leading-loose tracking-wide">
+                <article className={`px-8 py-12 lg:px-16 max-w-none text-ash-light font-serif leading-loose tracking-wide ${getFontClass(readerFont)}`}>
                     {renderContent(translation.content)}
                 </article>
 

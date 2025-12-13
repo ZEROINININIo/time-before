@@ -1,6 +1,6 @@
 
-import React, { useEffect, useRef } from 'react';
-import { Volume2, Volume1, Activity, Music, Disc } from 'lucide-react';
+import React, { useEffect, useRef, useState } from 'react';
+import { Volume2, Volume1, Activity, Music, Disc, AlertCircle } from 'lucide-react';
 
 interface BackgroundMusicProps {
     isSetupMode?: boolean;
@@ -18,14 +18,64 @@ const FADE_OUT_DURATION = 1500; // ms
 
 // Global singleton to persist audio across component unmounts (e.g. Setup -> Main transition)
 let globalAudio: HTMLAudioElement | null = null;
+let audioCleanupTimer: number | null = null;
 
 const getGlobalAudio = () => {
     if (!globalAudio) {
         globalAudio = new Audio(); // Source set dynamically
         globalAudio.loop = true;
         globalAudio.volume = 0; // Init at 0
+        // Add crossorigin attribute to avoid CORS issues
+        globalAudio.crossOrigin = 'anonymous';
     }
     return globalAudio;
+};
+
+// Helper to reliably get absolute URL in various environments
+const getAbsoluteUrl = (url: string): string => {
+    try {
+        // Fallback for environments where window.location might be incomplete
+        const base = typeof window !== 'undefined' && window.location 
+            ? window.location.href 
+            : 'http://localhost/';
+        return new URL(url, document.baseURI || base).href;
+    } catch (e) {
+        // Ultimate fallback: DOM element resolution
+        try {
+            const a = document.createElement('a');
+            a.href = url;
+            return a.href;
+        } catch(e2) {
+            return url; // Should not happen in browser
+        }
+    }
+};
+
+// Helper to check if audio format is supported
+const isAudioFormatSupported = (format: string): boolean => {
+    const audio = new Audio();
+    return audio.canPlayType(format) !== '';
+};
+
+// Helper to get supported audio extension based on browser support
+const getSupportedAudioExtension = (baseUrl: string): string => {
+    // Check if URL already has extension
+    if (/.(mp3|wav|ogg|aac)$/i.test(baseUrl)) {
+        return baseUrl;
+    }
+    
+    // Test different formats
+    const formats = ['.mp3', '.wav', '.ogg', '.aac'];
+    for (const format of formats) {
+        const testUrl = baseUrl + format;
+        const mimeType = `audio/${format.slice(1)}`;
+        if (isAudioFormatSupported(mimeType)) {
+            return testUrl;
+        }
+    }
+    
+    // Fallback to mp3
+    return baseUrl + '.mp3';
 };
 
 const BackgroundMusic: React.FC<BackgroundMusicProps> = ({ 
@@ -39,6 +89,7 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     trackComposer = "UNKNOWN"
 }) => {
   const fadeIntervalRef = useRef<number | null>(null);
+  const [error, setError] = useState<boolean>(false);
 
   // Helper to perform smooth volume transition
   const performFade = (audio: HTMLAudioElement, targetVol: number, duration: number, onComplete?: () => void) => {
@@ -76,31 +127,104 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
   useEffect(() => {
     const audio = getGlobalAudio();
 
+    // Error handling listener
+    const handleError = (e: Event) => {
+        console.warn("Audio Playback Error:", audio.error);
+        setError(true);
+    };
+    
+    // Canplaythrough listener - ensures audio is loaded before playing
+    const handleCanPlayThrough = () => {
+        console.log("Audio can play through");
+    };
+    
+    // Play listener - for debugging and state management
+    const handlePlay = () => {
+        console.log("Audio playing");
+    };
+    
+    // Pause listener - for debugging and state management
+    const handlePause = () => {
+        console.log("Audio paused");
+    };
+    
+    // Add all event listeners
+    audio.addEventListener('error', handleError);
+    audio.addEventListener('canplaythrough', handleCanPlayThrough);
+    audio.addEventListener('play', handlePlay);
+    audio.addEventListener('pause', handlePause);
+
     // 1. Handle Audio Source Update
-    if (audioSrc && audio.src !== audioSrc) {
-        audio.src = audioSrc;
-        // If we switch tracks while playing, we keep playing, 
-        // but performFade will handle volume smoothing below.
+    // IMPORTANT: Compare absolute URLs to prevent infinite loop with relative paths
+    // DECODING: Decode both to standard text to avoid "%20" vs " " mismatches
+    const currentAbsSrc = audio.src;
+    const newAbsSrc = audioSrc ? getAbsoluteUrl(audioSrc) : '';
+
+    const currentDecoded = decodeURIComponent(currentAbsSrc);
+    const newDecoded = decodeURIComponent(newAbsSrc);
+
+    if (audioSrc && currentDecoded !== newDecoded) {
+        // Reset error state on track change
+        setError(false);
+        
+        // Set audio source with proper compatibility handling
+        audio.src = getSupportedAudioExtension(audioSrc);
+        
+        // Preload audio for smoother playback
+        audio.preload = 'auto';
+        
+        // If we switch tracks while playing, the loop below handles the play trigger
+        if (isPlaying) {
+            // Load the new track before attempting to play
+            audio.load();
+        }
     }
 
     // 2. Handle Play/Stop Logic with Fades
-    if (isPlaying && audioSrc) {
+    if (isPlaying && audioSrc && !error) {
         // --- DESIRED STATE: PLAYING ---
         if (audio.paused) {
-            // Start from silence
+            // Start from silence for fade-in
             audio.volume = 0; 
-            const playPromise = audio.play();
-            if (playPromise !== undefined) {
-                playPromise
-                    .then(() => {
+            
+            // Handle different browser autoplay policies
+            const playAudio = async () => {
+                try {
+                    // Load audio if not already loaded
+                    if (audio.readyState < 3) { // HAVE_FUTURE_DATA
+                        await audio.load();
+                    }
+                    
+                    const playPromise = audio.play();
+                    if (playPromise !== undefined) {
+                        await playPromise;
                         // Fade In
                         performFade(audio, volume, FADE_IN_DURATION);
-                    })
-                    .catch(e => console.error("Playback failed", e));
-            }
+                    }
+                } catch (e) {
+                    console.warn("Playback prevented (autoplay policy or error):", e);
+                    // Don't set error state here as it might be recoverable by user interaction
+                    // Try again after a short delay as fallback
+                    audioCleanupTimer = window.setTimeout(() => {
+                        try {
+                            const playPromise = audio.play();
+                            if (playPromise !== undefined) {
+                                playPromise.then(() => {
+                                    performFade(audio, volume, FADE_IN_DURATION);
+                                }).catch(fallbackError => {
+                                    console.warn("Fallback playback attempt failed:", fallbackError);
+                                });
+                            }
+                        } catch (fallbackError) {
+                            console.warn("Fallback playback attempt failed:", fallbackError);
+                        }
+                    }, 500);
+                }
+            };
+            
+            playAudio();
         } else {
             // Already playing, ensure we fade to the correct target volume 
-            // (e.g., if we cancelled a fade-out midway)
             performFade(audio, volume, FADE_IN_DURATION);
         }
     } else {
@@ -108,24 +232,45 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         if (!audio.paused) {
             // Fade Out -> Pause
             performFade(audio, 0, FADE_OUT_DURATION, () => {
-                audio.pause();
+                try {
+                    audio.pause();
+                    // Reset current time to start for next play
+                    audio.currentTime = 0;
+                } catch (e) {
+                    console.warn("Error during pause/reset:", e);
+                }
             });
         }
     }
 
-    // Cleanup on unmount (only clears interval, audio keeps playing if global)
+    // Cleanup on unmount
     return () => {
-        if (fadeIntervalRef.current) window.clearInterval(fadeIntervalRef.current);
+        // Clear any pending fade intervals
+        if (fadeIntervalRef.current) {
+            window.clearInterval(fadeIntervalRef.current);
+            fadeIntervalRef.current = null;
+        }
+        
+        // Clear any pending timers
+        if (audioCleanupTimer) {
+            window.clearTimeout(audioCleanupTimer);
+            audioCleanupTimer = null;
+        }
+        
+        // Remove all event listeners
+        audio.removeEventListener('error', handleError);
+        audio.removeEventListener('canplaythrough', handleCanPlayThrough);
+        audio.removeEventListener('play', handlePlay);
+        audio.removeEventListener('pause', handlePause);
     };
-  }, [isPlaying, audioSrc]); // Note: 'volume' is NOT in dependency array to avoid re-triggering fade on slider drag
+  }, [isPlaying, audioSrc, error, volume]); // Add volume to dependencies for better sync
 
   // Handle Manual Volume Change (Slider)
-  // This needs to interrupt any active fades to feel responsive
   useEffect(() => {
       const audio = getGlobalAudio();
       
       // Only apply immediate volume if we are logically playing and audio is active
-      if (isPlaying && !audio.paused) {
+      if (isPlaying && !audio.paused && !error) {
           // Kill any running fade animation so the slider takes control
           if (fadeIntervalRef.current) window.clearInterval(fadeIntervalRef.current);
           audio.volume = volume;
@@ -137,7 +282,7 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
       onVolumeChange(parseFloat(e.target.value));
   };
 
-  const isDisabled = !audioSrc;
+  const isDisabled = !audioSrc || error;
 
   if (isSetupMode) {
     return (
@@ -161,10 +306,10 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
     <div className="flex flex-col gap-1 w-full">
         <button 
         onClick={onToggle}
-        disabled={isDisabled}
+        disabled={isDisabled && !isPlaying} // Allow toggling off if playing despite errors (edge case)
         className={`flex items-center justify-between w-full px-3 py-3 border-2 transition-all duration-300 shadow-hard group
             ${isDisabled 
-                ? 'bg-ash-black text-ash-gray border-ash-gray/30 opacity-50 cursor-not-allowed'
+                ? 'bg-ash-black text-ash-gray border-ash-gray/30 cursor-not-allowed opacity-70'
                 : isPlaying 
                     ? 'bg-ash-light text-ash-black border-ash-light' 
                     : 'bg-ash-black text-ash-gray border-ash-gray/50 hover:border-ash-light hover:text-ash-light'
@@ -172,7 +317,8 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
         >
             <div className="flex items-center gap-3">
                 <div className="relative">
-                    {isPlaying && !isDisabled ? <Disc size={16} className="animate-spin" /> : <Volume2 size={16} />}
+                    {error ? <AlertCircle size={16} className="text-red-500" /> : 
+                     isPlaying && !isDisabled ? <Disc size={16} className="animate-spin" /> : <Volume2 size={16} />}
                 </div>
                 <span className="text-[10px] font-mono font-bold uppercase">
                     BGM
@@ -180,7 +326,9 @@ const BackgroundMusic: React.FC<BackgroundMusicProps> = ({
             </div>
             
             <div className="flex items-center gap-2">
-                {isPlaying && !isDisabled ? (
+                {error ? (
+                    <span className="text-[10px] font-mono font-bold text-red-500 animate-pulse">ERR</span>
+                ) : isPlaying && !isDisabled ? (
                     <div className="flex gap-0.5 items-end h-3">
                         <div className="w-0.5 bg-current animate-[bounce_1s_infinite] h-2"></div>
                         <div className="w-0.5 bg-current animate-[bounce_1.2s_infinite] h-3"></div>

@@ -7,14 +7,16 @@ import SideStoryChapterList from '../components/sidestory/SideStoryChapterList';
 import SideStoryReader from '../components/sidestory/SideStoryReader';
 import SideCharacterModal from '../components/sidestory/SideCharacterModal';
 import SideStoryEntryAnimation from '../components/SideStoryEntryAnimation';
+import { ReaderFont } from '../components/fonts/fontConfig';
 
 interface SideStoriesPageProps {
   language: Language;
   isLightTheme: boolean;
   onVolumeChange: (volumeId: string | null) => void;
+  readerFont: ReaderFont;
 }
 
-const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language, isLightTheme, onVolumeChange }) => {
+const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language, isLightTheme, onVolumeChange, readerFont }) => {
   // Navigation State: 'volumes' -> 'chapters' -> 'reader'
   const [viewMode, setViewMode] = useState<'volumes' | 'chapters' | 'reader'>('volumes');
   const [activeVolume, setActiveVolume] = useState<SideStoryVolume | null>(null);
@@ -99,6 +101,7 @@ const SideStoriesPage: React.FC<SideStoriesPageProps> = ({ language, isLightThem
             onBack={() => setViewMode('chapters')}
             language={language}
             isLightTheme={isLightTheme}
+            readerFont={readerFont}
         />
       );
   }

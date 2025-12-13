@@ -1,11 +1,13 @@
 
 import React, { useState, useEffect } from 'react';
-import { Globe, Monitor, Volume2, ArrowRight, ShieldAlert, Check, ChevronLeft, Loader2 } from 'lucide-react';
+import { Globe, Monitor, Volume2, ArrowRight, ShieldAlert, Check, ChevronLeft, Loader2, Type } from 'lucide-react';
 import { Language } from '../types';
 import ThemeToggle from './ThemeToggle';
 import CRTToggle from './CRTToggle';
 import BackgroundMusic from './BackgroundMusic';
 import FullscreenToggle from './FullscreenToggle';
+import FontSelector from './fonts/FontSelector';
+import { ReaderFont } from './fonts/fontConfig';
 
 interface InitialSetupProps {
   onComplete: () => void;
@@ -19,11 +21,13 @@ interface InitialSetupProps {
   setBgmPlaying: (val: boolean) => void;
   bgmVolume: number;
   setBgmVolume: (val: number) => void;
+  readerFont: ReaderFont;
+  setReaderFont: (font: ReaderFont) => void;
 }
 
 const InitialSetup: React.FC<InitialSetupProps> = ({ 
     onComplete, language, setLanguage, crtEnabled, setCrtEnabled, isLightTheme, setIsLightTheme,
-    bgmPlaying, setBgmPlaying, bgmVolume, setBgmVolume
+    bgmPlaying, setBgmPlaying, bgmVolume, setBgmVolume, readerFont, setReaderFont
 }) => {
   
   const [step, setStep] = useState(0); // 0: Lang, 1: Config, 2: Ready
@@ -97,7 +101,7 @@ const InitialSetup: React.FC<InitialSetupProps> = ({
         <div className="absolute top-0 left-0 w-full h-2 bg-amber-500/20 animate-pulse"></div>
         <div className="absolute bottom-0 left-0 w-full h-2 bg-amber-500/20 animate-pulse"></div>
 
-        <div className="max-w-2xl w-full border-2 border-amber-600/50 bg-black/80 backdrop-blur-sm p-8 shadow-[0_0_20px_rgba(245,158,11,0.2)] relative animate-slide-in">
+        <div className="max-w-3xl w-full border-2 border-amber-600/50 bg-black/80 backdrop-blur-sm p-8 shadow-[0_0_20px_rgba(245,158,11,0.2)] relative animate-slide-in">
             <div className="absolute -top-3 left-4 bg-black px-2 text-amber-500 font-bold border border-amber-600/50 flex items-center gap-2">
                 <ShieldAlert size={14} className="animate-pulse" />
                 {t.safeMode}
@@ -146,6 +150,7 @@ const InitialSetup: React.FC<InitialSetupProps> = ({
                                         <Monitor size={14} /> {t.visuals}
                                     </label>
                                     <div className="space-y-3">
+                                        <FontSelector value={readerFont} onChange={setReaderFont} language={language} isSetupMode />
                                         <CRTToggle value={crtEnabled} onChange={setCrtEnabled} isSetupMode language={language} />
                                         <FullscreenToggle isSetupMode language={language} />
                                         <ThemeToggle value={isLightTheme} onChange={setIsLightTheme} isSetupMode />

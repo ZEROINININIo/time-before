@@ -4,6 +4,7 @@ import { SideStoryVolume, Language, ChapterTranslation } from '../../types';
 import { ArrowLeft, List, ShieldAlert, FileText, ChevronLeft, ChevronRight, Activity, Image as ImageIcon, AlertTriangle, Loader2, Eye } from 'lucide-react';
 import Reveal from '../Reveal';
 import MaskedText from '../MaskedText';
+import { ReaderFont, getFontClass } from '../fonts/fontConfig';
 
 // --- Internal Reader Logic (Shared with ReaderPage) ---
 const VoidLog: React.FC<{ lines: string[] }> = ({ lines }) => {
@@ -65,9 +66,10 @@ interface SideStoryReaderProps {
   onBack: () => void;
   language: Language;
   isLightTheme: boolean;
+  readerFont: ReaderFont;
 }
 
-const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapterIndex, onBack, language, isLightTheme }) => {
+const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapterIndex, onBack, language, isLightTheme, readerFont }) => {
   const [currentChapterIndex, setCurrentChapterIndex] = useState(initialChapterIndex);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const mainRef = useRef<HTMLDivElement>(null);
@@ -120,7 +122,7 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
             const joinedText = smartJoin(textBuffer);
             
             // Default Styling Logic
-            let className = "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-ash-light transition-colors";
+            let className = `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-ash-light transition-colors ${getFontClass(readerFont)}`;
             
             // Legacy Overwrite: Force specific style for legacy chapter text
             if (isLegacy) {
@@ -131,20 +133,20 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
                 // Standard Logic for other chapters
                 if (joinedText.startsWith('零点') || joinedText.startsWith('Point') || joinedText.startsWith('零點')) {
                     className = isLightTheme
-                        ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-zinc-600 font-bold"
-                        : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_2px_rgba(255,255,255,0.4)]";
+                        ? `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-zinc-600 font-bold ${getFontClass(readerFont)}`
+                        : `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_2px_rgba(255,255,255,0.4)] ${getFontClass(readerFont)}`;
                 } else if (joinedText.startsWith('芷漓') || joinedText.startsWith('Zeri')) {
                     className = isLightTheme
-                        ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-600"
-                        : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-pink-400 drop-shadow-[0_0_2px_rgba(244,114,182,0.4)]";
+                        ? `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-pink-600 ${getFontClass(readerFont)}`
+                        : `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-pink-400 drop-shadow-[0_0_2px_rgba(244,114,182,0.4)] ${getFontClass(readerFont)}`;
                 } else if (joinedText.startsWith('泽洛') || joinedText.startsWith('Zelo') || joinedText.startsWith('澤洛')) {
                     className = isLightTheme
-                        ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-600"
-                        : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400 drop-shadow-[0_0_2px_rgba(96,165,250,0.4)]";
+                        ? `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-blue-600 ${getFontClass(readerFont)}`
+                        : `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-blue-400 drop-shadow-[0_0_2px_rgba(96,165,250,0.4)] ${getFontClass(readerFont)}`;
                 } else if (joinedText.startsWith('???') || joinedText.startsWith('Void') || joinedText.includes('void') || joinedText.includes('Void')) {
                     className = isLightTheme
-                        ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-zinc-900 font-bold"
-                        : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)]";
+                        ? `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-zinc-900 font-bold ${getFontClass(readerFont)}`
+                        : `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-white drop-shadow-[0_0_5px_rgba(255,255,255,0.5)] ${getFontClass(readerFont)}`;
                 } else if (joinedText.startsWith('终端') || joinedText.startsWith('TERMINAL') || joinedText.startsWith('終端')) {
                     className = isLightTheme
                         ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-emerald-700 font-bold"
@@ -208,8 +210,8 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
             
             if (blueMatch) {
                  const blueClass = isLightTheme 
-                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-600 font-bold"
-                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-blue-400 font-bold";
+                    ? `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-blue-600 font-bold ${getFontClass(readerFont)}`
+                    : `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-blue-400 font-bold ${getFontClass(readerFont)}`;
                 nodes.push(
                     <Reveal key={`blue-${i}`}>
                         <p className={blueClass}>
@@ -219,8 +221,8 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
                 );
             } else if (dangerMatch) {
                 const dangerClass = isLightTheme
-                    ? "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-red-600 font-black animate-crash origin-left"
-                    : "mb-6 md:mb-8 text-justify indent-8 md:indent-12 font-mono text-sm md:text-base leading-relaxed text-red-500 font-black animate-crash origin-left";
+                    ? `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-red-600 font-black animate-crash origin-left ${getFontClass(readerFont)}`
+                    : `mb-6 md:mb-8 text-justify indent-8 md:indent-12 text-sm md:text-base leading-relaxed text-red-500 font-black animate-crash origin-left ${getFontClass(readerFont)}`;
                 nodes.push(
                     <Reveal key={`danger-${i}`}>
                         <p className={dangerClass}>
@@ -431,7 +433,7 @@ const SideStoryReader: React.FC<SideStoryReaderProps> = ({ volume, initialChapte
                         </div>
                         
                         {/* Body */}
-                        <article className={`px-8 py-12 lg:px-16 max-w-none text-ash-light font-serif leading-loose tracking-wide ${isLegacy ? 'font-mono' : ''}`}>
+                        <article className={`px-8 py-12 lg:px-16 max-w-none text-ash-light font-serif leading-loose tracking-wide ${isLegacy ? 'font-mono' : getFontClass(readerFont)}`}>
                             {renderContent(translation.content)}
                         </article>
 

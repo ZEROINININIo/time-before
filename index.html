@@ -17,15 +17,17 @@
     </script>
     <link rel="icon" href="https://free.picui.cn/free/2025/12/08/6936e856897d6.png" />
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=Noto+Serif+SC:wght@400;700&family=JetBrains+Mono:wght@400;800&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
               sans: ['"Noto Sans SC"', 'sans-serif'],
+              serif: ['"Noto Serif SC"', 'serif'],
               mono: ['"JetBrains Mono"', 'monospace'],
               display: ['"JetBrains Mono"', 'monospace'],
+              'custom-02': ['"CustomFont02"', '"Noto Sans SC"', 'sans-serif'],
             },
             colors: {
               'ash-black': 'var(--ash-black)',
@@ -114,7 +116,7 @@
                 '0%': { transform: 'translateY(0)', opacity: '0' },
                 '10%': { opacity: '1' },
                 '90%': { opacity: '1' },
-                '100%': { transform: 'translateY(400px)', opacity: '0' }
+                '100%': { transform: 'translateY(300px)', opacity: '0' }
               },
               shimmer: {
                 '0%': { transform: 'translateX(-100%)' },
@@ -140,6 +142,13 @@
         
         --grid-color: #27272a;
         --halftone-color: #27272a;
+      }
+
+      @font-face {
+        font-family: 'CustomFont02';
+        src: url('./02.ttf') format('truetype');
+        font-weight: normal;
+        font-style: normal;
       }
 
       body.light-theme {
